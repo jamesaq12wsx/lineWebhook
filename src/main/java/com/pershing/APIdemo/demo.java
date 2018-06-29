@@ -5,7 +5,7 @@ import java.net.InetSocketAddress;
 
 import com.sun.net.httpserver.HttpServer;
 
-public class demo {
+public class Demo {
 
 	public static void main(String[] args) throws NumberFormatException, IOException {
 

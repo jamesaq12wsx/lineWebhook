@@ -51,7 +51,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>com.ian.push.rest.App</mainClass>
+              <mainClass>com.pershing.APIdemo.Demo</mainClass>
             </manifest>
           </archive>
         </configuration>
@@ -64,7 +64,7 @@
                 <assembleDirectory>target</assembleDirectory>
                 <programs>
                     <program>
-                        <mainClass>com.ian.push.demo.App</mainClass>
+                        <mainClass>com.pershing.APIdemo.Demo</mainClass>
                         <name>line</name>
                     </program>
                 </programs>

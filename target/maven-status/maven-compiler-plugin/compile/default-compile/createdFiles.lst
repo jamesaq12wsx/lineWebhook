@@ -19,7 +19,6 @@ com\pershing\event\MessageEvent.class
 com\pershing\template\Template.class
 com\pershing\action\MessageAction.class
 com\pershing\APIdemo\BankWebHookDemo$1.class
-com\pershing\APIdemo\demo.class
 com\pershing\event\PostbackEvent.class
 com\pershing\message\MessageType.class
 com\pershing\message\TemplateMessage.class
@@ -27,6 +26,7 @@ com\pershing\sender\Response.class
 com\pershing\template\ConfirmTemplate.class
 com\pershing\event\AccountLinkEvent.class
 com\pershing\event\BeaconEventType.class
+com\pershing\APIdemo\Demo.class
 com\pershing\APIdemo\utils.class
 com\pershing\sender\MessageSender.class
 com\pershing\event\WebHookEventType.class
