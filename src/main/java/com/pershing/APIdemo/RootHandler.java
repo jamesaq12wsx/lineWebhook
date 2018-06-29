@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Scanner;
 
-import com.pershing.lineAPI.WebHookHandler;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
@@ -15,10 +14,10 @@ public class RootHandler implements HttpHandler {
 	private static final String CHANNEL_SECRET = "39a7a8b5594e8fe81bac12e31890752e";
 	private static final String CHANNEL_ACCESS_TOKEN = "B+R5Dl03JENfxXW+ALdsS6yHlFvBlB1xIrMh1ReV7qwgxnKflMyV+ludAmyhCq3oLt6XIzXQlv/vSUXSUBFNRbc+HP2TYfLZv5oMCQHGq+xsrZpDmRd+nj+KeJWrVtkYbD8r/uxDPXRUS21iE15iQgdB04t89/1O/w1cDnyilFU=";
 	
-	WebHookHandler webHookHandler;
+	BankWebHookDemo webHookHandler;
 	
 	public RootHandler() {
-		webHookHandler = new WebHookHandler(CHANNEL_SECRET, CHANNEL_ACCESS_TOKEN);
+		webHookHandler = new BankWebHookDemo(CHANNEL_SECRET, CHANNEL_ACCESS_TOKEN);
 		webHookHandler.setVerbose(true);
 	}
 
