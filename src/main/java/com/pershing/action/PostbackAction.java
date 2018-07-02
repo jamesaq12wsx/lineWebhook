@@ -2,6 +2,12 @@ package com.pershing.action;
 
 import com.google.gson.JsonObject;
 
+/**
+ * Action that sends a postback event to the bot server
+ * 
+ * @author ianw3214
+ *
+ */
 public class PostbackAction implements Action {
 
 
