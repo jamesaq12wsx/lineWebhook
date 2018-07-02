@@ -143,6 +143,9 @@ Another is the build field:
 </build>
 ```
 
+Also, when deploying to Heroku it is important to have a Procfile. This file describes the commands the server should run for different scenarios, in our case we want the server to run our java application for the **web** setting. The Procfile thus contains just one line:
+>web: sh target/bin/line
+
 <div style="page-break-after: always;"></div>
 
 ## More References
@@ -150,3 +153,4 @@ Another is the build field:
 - [Messaging API Documentation](https://developers.line.me/en/docs/messaging-api/)
 - [Deploying Java Apps on Heroku](https://devcenter.heroku.com/articles/deploying-java)
 - [Getting started with Maven](https://maven.apache.org/guides/getting-started/)
+- [Heroku Procfile](https://devcenter.heroku.com/articles/procfile)

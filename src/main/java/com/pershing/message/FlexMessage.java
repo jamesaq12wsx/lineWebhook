@@ -11,6 +11,15 @@ import com.google.gson.JsonObject;
 // ---------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------
+/**
+ * Flex messages represent messages with a customizable layout
+ * 	- See documentation @ https://developers.line.me/en/docs/messaging-api/reference/#flex-message
+ * 
+ * NOTE that flex messages are only used for sending, not receiving
+ * 
+ * @author ianw3214
+ *
+ */
 public class FlexMessage implements Message {
 
 	String altText;
