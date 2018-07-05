@@ -215,18 +215,23 @@ public class WebHookHandler {
 	 */
 	protected void handleMessageEvent(MessageEvent event) {
 		log(">>> [WebHookHandler] Message handler triggered, invoking Dialogue Stack");
-		// Assume this is a userId for now, group Ids and room Ids should be handled differently in the future
-		String userId = event.source().getId();
-		String replyToken = event.replyToken();
-		// If the user doesn't already have a dialogue stack, create a new one
-		if (!dialogueStacks.containsKey(userId)) {
-			dialogueStacks.put(userId, new DialogueStack(rootDialogue.create()));
+		try {
+			// Assume this is a userId for now, group Ids and room Ids should be handled differently in the future
+			String userId = event.source().getId();
+			String replyToken = event.replyToken();
+			// If the user doesn't already have a dialogue stack, create a new one
+			if (!dialogueStacks.containsKey(userId)) {
+				dialogueStacks.put(userId, new DialogueStack(rootDialogue.create()));
+			}
+			// Call the handle function of the top dialogue of the stack
+			DialogueStack userStack = dialogueStacks.get(userId);
+			List<Message> replies = userStack.top().handleUserInput(event.message(), userStack);
+			// Finally, send the desired replies to the user
+			sendReply(replyToken, replies);
+		} catch (Exception e) {
+			System.out.println("EXCEPTION CAUGHT");
+			e.printStackTrace();
 		}
-		// Call the handle function of the top dialogue of the stack
-		DialogueStack userStack = dialogueStacks.get(userId);
-		List<Message> replies = userStack.top().handleUserInput(event.message(), userStack);
-		// Finally, send the desired replies to the user
-		sendReply(replyToken, replies);
 	}
 	
 	/**
