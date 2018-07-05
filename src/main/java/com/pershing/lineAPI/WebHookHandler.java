@@ -2,9 +2,7 @@ package com.pershing.lineAPI;
 
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -13,9 +11,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.pershing.dialogue.Dialogue;
-import com.pershing.dialogue.DialogueStack;
-import com.pershing.dialogue.RootDialogue;
 import com.pershing.event.AccountLinkEvent;
 import com.pershing.event.BeaconEvent;
 import com.pershing.event.FollowEvent;
@@ -38,9 +33,6 @@ public class WebHookHandler {
 	private final String channelAccessToken;
 	// The sender of objects, FEAR ME~ MWA-HA-HA
 	private final MessageSender messageSender;
-	// Map each user to a dialogue stack
-	private final Map<String, DialogueStack> dialogueStacks;
-	private final RootDialogue rootDialogue;
 	
 	// state variable of whether to log information or not
 	protected boolean verbose;
@@ -56,57 +48,20 @@ public class WebHookHandler {
 		channelAccessToken = inChannelAccessToken;
 		verbose = false;
 		messageSender = MessageSenderFactory.createDefault();
-		dialogueStacks = new HashMap();
-		rootDialogue = RootDialogue.createDefault();
 	}
 	
 	/**
 	 * Constructor where MessageSender is specified and not defaulted to HTTP
 	 * 
-	 * @param inChannelSecret		The channel secret of the line bot
+	 * @param inChannelSecret	The channel secret of the line bot
 	 * @param inChannelAccessToken	The channel access token of the line bot
-	 * @param sender				The MessageSender object to send push/reply messages
+	 * @param sender			The MessageSender object to send push/reply messages
 	 */
 	public WebHookHandler(String inChannelSecret, String inChannelAccessToken, MessageSender sender) {
 		channelSecret = inChannelSecret;
 		channelAccessToken = inChannelAccessToken;
 		verbose = false;
 		messageSender = sender;
-		dialogueStacks = new HashMap();
-		rootDialogue = RootDialogue.createDefault();
-	}
-	
-	/**
-	 * Constructor where the RootDialogue is specified
-	 * 
-	 * @param inChannelSecret		The channel secret of the line bot
-	 * @param inChannelAccessToken	The channel access token of the line bot
-	 * @param dialogue				The RootDialogue to set for new users
-	 */
-	public WebHookHandler(String inChannelSecret, String inChannelAccessToken, RootDialogue dialogue) {
-		channelSecret = inChannelSecret;
-		channelAccessToken = inChannelAccessToken;
-		verbose = false;
-		messageSender = MessageSenderFactory.createDefault();
-		dialogueStacks = new HashMap();
-		rootDialogue = RootDialogue.createDefault();
-	}
-	
-	/**
-	 * Constructor that sets both MessageSender and RootDialogue
-	 * 
-	 * @param inChannelSecret		The channel secret of the line bot
-	 * @param inChannelAccessToken	The channel access token of the line bot
-	 * @param sender				The MessageSender object to send push/reply messages
-	 * @param dialogue				The RootDialogue to set for new users
-	 */
-	public WebHookHandler(String inChannelSecret, String inChannelAccessToken, MessageSender sender, RootDialogue dialogue) {
-		channelSecret = inChannelSecret;
-		channelAccessToken = inChannelAccessToken;
-		verbose = false;
-		messageSender = sender;
-		dialogueStacks = new HashMap();
-		rootDialogue = RootDialogue.createDefault();
 	}
 	
 	/**
@@ -208,25 +163,14 @@ public class WebHookHandler {
 	
 	/**
 	 * Handler function for incoming message events
-	 *  - Invokes the Dialogue Stack handler by default, change functionality by changing dialogue stack
 	 * 	- See more documentation @ https://developers.line.me/en/docs/messaging-api/reference/#message-event
 	 * 
 	 * @param event
 	 */
 	protected void handleMessageEvent(MessageEvent event) {
-		log(">>> [WebHookHandler] Message handler triggered, invoking Dialogue Stack");
-		// Assume this is a userId for now, group Ids and room Ids should be handled differently in the future
-		String userId = event.source().getId();
+		log(">>> [WebHookHandler] Message handler triggered, sending automated reply");
 		String replyToken = event.replyToken();
-		// If the user doesn't already have a dialogue stack, create a new one
-		if (!dialogueStacks.containsKey(userId)) {
-			dialogueStacks.put(userId, new DialogueStack(rootDialogue.create()));
-		}
-		// Call the handle function of the top dialogue of the stack
-		DialogueStack userStack = dialogueStacks.get(userId);
-		List<Message> replies = userStack.top().handleUserInput(event.message(), userStack);
-		// Finally, send the desired replies to the user
-		if (replies != null) sendReply(replyToken, replies);
+		sendSingleTextReply(replyToken, "Message Event Recieved!");
 	}
 	
 	/**
