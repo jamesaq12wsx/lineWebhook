@@ -12,7 +12,7 @@ import com.pershing.message.Message;
  */
 public interface MessageSender {
 
-	public Response sendReply(String channelAccessToken, String token, List<Message> replyMessages);
-	public Response sendPush(String channelAccessToken, String userId, List<Message> pushMessages);
+	public Response sendReply(String token, List<Message> replyMessages, String metadata);
+	public Response sendPush(String userId, List<Message> pushMessages, String metadata);
 	
 }

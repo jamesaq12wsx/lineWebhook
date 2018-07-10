@@ -8,8 +8,8 @@ package com.pershing.sender;
  */
 public class MessageSenderFactory {
 
-	public static MessageSender createDefault() {
-		return new HTTPMessageSender();
+	public static MessageSender createDefault(String channelAccessToken) {
+		return new HTTPMessageSender(channelAccessToken);
 	}
 	
 }

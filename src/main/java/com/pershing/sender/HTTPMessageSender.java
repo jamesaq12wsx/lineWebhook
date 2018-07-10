@@ -29,14 +29,20 @@ import com.pershing.message.Message;
  */
 public class HTTPMessageSender implements MessageSender {
 
+	private final String channelAccessToken;
+	
+	public HTTPMessageSender(String channelAccessToken) {
+		this.channelAccessToken = channelAccessToken;
+	}
+	
 	/**
 	 * Send a reply to an event directly to LINE via HTTPS
 	 * 
-	 * @param channelAccessToken	The channel access token of the bot
 	 * @param token					The reply Token of the event
 	 * @param replyMessages			The reply messages to be sent to the source
+	 * @param metadata				Additional data to be sent with the reply
 	 */
-	public Response sendReply(String channelAccessToken, String token, List<Message> replyMessages) {
+	public Response sendReply(String token, List<Message> replyMessages, String metadata) {
 		
 		// initialize the HTTP request
 		HttpClient httpclient = HttpClients.createDefault();
@@ -110,11 +116,11 @@ public class HTTPMessageSender implements MessageSender {
 	/**
 	 * Send a push message directly to LINE via HTTPS
 	 * 
-	 * @param channelAccessToken	The channel access token of the bot
 	 * @param userId				The LINE messenger ID of the target user
 	 * @param pushMessages			The push messages to be sent to the user
+	 * @param metadata				Additional metadata to send with the message
 	 */
-	public Response sendPush(String channelAccessToken, String userId, List<Message> pushMessages) {
+	public Response sendPush(String userId, List<Message> pushMessages, String metadata) {
 		
 		// initialize the HTTP request
 		HttpClient httpclient = HttpClients.createDefault();
