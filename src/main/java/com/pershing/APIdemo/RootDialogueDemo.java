@@ -42,9 +42,13 @@ public class RootDialogueDemo extends RootDialogue {
 	
 	private void parseTextMessage(String text, String userId) {
 		if (text.toLowerCase().contains("help")) {
-			Util.sendSingleTextPush(sender, userId, "Type 'phone' or 'email' to phone or email, type 'info' to see account info.");			
+			Util.sendSingleTextPush(sender, userId, "Type balance to check your balance");			
 		} else if (text.toLowerCase().contains("setup")) {
 			push(new SetupDialogue(userId));
+		} else if (text.toLowerCase().contains("balance")) {
+			// just print the response from within the root dialogue
+			int balance = mockRemoteAPI.getUserBalance(userId);
+			Util.sendSingleTextPush(sender, userId, "User balance: " + balance);
 		}
 	}
 

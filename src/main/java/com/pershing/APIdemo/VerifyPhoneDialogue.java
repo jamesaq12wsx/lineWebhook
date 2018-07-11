@@ -17,9 +17,10 @@ public class VerifyPhoneDialogue extends Dialogue {
 	public VerifyPhoneDialogue(String userId) {
 		String code = getFourDigitCode();
 		Util.sendSingleTextPush(sender, userId, "A 4 digit code has been sent to your phone, please enter it below for validation.");
+		Util.sendSingleTextPush(sender, userId, "SMS message sending disabled for now, the code is: " + code);
 		mockRemoteAPI.setUserVerificationCode(userId, code);
 		String number = mockRemoteAPI.getUserPhone(userId);
-		SMS.sendTextMessage(number, "DEMO", "Your code is: " + code);
+		// SMS.sendTextMessage(number, "DEMO", "Your code is: " + code);
 		triesLeft = 3;
 	}
 	
@@ -39,6 +40,7 @@ public class VerifyPhoneDialogue extends Dialogue {
 					pop();
 				} else {
 					triesLeft--;
+					if (triesLeft <= 0) pop();
 					Util.sendSingleTextReply(sender, 
 							messageEvent.replyToken(), 
 							"Incorrect code, tries remaining: " + Integer.toString(triesLeft));

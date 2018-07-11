@@ -13,10 +13,18 @@ public class mockRemoteAPI {
 		}
 	}
 	
+	public static boolean userValid(String userId) {
+		if (users.containsKey(userId)) {
+			return users.get(userId).valid;
+		}
+		return false;
+	}
+	
 	// Assume input validation was already done by the calling application
 	public static void setUserPhone(String userId, String phone) {
 		if (!users.containsKey(userId)) {
 			users.put(userId, new UserData());
+			users.get(userId).balance = 100;
 		}
 		users.get(userId).phone = phone;
 	}
@@ -24,6 +32,7 @@ public class mockRemoteAPI {
 	public static void setUserVerificationCode(String userId, String code) {
 		if (!users.containsKey(userId)) {
 			users.put(userId, new UserData());
+			users.get(userId).balance = 100;
 		}
 		users.get(userId).code = code;
 	}
