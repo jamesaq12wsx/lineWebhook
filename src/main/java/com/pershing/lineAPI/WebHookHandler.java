@@ -78,6 +78,14 @@ public class WebHookHandler {
 	}
 	
 	/**
+	 * Setter method for the root dialogue of the webhook handler
+	 * @param dialogue
+	 */
+	public final void setRootDialogue(RootDialogue dialogue) {
+		this.rootDialogue = dialogue;
+	}
+	
+	/**
 	 * Setter function to the verbose property
 	 * 
 	 * @param verbose	

@@ -1,5 +1,6 @@
 package com.pershing.template;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.JsonArray;
@@ -124,12 +125,20 @@ public class ButtonsTemplate implements Template {
 		
 		// actions
 		public ButtonsTemplateBuilder actions(List<Action> actions) {
-			nestedActions= actions;
+			nestedActions = actions;
+			return this;
+		}
+		
+		// add a single action
+		public ButtonsTemplateBuilder addAction(Action action) {
+			if (nestedActions == null) nestedActions = new ArrayList<Action>();
+			// 4 is the maximum number of actions
+			if (nestedActions.size() < 4) nestedActions.add(action);
 			return this;
 		}
 		
 		// create method
-		public ButtonsTemplate createButtonsTemplate() {
+		public ButtonsTemplate build() {
 			return new ButtonsTemplate(
 					nestedThumbnailImageUrl,
 					nestedImageAspectRatio,
