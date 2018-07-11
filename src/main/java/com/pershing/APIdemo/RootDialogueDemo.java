@@ -46,9 +46,16 @@ public class RootDialogueDemo extends RootDialogue {
 		} else if (text.toLowerCase().contains("setup")) {
 			push(new SetupDialogue(userId));
 		} else if (text.toLowerCase().contains("balance")) {
-			// just print the response from within the root dialogue
+			requestUserBalance(userId);
+		}
+	}
+	
+	private void requestUserBalance(String userId) {
+		if (mockRemoteAPI.userValid(userId)) {
 			int balance = mockRemoteAPI.getUserBalance(userId);
-			Util.sendSingleTextPush(sender, userId, "User balance: " + balance);
+			Util.sendSingleTextPush(sender, userId, "User balance: " + balance);	
+		} else {
+			Util.sendSingleTextPush(sender, userId, "Sorry, account not yet validated.\n Type setup to get started.");
 		}
 	}
 
