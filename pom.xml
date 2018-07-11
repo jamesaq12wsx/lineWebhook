@@ -39,6 +39,11 @@
     	<version>20070405</version>
     	<scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>com.nexmo</groupId>
+      <artifactId>client</artifactId>
+      <version>3.6.0</version>
+	</dependency>
   </dependencies>
   
   <build>

@@ -22,6 +22,14 @@ public abstract class Dialogue {
 	public abstract void handleEvent(WebHookEvent event, String userId);
 	
 	/**
+	 * Function to override if there is functionality desired for when an element is popped
+	 * 	and the current dialogue is the next in the stack.
+	 */
+	protected void recieve() {
+		// do nothing by default
+	}
+	
+	/**
 	 * Push a dialogue onto the stack
 	 * 	- Set the previous to the current dialogue because when calling from within the
 	 * 		class, the previous must be the current dialogue.
@@ -46,6 +54,7 @@ public abstract class Dialogue {
 	protected boolean pop() {
 		if (this.previous == null) return false;
 		this.root.top = this.previous;
+		this.previous.recieve();
 		return true;
 	}
 	

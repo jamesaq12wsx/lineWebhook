@@ -7,14 +7,25 @@ public class mockRemoteAPI {
 
 	public static Map<String, UserData> users = new HashMap<String, UserData>();
 	
-	// Assume validation was already done by the calling application
+	public static void validateUser(String userId) {
+		if (users.containsKey(userId)) {
+			users.get(userId).valid = true;
+		}
+	}
+	
+	// Assume input validation was already done by the calling application
 	public static void setUserPhone(String userId, String phone) {
 		if (!users.containsKey(userId)) {
 			users.put(userId, new UserData());
 		}
 		users.get(userId).phone = phone;
-		// temporarily just initialize balance to 100 dollars for now
-		users.get(userId).balance = 100;
+	}
+	
+	public static void setUserVerificationCode(String userId, String code) {
+		if (!users.containsKey(userId)) {
+			users.put(userId, new UserData());
+		}
+		users.get(userId).code = code;
 	}
 	
 	// Mock getting users balance from a remote API
@@ -30,6 +41,15 @@ public class mockRemoteAPI {
 	public static String getUserPhone(String userId) {
 		if (users.containsKey(userId)) {
 			return users.get(userId).phone;
+		} else {
+			return "";
+		}
+	}
+	
+	// Mock getting users verification code from remote API
+	public static String getUserVerificationCode(String userId) {
+		if (users.containsKey(userId)) {
+			return users.get(userId).code;
 		} else {
 			return "";
 		}

@@ -22,11 +22,18 @@ public class SetupDialogue extends Dialogue {
 			MessageEvent messageEvent = (MessageEvent) event;
 			if (messageEvent.message().type() == MessageType.TEXT) {
 				TextMessage textMessage = (TextMessage) messageEvent.message();
-				// Do some text validation
+				// TODO: Do some text validation
 				mockRemoteAPI.setUserPhone(userId, textMessage.getText());
-				pop();
+				// Push a verification code dialogue to the user
+				push(new VerifyPhoneDialogue(userId));
 			}
 		}
 	}
-
+	
+	@Override
+	public void recieve() {
+		// just pop and don't do anymore verification for now
+		pop();
+	}
+	
 }
