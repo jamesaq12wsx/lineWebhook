@@ -13,7 +13,8 @@ public class SetupDialogue extends Dialogue {
 	// constructor of the dialogue
 	public SetupDialogue(String userId) {
 		// send a push message to prompt for phone number to start the setup process
-		Util.sendSingleTextPush(sender, userId, "Please start the setup process by typing your phone number.");
+		Util.sendSingleTextPush(sender, userId, 
+				"Please start the setup process by typing your phone number.");
 	}
 	
 	@Override
@@ -22,8 +23,12 @@ public class SetupDialogue extends Dialogue {
 			MessageEvent messageEvent = (MessageEvent) event;
 			if (messageEvent.message().type() == MessageType.TEXT) {
 				TextMessage textMessage = (TextMessage) messageEvent.message();
+				String phone = textMessage.getText();
+				if (!(phone.charAt(0) == '8' && phone.charAt(1) == '8' && phone.charAt(2) == '6')) {
+					phone = "886" + phone;
+				}
 				// TODO: Do some text validation
-				mockRemoteAPI.setUserPhone(userId, textMessage.getText());
+				mockRemoteAPI.setUserPhone(userId, phone);
 				// Push a verification code dialogue to the user
 				push(new VerifyPhoneDialogue(userId));
 			}
