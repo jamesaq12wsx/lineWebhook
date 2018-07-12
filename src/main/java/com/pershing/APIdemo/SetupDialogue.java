@@ -54,6 +54,7 @@ public class SetupDialogue extends Dialogue {
 							"User validated, type help for different commands.")
 					.addAction(new MessageAction("help", "help"))
 					.addAction(new MessageAction("balance", "balance"))
+					.addAction(new MessageAction("bills", "bills"))
 					.build());
 			Util.sendSinglePush(sender, userId, menu);
 		} else {

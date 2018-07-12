@@ -46,7 +46,19 @@ public class RootDialogueDemo extends RootDialogue {
 		} else if (text.toLowerCase().contains("setup")) {
 			push(new SetupDialogue(userId));
 		} else if (text.toLowerCase().contains("balance")) {
-			requestUserBalance(userId);
+			if (mockRemoteAPI.userValid(userId)) {
+				requestUserBalance(userId);	
+			} else {
+				Util.sendSingleTextPush(sender, userId, "Sorry, user not yet validated. Type setup to verify account.");
+			}
+		} else if (text.toLowerCase().contains("bills")) {
+			if (mockRemoteAPI.userValid(userId)) {
+				push(new BillPaymentDialogue(userId));	
+			} else {
+				Util.sendSingleTextPush(sender, userId, "Sorry, user not yet validated. Type setup to verify account.");
+			}
+		} else {
+			Util.sendSingleTextPush(sender, userId, "Message not understood, type help for a list of commands");
 		}
 	}
 	

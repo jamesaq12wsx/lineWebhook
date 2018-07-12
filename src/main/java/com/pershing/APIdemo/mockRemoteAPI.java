@@ -1,5 +1,7 @@
 package com.pershing.APIdemo;
 
+import java.util.List;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -61,6 +63,28 @@ public class mockRemoteAPI {
 			return users.get(userId).code;
 		} else {
 			return "";
+		}
+	}
+	
+	public static void addUserPayee(String userId, String payee) {
+		if (users.containsKey(userId)) {
+			users.get(userId).payees.add(payee);
+		}
+	}
+	
+	// Mock getting user payees
+	public static List<String> getUserPayees(String userId) {
+		if (users.containsKey(userId)) {
+			return users.get(userId).payees;
+		} else {
+			return new ArrayList<String>();
+		}
+	}
+	
+	// hehe taking in dem moneyzz
+	public static void TakeUserMoney(String userId, int amount) {
+		if (users.containsKey(userId)) {
+			users.get(userId).balance -= amount;
 		}
 	}
 	
