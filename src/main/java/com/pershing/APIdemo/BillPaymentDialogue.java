@@ -22,6 +22,7 @@ public class BillPaymentDialogue extends Dialogue {
 	public BillPaymentDialogue(String userId) {
 		List<String> payees = mockRemoteAPI.getUserPayees(userId);
 		if (payees.size() > 0) {
+			try {
 			ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(
 					"Please choose a payee from the menu below or message the name of the payee.").build();	
 			for (String payee : payees) {
@@ -35,6 +36,9 @@ public class BillPaymentDialogue extends Dialogue {
 			System.out.println(" +============ FLAG ================+");
 			System.out.println(message.getAsJsonString());
 			System.out.println(" +============ FLAG ================+");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		} else {
 			Util.sendSingleTextPush(sender, userId, "Please enter the name of the payee.");
 		}
