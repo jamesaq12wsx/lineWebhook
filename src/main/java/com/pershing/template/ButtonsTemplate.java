@@ -183,7 +183,10 @@ public class ButtonsTemplate implements Template {
 	 * @param action		The new action to be added
 	 */
 	public void addAction(Action action) {
-		if (actions != null) actions.add(action);
+		if (actions == null) {
+			actions = new ArrayList<Action>();
+		}
+		actions.add(action);
 	}
 	
 	/**
