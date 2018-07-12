@@ -75,7 +75,9 @@ public class BillPaymentDialogue extends Dialogue {
 						Util.sendSingleTextPush(sender, userId, "Transaction successful, transferring " + 
 								amount.toString() + " dollars to " + payee);
 						// Only add the payee to the users list if the transaction went through
-						mockRemoteAPI.addUserPayee(userId, payee);
+						if (!mockRemoteAPI.getUserPayees(userId).contains(payee)) {
+							mockRemoteAPI.addUserPayee(userId, payee);	
+						}
 						pop();
 					} else {
 						Util.sendSingleTextPush(sender, userId, "Transaction cancelled.");
