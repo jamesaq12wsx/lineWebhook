@@ -31,7 +31,10 @@ public class BillPaymentDialogue extends Dialogue {
 					"Please choose a payee from the menu below or message the name of the payee.",
 					buttons);
 			Util.sendSinglePush(sender, userId, message);
-			Util.sendSingleTextPush(sender, userId, "TEST MESSAGE");
+			Util.sendSingleTextPush(sender, userId, message.getAsJsonString());
+			System.out.println(" +============ FLAG ================+");
+			System.out.println(message.getAsJsonString());
+			System.out.println(" +============ FLAG ================+");
 		} else {
 			Util.sendSingleTextPush(sender, userId, "Please enter the name of the payee.");
 		}
