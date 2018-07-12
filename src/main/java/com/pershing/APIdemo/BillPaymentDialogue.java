@@ -31,6 +31,7 @@ public class BillPaymentDialogue extends Dialogue {
 					"Please choose a payee from the menu below or message the name of the payee.",
 					buttons);
 			Util.sendSinglePush(sender, userId, message);
+			Util.sendSingleTextPush(sender, userId, "TEST MESSAGE");
 		} else {
 			Util.sendSingleTextPush(sender, userId, "Please enter the name of the payee.");
 		}
