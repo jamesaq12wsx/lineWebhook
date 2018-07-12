@@ -48,7 +48,7 @@ public class TemplateMessage implements Message {
 	 * @return	The string containing the JSON data of the message
 	 */
 	public String getAsJsonString() {
-		return getAsJsonObject().getAsString();
+		return getAsJsonObject().toString();
 	}
 
 }
