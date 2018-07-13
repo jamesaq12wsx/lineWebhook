@@ -42,32 +42,11 @@ public class RootDialogueDemo extends RootDialogue {
 	
 	private void parseTextMessage(String text, String userId) {
 		if (text.toLowerCase().contains("help")) {
-			Util.sendSingleTextPush(sender, userId, "Type balance to check your balance");			
+			Util.sendSingleTextPush(sender, userId, "Type accounts to check your account details");			
 		} else if (text.toLowerCase().contains("setup")) {
 			push(new SetupDialogue(userId));
-		} else if (text.toLowerCase().contains("balance")) {
-			if (mockRemoteAPI.userValid(userId)) {
-				requestUserBalance(userId);	
-			} else {
-				Util.sendSingleTextPush(sender, userId, "Sorry, user not yet validated. Type setup to verify account.");
-			}
-		} else if (text.toLowerCase().contains("bills")) {
-			if (mockRemoteAPI.userValid(userId)) {
-				push(new BillPaymentDialogue(userId));	
-			} else {
-				Util.sendSingleTextPush(sender, userId, "Sorry, user not yet validated. Type setup to verify account.");
-			}
 		} else {
 			Util.sendSingleTextPush(sender, userId, "Message not understood, type help for a list of commands");
-		}
-	}
-	
-	private void requestUserBalance(String userId) {
-		if (mockRemoteAPI.userValid(userId)) {
-			int balance = mockRemoteAPI.getUserBalance(userId);
-			Util.sendSingleTextPush(sender, userId, "User balance: " + balance);	
-		} else {
-			Util.sendSingleTextPush(sender, userId, "Sorry, account not yet validated.\n Type setup to get started.");
 		}
 	}
 

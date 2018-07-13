@@ -15,6 +15,10 @@ public class SMS {
 	private static NexmoClient client = new NexmoClient(auth);
 	
 	public static void sendTextMessage(String number, String appName, String message) {
+		// First get the number to a valid format
+		if (number.length() == 10) number = number.substring(1);
+		if (number.length() == 9) number = "886" + number;
+		// Then try to send the SMS message
 		try {
 			SmsSubmissionResult[] responses;
 			responses = client.getSmsClient().submitMessage(new TextMessage(
