@@ -96,9 +96,11 @@ public class RootDialogueDemo extends RootDialogue {
 				return;
 			}
 			String id = data.substring(7);
+			System.out.println("LOOKING FOR: " + id);
 			// try to get the user account info
 			List<Account> accounts = MockAPI.getUserAccounts(userId);
 			for (Account account : accounts) {
+				System.out.println("ACCOUNT ID: " + account.id);
 				if (account.id == id) {
 					String overview  = account.name + '\n';
 					overview += "ID: " + account.id + '\n';
