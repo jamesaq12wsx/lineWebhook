@@ -9,6 +9,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
@@ -189,6 +190,107 @@ public class HTTPMessageSender implements MessageSender {
         }	
         
 		return new Response(status, message, data);
+	}
+
+	@Override
+	public Response linkRichMenu(String richMenuId, String userId) {
+		// initialize the HTTP request
+		HttpClient httpclient = HttpClients.createDefault();
+		String url = "https://api.line.me/v2/bot/user/" + userId;
+		url += "/richmenu/" + richMenuId;
+        HttpPost httppost = new HttpPost(url);
+        
+        // request headers
+        httppost.setHeader("Authorization", "Bearer " + channelAccessToken);
+		
+        // execute and get the response
+        HttpResponse response = null;
+		try {
+			response = httpclient.execute(httppost);
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		int status = -1;
+		String message = "";
+		String data = "";
+		
+		// handle the server response
+        HttpEntity entity = response.getEntity();
+        if (entity != null) {
+    		// verify that the status code is what we want
+        	status = response.getStatusLine().getStatusCode();
+        	message = response.getStatusLine().toString();
+    		try {
+				data = EntityUtils.toString(entity);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+        } else {
+            // release the connection when finished
+            httppost.releaseConnection();
+            return Response.constructEmptyResponse();
+        }	
+        
+		return new Response(status, message, data);
+	}
+
+	@Override
+	public Response UnlinkRichMenu(String userId) {
+		// initialize the HTTP request
+				HttpClient httpclient = HttpClients.createDefault();
+				String url = "https://api.line.me/v2/bot/user/" + userId + "/richmenu";
+		        HttpDelete httpDelete = new HttpDelete(url);
+		        
+		        // request headers
+		        httpDelete.setHeader("Authorization", "Bearer " + channelAccessToken);
+				
+		        // execute and get the response
+		        HttpResponse response = null;
+				try {
+					response = httpclient.execute(httpDelete);
+				} catch (ClientProtocolException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				int status = -1;
+				String message = "";
+				String data = "";
+				
+				// handle the server response
+		        HttpEntity entity = response.getEntity();
+		        if (entity != null) {
+		    		// verify that the status code is what we want
+		        	status = response.getStatusLine().getStatusCode();
+		        	message = response.getStatusLine().toString();
+		    		try {
+						data = EntityUtils.toString(entity);
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}	
+		        } else {
+		            // release the connection when finished
+		        	httpDelete.releaseConnection();
+		            return Response.constructEmptyResponse();
+		        }	
+		        
+				return new Response(status, message, data);
 	}
 
 }

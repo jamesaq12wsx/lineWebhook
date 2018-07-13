@@ -22,6 +22,8 @@ import com.pershing.util.Util;
 
 public class RootDialogueDemo extends RootDialogue {
 
+	private static final String richMenuId = "richmenu-052dac80d35611ab4c4984c78891e437";
+	
 	@Override
 	public RootDialogue create() {
 		return new RootDialogueDemo();
@@ -49,6 +51,10 @@ public class RootDialogueDemo extends RootDialogue {
 		if (event.type() == WebHookEventType.POSTBACK) {
 			PostbackEvent postbackEvent = (PostbackEvent) event;
 			handlePostbackEvent(postbackEvent, userId);
+		}
+		if (event.type() == WebHookEventType.UNFOLLOW) {
+			// unlink the rich menu if the user unfollows
+			sender.UnlinkRichMenu(userId);
 		}
 	}
 	

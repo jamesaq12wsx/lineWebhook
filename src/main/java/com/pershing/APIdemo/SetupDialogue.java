@@ -14,6 +14,8 @@ import com.pershing.util.Util;
 
 public class SetupDialogue extends Dialogue {
 
+	private static final String richMenuId = "richmenu-052dac80d35611ab4c4984c78891e437";
+	
 	String userId;
 	
 	// constructor of the dialogue
@@ -52,6 +54,8 @@ public class SetupDialogue extends Dialogue {
 					.addAction(new MessageAction("billing", "billing"))
 					.build());
 			Util.sendSinglePush(sender, userId, menu);
+			// Also link the rich menu to the user once the account is validated
+			sender.linkRichMenu(richMenuId, userId);
 		} else {
 			Util.sendSingleTextPush(sender, userId, "User validation failed, type setup to try again.");
 		}
