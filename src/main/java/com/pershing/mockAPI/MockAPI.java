@@ -39,7 +39,20 @@ public class MockAPI {
 			Account account = users.get(userId).accounts.get(0);
 			account.balance -= amount;
 			account.history.add(Integer.toString(amount) + " payed to '" + target + '\'');
+			// now also update the payee information
+			for (Payee payee : users.get(userId).payees) {
+				if (payee.name.equals(target)) {
+					payee.history.add(Integer.toString(amount));
+					return;
+				}
+			}
+			// If the payee wasn't found, add it to the list
+			users.get(userId).payees.add(new Payee(target));
 		}
+	}
+	
+	public static List<Payee> getUserPayees(String userId) {
+		return users.get(userId).payees;
 	}
 	
 }

@@ -1,5 +1,7 @@
 package com.pershing.APIdemo;
 
+import java.util.List;
+
 import com.pershing.action.MessageAction;
 import com.pershing.dialogue.Dialogue;
 import com.pershing.event.MessageEvent;
@@ -9,21 +11,33 @@ import com.pershing.message.MessageType;
 import com.pershing.message.TemplateMessage;
 import com.pershing.message.TextMessage;
 import com.pershing.mockAPI.MockAPI;
+import com.pershing.mockAPI.Payee;
 import com.pershing.template.ButtonsTemplate;
 import com.pershing.template.ConfirmTemplate;
 import com.pershing.util.Util;
 
 public class BillingDialogue extends Dialogue {
 
-	private boolean targetSet = false;
+	private boolean targetSet;
 	private String target;
-	private boolean amountSet = false;
+	private boolean amountSet;
 	private int amount;
 	
 	public BillingDialogue(String userId) {
 		targetSet = false;
-		Util.sendSingleTextPush(sender, userId, "Please enter the name of the payee");
-		// TODO: add list of payees here
+		amountSet = false;
+		List<Payee> payees = MockAPI.getUserPayees(userId);
+		if (payees.size() > 0) {
+			ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(
+					"Please enter the name of the payee").build();
+			for (Payee payee : MockAPI.getUserPayees(userId)) {
+				buttons.addAction(new MessageAction(payee.name, payee.name));
+			}
+			TemplateMessage message = new TemplateMessage("Please enter the name of the payee", buttons);
+			Util.sendSinglePush(sender, userId, message);	
+		} else {
+			Util.sendSingleTextPush(sender, userId, "Please enter the name of the payee");
+		}
 	}
 	
 	@Override

@@ -5,8 +5,8 @@ import java.util.List;
 
 public class Payee {
 
-	String name;
-	List<String> history;
+	public String name;
+	public List<String> history;
 	
 	public Payee() {
 		name = "";
