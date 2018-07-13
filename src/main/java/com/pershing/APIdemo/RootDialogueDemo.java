@@ -70,7 +70,7 @@ public class RootDialogueDemo extends RootDialogue {
 			push(new BillingDialogue(userId));
 		} else if (text.toLowerCase().contains("rates")) {
 			push(new RatesDialogue(userId));
-		} else if (text.toLowerCase().contains("info")) {
+		} else if (text.toLowerCase().contains("\ninfo")) {
 			// get user info and print it
 			UserData data = MockAPI.getUserInfo(userId);
 			if (data != null) {
