@@ -34,7 +34,7 @@ public class SetupDialogue extends Dialogue {
 				// TODO: Do some text validation
 				MockAPI.generateAccount(userId, phone);
 				// Push a verification code dialogue to the user
-				push(new VerifyPhoneDialogue(userId));
+				push(new VerifyPhoneDialogue(userId, phone));
 			}
 		}
 	}
