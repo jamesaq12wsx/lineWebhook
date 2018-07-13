@@ -31,6 +31,10 @@ public class MockAPI {
 		}
 	}
 	
+	public static UserData getUserInfo(String userId) {
+		return users.get(userId);
+	}
+	
 	public static List<Account> getUserAccounts(String userId) {
 		return users.get(userId).accounts;
 	}

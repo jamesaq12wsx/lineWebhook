@@ -17,6 +17,7 @@ import com.pershing.message.TemplateMessage;
 import com.pershing.message.TextMessage;
 import com.pershing.mockAPI.Account;
 import com.pershing.mockAPI.MockAPI;
+import com.pershing.mockAPI.UserData;
 import com.pershing.template.ButtonsTemplate;
 import com.pershing.util.Util;
 
@@ -69,6 +70,16 @@ public class RootDialogueDemo extends RootDialogue {
 			push(new BillingDialogue(userId));
 		} else if (text.toLowerCase().contains("rates")) {
 			push(new RatesDialogue(userId));
+		} else if (text.toLowerCase().contains("info")) {
+			// get user info and print it
+			UserData data = MockAPI.getUserInfo(userId);
+			if (data != null) {
+				String message = "PHONE: " + data.phone;
+				message += "EMAIL: " + data.email;
+				Util.sendSingleTextPush(sender, userId, message);
+			} else {
+				Util.sendSingleTextPush(sender, userId, "User data could not be retrieved");
+			}
 		} else {
 			Util.sendSingleTextPush(sender, userId, "Message not understood, type help for a list of commands");
 		}

@@ -46,7 +46,7 @@ public class RatesDialogue extends Dialogue {
 					String source = textMessage.getText();
 					// send a HTTP request to find the currency
 					float result = MockAPI.getCurrency(unitCode, source);
-					String message = "1 " + source + " = " + Float.toString(result) + unitCode;
+					String message = "1 " + source + " = " + Float.toString(result) + " " + unitCode;
 					Util.sendSingleTextPush(sender, userId, message);
 					pop();
 				}

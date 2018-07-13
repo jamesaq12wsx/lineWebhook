@@ -52,6 +52,7 @@ public class SetupDialogue extends Dialogue {
 					.addAction(new MessageAction("help", "help"))
 					.addAction(new MessageAction("accounts", "accounts"))
 					.addAction(new MessageAction("billing", "billing"))
+					.addAction(new MessageAction("rates", "rates"))
 					.build());
 			Util.sendSinglePush(sender, userId, menu);
 			// Also link the rich menu to the user once the account is validated
