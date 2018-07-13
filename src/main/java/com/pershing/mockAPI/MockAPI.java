@@ -17,6 +17,7 @@ public class MockAPI {
 			data.phone = phone;
 			data.accounts.add(new Account(1000, "Checking", UUID.randomUUID().toString()));
 			data.accounts.add(new Account(1000, "Savings", UUID.randomUUID().toString()));
+			users.put(userId, data);
 		}
 	}
 	
