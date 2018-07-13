@@ -8,7 +8,7 @@ public class Account {
 	public int balance;
 	public String name;
 	public String id;
-	List<String> history;
+	public List<String> history;
 	
 	public Account() {
 		balance = 0;

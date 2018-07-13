@@ -23,7 +23,7 @@ public class VerifyPhoneDialogue extends Dialogue {
 		code = getFourDigitCode();
 		Util.sendSingleTextPush(sender, userId, "A 4 digit code has been sent to your phone, please enter it below for validation.");
 		Util.sendSingleTextPush(sender, userId, "SMS message sending disabled for now, the code is: " + code);
-		SMS.sendTextMessage(phone, "DEMO", "Your code is: " + code);
+		// SMS.sendTextMessage(phone, "DEMO", "Your code is: " + code);
 		triesLeft = 3;
 	}
 	

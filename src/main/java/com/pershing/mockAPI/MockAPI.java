@@ -25,7 +25,7 @@ public class MockAPI {
 	}
 	
 	public static boolean userValid(String userId) {
-		return users.get(userId).valid;
+		return users.get(userId) == null ? false : users.get(userId).valid;
 	}
 	
 	public static void validateUser(String userId) {
