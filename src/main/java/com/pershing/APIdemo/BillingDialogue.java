@@ -68,8 +68,8 @@ public class BillingDialogue extends Dialogue {
 						MockAPI.userPayment(userId, amount, target);
 					} else {
 						Util.sendSingleTextPush(sender, userId, "Transaction cancelled");
-						pop();
 					}
+					pop();
 				}
 			}
 		}
