@@ -59,6 +59,8 @@ public class RootDialogueDemo extends RootDialogue {
 			push(new SetupDialogue(userId));
 		} else if (text.toLowerCase().contains("accounts")) {
 			handleAccountCommand(userId);
+		} else if (text.toLowerCase().contains("billing")) {
+			push(new BillingDialogue(userId));
 		} else {
 			Util.sendSingleTextPush(sender, userId, "Message not understood, type help for a list of commands");
 		}

@@ -15,8 +15,8 @@ public class MockAPI {
 		if (!users.containsKey(userId)) {
 			UserData data = new UserData();
 			data.phone = phone;
-			data.accounts.add(new Account(1000, "Checking", UUID.randomUUID().toString()));
-			data.accounts.add(new Account(1000, "Savings", UUID.randomUUID().toString()));
+			data.accounts.add(new Account(1000, "Chequing Account", UUID.randomUUID().toString()));
+			data.accounts.add(new Account(1000, "Savings Account", UUID.randomUUID().toString()));
 			users.put(userId, data);
 		}
 	}
@@ -31,6 +31,15 @@ public class MockAPI {
 	
 	public static void validateUser(String userId) {
 		if (users.containsKey(userId)) users.get(userId).valid = true;
+	}
+	
+	public static void userPayment(String userId, int amount, String target) {
+		if (users.containsKey(userId)) {
+			if (users.get(userId).accounts.size() <= 0) return;
+			Account account = users.get(userId).accounts.get(0);
+			account.balance -= amount;
+			account.history.add(Integer.toString(amount) + " payed to '" + target + '\'');
+		}
 	}
 	
 }
