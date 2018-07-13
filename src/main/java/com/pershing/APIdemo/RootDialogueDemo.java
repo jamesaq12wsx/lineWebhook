@@ -101,7 +101,7 @@ public class RootDialogueDemo extends RootDialogue {
 			List<Account> accounts = MockAPI.getUserAccounts(userId);
 			for (Account account : accounts) {
 				System.out.println("ACCOUNT ID: " + account.id);
-				if (account.id == id) {
+				if (account.id.equals(id)) {
 					String overview  = account.name + '\n';
 					overview += "ID: " + account.id + '\n';
 					overview += "BALANCE: " + account.balance;
