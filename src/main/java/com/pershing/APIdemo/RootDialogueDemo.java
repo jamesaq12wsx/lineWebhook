@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.pershing.action.MessageAction;
 import com.pershing.action.PostbackAction;
+import com.pershing.action.URIAction;
 import com.pershing.dialogue.RootDialogue;
 import com.pershing.event.FollowEvent;
 import com.pershing.event.MessageEvent;
@@ -80,6 +81,11 @@ public class RootDialogueDemo extends RootDialogue {
 			} else {
 				Util.sendSingleTextPush(sender, userId, "User data could not be retrieved");
 			}
+		} else if (text.toLowerCase().contains("test")) {
+			ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder("TEST").build();
+			buttons.addAction(new URIAction("test", "https://line.me/R/app/1588952156-1ObPN3nK"));
+			TemplateMessage message = new TemplateMessage("TEST", buttons);
+			Util.sendSinglePush(sender, userId, message);
 		} else {
 			Util.sendSingleTextPush(sender, userId, "Message not understood, type help for a list of commands");
 		}
