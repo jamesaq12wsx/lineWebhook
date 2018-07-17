@@ -141,7 +141,7 @@ public class RuleEngineDialogue extends RootDialogue {
         		return;
         	}
     		try {
-				String data = EntityUtils.toString(entity);
+				String data = EntityUtils.toString(entity, "UTF-8");
 				JsonParser parser = new JsonParser();
 				responseData = parser.parse(data).getAsJsonObject();
 				System.out.println(responseData.toString());
