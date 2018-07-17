@@ -144,6 +144,7 @@ public class RuleEngineDialogue extends RootDialogue {
 				String data = EntityUtils.toString(entity);
 				JsonParser parser = new JsonParser();
 				responseData = parser.parse(data).getAsJsonObject();
+				System.out.println(responseData.toString());
 			} catch (ParseException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -162,6 +163,7 @@ public class RuleEngineDialogue extends RootDialogue {
         		JsonArray nodes = responseData.getAsJsonArray("nodes");
         		for (JsonElement e : nodes) {
         			JsonObject node = e.getAsJsonObject();
+        			System.out.println(node.get("nodetitle").getAsString());
         			String nodeType = node.get("nodetype").getAsString();
         			if (nodeType.equals("D")) {
         				String text = node.get("nodetitle").getAsString();
