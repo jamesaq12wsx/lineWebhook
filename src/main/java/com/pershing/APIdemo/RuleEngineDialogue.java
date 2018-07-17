@@ -118,9 +118,6 @@ public class RuleEngineDialogue extends RootDialogue {
 		HttpClient httpclient = HttpClients.createDefault();
         HttpPost httpget = new HttpPost("https://chatbotapipsc.azurewebsites.net/api/chatbot/");
         
-        // request headers
-        httpget.setHeader("Content-Type", "application/json");
-        
         // execute and get the response
         HttpResponse response = null;
 		try {
