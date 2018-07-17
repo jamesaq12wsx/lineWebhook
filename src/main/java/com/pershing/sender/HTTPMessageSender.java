@@ -79,10 +79,8 @@ public class HTTPMessageSender implements MessageSender {
 		try {
 			response = httpclient.execute(httppost);
 		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
