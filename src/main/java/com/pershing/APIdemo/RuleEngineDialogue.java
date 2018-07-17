@@ -21,9 +21,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.pershing.action.MessageAction;
+import com.pershing.action.PostbackAction;
 import com.pershing.dialogue.RootDialogue;
 import com.pershing.event.FollowEvent;
 import com.pershing.event.MessageEvent;
+import com.pershing.event.PostbackEvent;
 import com.pershing.event.WebHookEvent;
 import com.pershing.event.WebHookEventType;
 import com.pershing.message.Message;
@@ -65,6 +67,10 @@ public class RuleEngineDialogue extends RootDialogue {
 		if (event.type() == WebHookEventType.FOLLOW) {
 			sendInitialMessage(userId);
 		}
+		if (event.type() == WebHookEventType.POSTBACK) {
+			PostbackEvent postbackEvent = (PostbackEvent) event;
+			Util.sendSingleTextReply(sender, postbackEvent.replyToken(), postbackEvent.postbackData());
+		}
 	}
 	
 	private void handleNodes(JsonArray nodes, String userId) {
@@ -84,6 +90,21 @@ public class RuleEngineDialogue extends RootDialogue {
 							String title = nodeObject.get("nodetitle").getAsString();
 							buttons.addAction(new MessageAction(title, title));	
 						}
+					}
+					TemplateMessage message = new TemplateMessage(node.get("content").getAsString(), buttons);
+					Util.sendSinglePush(sender, userId, message);
+				}
+				if (type.equals("B")) {
+					// print a menu with the specfied buttons
+					ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(
+							node.get("nodetitle").getAsString()).build();
+					JsonArray content = node.getAsJsonArray("content");
+					for (JsonElement button : content) {
+						JsonObject buttonObject = button.getAsJsonObject();
+						buttons.addAction(new PostbackAction(
+								buttonObject.get("title").getAsString(), 
+								buttonObject.get("forward").getAsString(),
+								buttonObject.get("title").getAsString()));
 					}
 					TemplateMessage message = new TemplateMessage(node.get("content").getAsString(), buttons);
 					Util.sendSinglePush(sender, userId, message);
