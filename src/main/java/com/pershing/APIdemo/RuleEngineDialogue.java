@@ -215,7 +215,7 @@ public class RuleEngineDialogue extends RootDialogue {
 			JsonArray nodes = nodeTreeJson.getAsJsonArray("nodes");
 			for (JsonElement e : nodes) {
 				JsonObject obj = e.getAsJsonObject();
-				if (obj.get("nodeid").equals(id)) {
+				if (obj.get("nodeid").getAsString().equals(id)) {
 					return obj;
 				}
 			}
