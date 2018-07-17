@@ -116,7 +116,7 @@ public class RuleEngineDialogue extends RootDialogue {
 		// send a GET request to get all the nodes
 		// initialize the HTTP request
 		HttpClient httpclient = HttpClients.createDefault();
-        HttpPost httpget = new HttpPost("https://chatbotapipsc.azurewebsites.net/api/chatbot/");
+        HttpPost httpget = new HttpGet("https://chatbotapipsc.azurewebsites.net/api/chatbot/");
         
         // execute and get the response
         HttpResponse response = null;
