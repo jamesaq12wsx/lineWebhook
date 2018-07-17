@@ -76,7 +76,7 @@ public class RuleEngineDialogue extends RootDialogue {
 					// print a menu with the next nodes as options
 					ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(
 							node.get("content").getAsString()).build();
-					JsonArray nextNodes = node.getAsJsonArray("content");
+					JsonArray nextNodes = node.getAsJsonArray("nextnode");
 					for (JsonElement nextNode : nextNodes) {
 						String nodeId = nextNode.getAsString();
 						JsonObject nodeObject = findNodeViaId(nodeId);
