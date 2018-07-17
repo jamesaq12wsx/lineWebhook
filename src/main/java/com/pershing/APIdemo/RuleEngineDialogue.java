@@ -88,7 +88,7 @@ public class RuleEngineDialogue extends RootDialogue {
 						JsonObject nodeObject = findNodeViaId(nodeId);
 						if (nodeObject != null) {
 							String title = nodeObject.get("nodetitle").getAsString();
-							buttons.addAction(new MessageAction(title, title));	
+							buttons.addAction(new PostbackAction(title, nodeId ,title));
 						}
 					}
 					TemplateMessage message = new TemplateMessage(node.get("content").getAsString(), buttons);
