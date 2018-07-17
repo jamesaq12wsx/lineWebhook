@@ -148,7 +148,7 @@ public class RuleEngineDialogue extends RootDialogue {
         	System.out.println("CHARSET: " + charset);
     		try {
 				String data = EntityUtils.toString(entity, charset);
-				Util.sendSingleTextPush(sender, userId, data.substring(200));
+				Util.sendSingleTextPush(sender, userId, data.substring(0, 1000));
 				JsonParser parser = new JsonParser();
 				responseData = parser.parse(data).getAsJsonObject();
 				System.out.println(responseData.toString());
