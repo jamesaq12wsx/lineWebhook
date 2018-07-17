@@ -2,6 +2,7 @@ package com.pershing.APIdemo;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -10,6 +11,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
@@ -140,8 +142,12 @@ public class RuleEngineDialogue extends RootDialogue {
         		System.out.println("Something went wrong, message: " + message);
         		return;
         	}
+        	// get the content type of the response
+        	ContentType contentType = ContentType.get(entity);
+        	Charset charset = contentType.getCharset();
+        	System.out.println("CHARSET: " + charset);
     		try {
-				String data = EntityUtils.toString(entity, "UTF-8");
+				String data = EntityUtils.toString(entity, charset);
 				JsonParser parser = new JsonParser();
 				responseData = parser.parse(data).getAsJsonObject();
 				System.out.println(responseData.toString());
