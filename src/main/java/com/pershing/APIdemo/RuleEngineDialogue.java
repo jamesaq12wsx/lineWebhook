@@ -36,6 +36,8 @@ import com.pershing.util.Util;
 
 public class RuleEngineDialogue extends RootDialogue {
 
+	private JsonObject nodeTreeJson;
+	
 	@Override
 	public RootDialogue create() {
 		return new RuleEngineDialogue();
@@ -48,11 +50,45 @@ public class RuleEngineDialogue extends RootDialogue {
 			if (messageEvent.message().type() == MessageType.TEXT) {
 				TextMessage textMessage = (TextMessage) messageEvent.message();
 				JsonObject response = ruleEngineRequest(textMessage.getText(), userId);
-				
+				try {
+					JsonArray nodes = response.getAsJsonArray("nodes");
+					if (nodes.size() > 0) {
+						handleNodes(nodes, userId);	
+					} else {
+						Util.sendSingleTextReply(sender, messageEvent.replyToken(), "Sorry, message not understood");
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		if (event.type() == WebHookEventType.FOLLOW) {
 			sendInitialMessage(userId);
+		}
+	}
+	
+	private void handleNodes(JsonArray nodes, String userId) {
+		try {
+			for (JsonElement e : nodes) {
+				JsonObject node = e.getAsJsonObject();
+				String type = node.get("nodetype").getAsString();
+				if (type.equals("D")) {
+					// print a menu with the next nodes as options
+					ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(
+							node.get("content").getAsString()).build();
+					JsonArray nextNodes = node.getAsJsonArray("content");
+					for (JsonElement nextNode : nextNodes) {
+						String nodeId = nextNode.getAsString();
+						JsonObject nodeObject = findNodeViaId(nodeId);
+						String title = nodeObject.get("nodetitle").getAsString();
+						buttons.addAction(new MessageAction(title, title));
+					}
+					TemplateMessage message = new TemplateMessage(node.get("content").getAsString(), buttons);
+					Util.sendSinglePush(sender, userId, message);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -71,15 +107,7 @@ public class RuleEngineDialogue extends RootDialogue {
         // request headers
         httppost.setHeader("Content-Type", "application/json");
         
-        StringEntity params = null;
-		try {
-			params = new StringEntity(obj.toString());
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-	        // release the connection when finished
-	        httppost.releaseConnection();
-	        return null;
-		}
+        StringEntity params = new StringEntity(obj.toString(), "UTF-8");
 		
 		httppost.setEntity(params);
         // execute and get the response
@@ -132,7 +160,6 @@ public class RuleEngineDialogue extends RootDialogue {
 		}
 		
 		// handle the server response
-		JsonObject responseData = null;
         HttpEntity entity = response.getEntity();
         if (entity != null) {
     		// verify that the status code is what we want
@@ -142,16 +169,11 @@ public class RuleEngineDialogue extends RootDialogue {
         		System.out.println("Something went wrong, message: " + message);
         		return;
         	}
-        	// get the content type of the response
-        	ContentType contentType = ContentType.get(entity);
-        	Charset charset = contentType.getCharset();
-        	System.out.println("CHARSET: " + charset);
     		try {
-				String data = EntityUtils.toString(entity, charset);
-				Util.sendSingleTextPush(sender, userId, data.substring(0, 1000));
+    			// Assume the response is always encoded in UTF-8 
+				String data = EntityUtils.toString(entity, "UTF-8");
 				JsonParser parser = new JsonParser();
-				responseData = parser.parse(data).getAsJsonObject();
-				System.out.println(responseData.toString());
+				nodeTreeJson = parser.parse(data).getAsJsonObject();
 			} catch (ParseException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -165,12 +187,11 @@ public class RuleEngineDialogue extends RootDialogue {
         ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(
         		"Welcome, pick an option below to get started").build();
         // parse the data to construct a message to send
-        if (responseData != null) {
+        if (nodeTreeJson != null) {
         	try {
-        		JsonArray nodes = responseData.getAsJsonArray("nodes");
+        		JsonArray nodes = nodeTreeJson.getAsJsonArray("nodes");
         		for (JsonElement e : nodes) {
         			JsonObject node = e.getAsJsonObject();
-        			System.out.println(node.get("nodetitle").getAsString());
         			String nodeType = node.get("nodetype").getAsString();
         			if (nodeType.equals("D")) {
         				String text = node.get("nodetitle").getAsString();
@@ -185,5 +206,20 @@ public class RuleEngineDialogue extends RootDialogue {
         TemplateMessage message = 
         		new TemplateMessage("Welcome, pick an option below to get started", buttons);
         Util.sendSinglePush(sender, userId, message);
+	}
+
+	private JsonObject findNodeViaId(String id) {
+		try {
+			JsonArray nodes = nodeTreeJson.getAsJsonArray("nodes");
+			for (JsonElement e : nodes) {
+				JsonObject obj = e.getAsJsonObject();
+				if (obj.get("nodeid").equals(id)) {
+					return obj;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }
