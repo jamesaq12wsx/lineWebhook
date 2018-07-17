@@ -62,16 +62,7 @@ public class HTTPMessageSender implements MessageSender {
         body.addProperty("replyToken", token);
         body.add("messages", messages);
         
-        StringEntity params = null;
-		try {
-			params = new StringEntity(body.toString());
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-	        // release the connection when finished
-	        httppost.releaseConnection();
-			return Response.constructEmptyResponse();
-		}
+        StringEntity params = new StringEntity(body.toString(), "UTF-8");
 		
 		httppost.setEntity(params);
         // execute and get the response
@@ -138,16 +129,7 @@ public class HTTPMessageSender implements MessageSender {
         body.addProperty("to", userId);
         body.add("messages", messages);
         
-        StringEntity params = null;
-		try {
-			params = new StringEntity(body.toString());
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-	        // release the connection when finished
-	        httppost.releaseConnection();
-			return Response.constructEmptyResponse();
-		}
+        StringEntity params = new StringEntity(body.toString(), "UTF-8");
 		
 		httppost.setEntity(params);
         // execute and get the response
