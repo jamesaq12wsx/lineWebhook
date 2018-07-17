@@ -22,6 +22,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.pershing.action.MessageAction;
 import com.pershing.action.PostbackAction;
+import com.pershing.action.URIAction;
 import com.pershing.dialogue.RootDialogue;
 import com.pershing.event.FollowEvent;
 import com.pershing.event.MessageEvent;
@@ -105,6 +106,20 @@ public class RuleEngineDialogue extends RootDialogue {
 								buttonObject.get("title").getAsString(), 
 								buttonObject.get("forward").getAsString(),
 								buttonObject.get("title").getAsString()));
+					}
+					TemplateMessage message = new TemplateMessage(node.get("nodetitle").getAsString(), buttons);
+					Util.sendSinglePush(sender, userId, message);
+				}
+				if (type.equals("L")) {
+					// print a menu with the specfied buttons
+					ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(
+							node.get("nodetitle").getAsString()).build();
+					JsonArray content = node.getAsJsonArray("content");
+					for (JsonElement button : content) {
+						JsonObject buttonObject = button.getAsJsonObject();
+						buttons.addAction(new URIAction(
+								buttonObject.get("title").getAsString(), 
+								buttonObject.get("url").getAsString()));
 					}
 					TemplateMessage message = new TemplateMessage(node.get("nodetitle").getAsString(), buttons);
 					Util.sendSinglePush(sender, userId, message);
