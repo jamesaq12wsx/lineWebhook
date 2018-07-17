@@ -106,7 +106,7 @@ public class RuleEngineDialogue extends RootDialogue {
 								buttonObject.get("forward").getAsString(),
 								buttonObject.get("title").getAsString()));
 					}
-					TemplateMessage message = new TemplateMessage(node.get("content").getAsString(), buttons);
+					TemplateMessage message = new TemplateMessage(node.get("nodetitle").getAsString(), buttons);
 					Util.sendSinglePush(sender, userId, message);
 				}
 			}
