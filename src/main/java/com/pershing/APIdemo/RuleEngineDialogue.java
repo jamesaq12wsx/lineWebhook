@@ -8,6 +8,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
@@ -116,7 +117,7 @@ public class RuleEngineDialogue extends RootDialogue {
 		// send a GET request to get all the nodes
 		// initialize the HTTP request
 		HttpClient httpclient = HttpClients.createDefault();
-        HttpPost httpget = new HttpGet("https://chatbotapipsc.azurewebsites.net/api/chatbot/");
+		HttpGet httpget = new HttpGet("https://chatbotapipsc.azurewebsites.net/api/chatbot/");
         
         // execute and get the response
         HttpResponse response = null;
