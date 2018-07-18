@@ -110,7 +110,7 @@ public class RuleEngineDialogue extends RootDialogue {
 						JsonObject buttonObject = button.getAsJsonObject();
 						buttons.addAction(new PostbackAction(
 								buttonObject.get("title").getAsString(), 
-								buttonObject.get("forward").getAsString(),
+								"forward" + buttonObject.get("forward").getAsString(),
 								buttonObject.get("title").getAsString()));
 					}
 					TemplateMessage message = new TemplateMessage(node.get("nodetitle").getAsString(), buttons);
@@ -147,6 +147,18 @@ public class RuleEngineDialogue extends RootDialogue {
 				JsonArray arr = new JsonArray();
 				arr.add(balanceNode);
 				handleNodes(arr, userId);
+			}
+		}
+		// parse the data as a forward action trigger if the data specifies it
+		if (data.substring(0, 8).equals("forward=")) {
+			String forward = data.substring(8);
+			JsonObject node = findNodeViaKeyword(forward);
+			if (node != null) {
+				JsonArray arr = new JsonArray();
+				arr.add(node);
+				handleNodes(arr, userId);
+			} else {
+				Util.sendSingleTextPush(sender, userId, "Sorry, something went wrong...");
 			}
 		}
 	}
@@ -276,6 +288,22 @@ public class RuleEngineDialogue extends RootDialogue {
 			for (JsonElement e : nodes) {
 				JsonObject obj = e.getAsJsonObject();
 				if (obj.get("nodeid").getAsString().equals(id)) {
+					return obj;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	// Helper method to find a node in the nodetree via the node keyword
+	private JsonObject findNodeViaKeyword(String keyword) {
+		try {
+			JsonArray nodes = nodeTreeJson.getAsJsonArray("nodes");
+			for (JsonElement e : nodes) {
+				JsonObject obj = e.getAsJsonObject();
+				if (obj.get("keyword").getAsString().equals(keyword)) {
 					return obj;
 				}
 			}
