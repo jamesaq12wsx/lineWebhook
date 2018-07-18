@@ -157,6 +157,21 @@ public class RuleEngineDialogue extends RootDialogue {
 				arr.add(balanceNode);
 				handleNodes(arr, userId);
 			}
+			if (action.equals("interest")) {
+				Util.sendSingleTextPush(sender, userId, "INTEREST RATES HERE");
+			}
+			if (action.equals("exchange")) {
+				Util.sendSingleTextPush(sender, userId, "EXCHANGE RATES HERE");
+			}
+			if (action.equals("smart_transfer")) {
+				Util.sendSingleTextPush(sender, userId, "SMART TRANSFER HERE");
+			}
+			if (action.equals("qr_transfer")) {
+				Util.sendSingleTextPush(sender, userId, "QR TRANSFER HERE");
+			}
+			if (action.equals("service")) {
+				Util.sendSingleTextPush(sender, userId, "SERVICE POINTS HERE");
+			}
 		}
 		// parse the data as a forward action trigger if the data specifies it
 		if (data.substring(0, 8).equals("forward=")) {
