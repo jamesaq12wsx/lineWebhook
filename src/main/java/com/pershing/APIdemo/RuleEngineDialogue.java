@@ -110,7 +110,7 @@ public class RuleEngineDialogue extends RootDialogue {
 						JsonObject buttonObject = button.getAsJsonObject();
 						buttons.addAction(new PostbackAction(
 								buttonObject.get("title").getAsString(), 
-								"forward" + buttonObject.get("forward").getAsString(),
+								"forward=" + buttonObject.get("forward").getAsString(),
 								buttonObject.get("title").getAsString()));
 					}
 					TemplateMessage message = new TemplateMessage(node.get("nodetitle").getAsString(), buttons);
