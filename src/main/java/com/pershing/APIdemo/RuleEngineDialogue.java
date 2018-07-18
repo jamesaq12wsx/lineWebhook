@@ -75,10 +75,11 @@ public class RuleEngineDialogue extends RootDialogue {
 		}
 		if (event.type() == WebHookEventType.POSTBACK) {
 			PostbackEvent postbackEvent = (PostbackEvent) event;
-			Util.sendSingleTextReply(sender, postbackEvent.replyToken(), postbackEvent.postbackData());
+			handlePostbackEvent(postbackEvent, userId);
 		}
 	}
 	
+	// Helper method to interact with the user based on the input nodes
 	private void handleNodes(JsonArray nodes, String userId) {
 		try {
 			for (JsonElement e : nodes) {
@@ -134,7 +135,23 @@ public class RuleEngineDialogue extends RootDialogue {
 			e.printStackTrace();
 		}
 	}
+
+	// Helper method to handle a postback event
+	private void handlePostbackEvent(PostbackEvent event, String userId) {
+		String data = event.postbackData();
+		// parse the data as an action trigger if the data specifies it
+		if (data.substring(0, 7).equals("action=")) {
+			String action = data.substring(7);
+			if (action.equals("balance")) {
+				JsonObject balanceNode = findNodeViaId("1.0");
+				JsonArray arr = new JsonArray();
+				arr.add(balanceNode);
+				handleNodes(arr, userId);
+			}
+		}
+	}
 	
+	// Helper method to get the next node depending on the sent message from backend API
 	private JsonObject ruleEngineRequest(String message, String userId) {
 		// construct the json object to be sent first
 		JsonObject obj = new JsonObject();
@@ -186,6 +203,7 @@ public class RuleEngineDialogue extends RootDialogue {
 		return null;
 	}
 	
+	// Helper method to send initial menu to user for a list of actions
 	private void sendInitialMessage(String userId) {
 		// send a GET request to get all the nodes
 		// initialize the HTTP request
@@ -251,6 +269,7 @@ public class RuleEngineDialogue extends RootDialogue {
         Util.sendSinglePush(sender, userId, message);
 	}
 
+	// Helper method to find a node in the nodetree via the node id
 	private JsonObject findNodeViaId(String id) {
 		try {
 			JsonArray nodes = nodeTreeJson.getAsJsonArray("nodes");
