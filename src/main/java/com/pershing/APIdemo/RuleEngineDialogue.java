@@ -139,9 +139,11 @@ public class RuleEngineDialogue extends RootDialogue {
 	// Helper method to handle a postback event
 	private void handlePostbackEvent(PostbackEvent event, String userId) {
 		String data = event.postbackData();
+		System.out.println(">>> RECIEVING POSTBACK EVENT: " + data);
 		// parse the data as an action trigger if the data specifies it
 		if (data.substring(0, 7).equals("action=")) {
 			String action = data.substring(7);
+			System.out.println(">>> POSTBACK DATA ACTION: " + action);
 			if (action.equals("balance")) {
 				JsonObject balanceNode = findNodeViaId("1.0");
 				JsonArray arr = new JsonArray();
@@ -152,6 +154,7 @@ public class RuleEngineDialogue extends RootDialogue {
 		// parse the data as a forward action trigger if the data specifies it
 		if (data.substring(0, 8).equals("forward=")) {
 			String forward = data.substring(8);
+			System.out.println(">>> POSTBACK DATA FORWARD: " + forward);
 			JsonObject node = findNodeViaKeyword(forward);
 			if (node != null) {
 				JsonArray arr = new JsonArray();
