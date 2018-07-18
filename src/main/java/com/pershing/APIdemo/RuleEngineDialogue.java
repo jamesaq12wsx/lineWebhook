@@ -39,6 +39,9 @@ import com.pershing.util.Util;
 
 public class RuleEngineDialogue extends RootDialogue {
 
+	private static final String richMenuId = "richmenu-9a514e3da2598a348836d6460b1fc5e1";
+	
+	// store the nodes to avoid constantly calling on them
 	private JsonObject nodeTreeJson;
 	
 	@Override
@@ -67,6 +70,8 @@ public class RuleEngineDialogue extends RootDialogue {
 		}
 		if (event.type() == WebHookEventType.FOLLOW) {
 			sendInitialMessage(userId);
+			// Also link the rich menu to the user
+			sender.linkRichMenu(richMenuId, userId);
 		}
 		if (event.type() == WebHookEventType.POSTBACK) {
 			PostbackEvent postbackEvent = (PostbackEvent) event;
@@ -89,7 +94,7 @@ public class RuleEngineDialogue extends RootDialogue {
 						JsonObject nodeObject = findNodeViaId(nodeId);
 						if (nodeObject != null) {
 							String title = nodeObject.get("nodetitle").getAsString();
-							buttons.addAction(new PostbackAction(title, nodeId ,title));
+							buttons.addAction(new MessageAction(title, nodeId));
 						}
 					}
 					TemplateMessage message = new TemplateMessage(node.get("content").getAsString(), buttons);
