@@ -58,20 +58,24 @@ public class RuleEngineDialogue extends RootDialogue {
 				// temporarily override message parsing for LIFF app testing
 				if (textMessage.getText().toLowerCase().contains("test")) {
 					ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder("TEST").build();
-					buttons.addAction(new URIAction("test", "https://line.me/R/app/1588952156-1ObPN3nK"));
+					buttons.addAction(new URIAction("test", "https://line.me/R/app/1588952156-kX2KV06z"));
 					TemplateMessage message = new TemplateMessage("TEST", buttons);
 					Util.sendSinglePush(sender, userId, message);
 				}
 				JsonObject response = ruleEngineRequest(textMessage.getText(), userId);
-				try {
-					JsonArray nodes = response.getAsJsonArray("nodes");
-					if (nodes.size() > 0) {
-						handleNodes(nodes, userId);	
-					} else {
-						Util.sendSingleTextReply(sender, messageEvent.replyToken(), "Sorry, message not understood");
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
+				if (response == null) {
+					Util.sendSingleTextReply(sender, userId, "Sorry, message could not be understood.");
+				} else {
+					try {
+						JsonArray nodes = response.getAsJsonArray("nodes");
+						if (nodes.size() > 0) {
+							handleNodes(nodes, userId);	
+						} else {
+							Util.sendSingleTextReply(sender, messageEvent.replyToken(), "Sorry, message not understood");
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}	
 				}
 			}
 		}
