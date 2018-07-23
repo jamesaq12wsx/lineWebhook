@@ -262,6 +262,7 @@ public class RuleEngineDialogue extends RootDialogue {
 				int counter = 0;
 				for (JsonElement e : nodes) {
 					JsonObject node = e.getAsJsonObject();
+					System.out.println(node.toString());
 					currentColumn.addAction(new PostbackAction(
 							node.get("nodetitle").getAsString(), 
 							"forward=" + node.get("forward").getAsString(),
