@@ -262,11 +262,15 @@ public class RuleEngineDialogue extends RootDialogue {
 				int counter = 0;
 				for (JsonElement e : nodes) {
 					JsonObject node = e.getAsJsonObject();
-					System.out.println(node.toString());
+					try {
 					currentColumn.addAction(new PostbackAction(
 							node.get("nodetitle").getAsString(), 
 							"forward=" + node.get("forward").getAsString(),
 							node.get("nodetitle").getAsString()));
+					} catch (Exception ex) {
+						// skip the current iteration if something went wrong
+						continue;
+					}
 					counter++;
 					if (counter % 3 == 0 && counter != 0) {	
 						carousel.addColumn(currentColumn);
