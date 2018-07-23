@@ -29,11 +29,10 @@ import com.pershing.message.MessageType;
 import com.pershing.message.TemplateMessage;
 import com.pershing.message.TextMessage;
 import com.pershing.template.ButtonsTemplate;
-import com.pershing.template.CarouselTemplate;
-import com.pershing.template.Column;
 import com.pershing.util.Util;
 
-public class RuleEngineDialogue extends RootDialogue {
+public class NewRuleEngineDialogue extends RootDialogue {
+
 
 	private static final String richMenuId = "richmenu-9a514e3da2598a348836d6460b1fc5e1";
 	
@@ -60,18 +59,18 @@ public class RuleEngineDialogue extends RootDialogue {
 				}
 				JsonObject response = ruleEngineRequest(textMessage.getText(), userId);
 				if (response == null) {
-					Util.sendSingleTextPush(sender, userId, "Sorry, message could not be understood.");
+					Util.sendSingleTextReply(sender, userId, "Sorry, message could not be understood.");
 				} else {
-					try {
-						JsonArray nodes = response.getAsJsonArray("nodes");
-						if (nodes.size() > 0) {
-							handleNodes(nodes, userId);	
-						} else {
-							Util.sendSingleTextReply(sender, messageEvent.replyToken(), "Sorry, message not understood");
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-					}	
+					String type = response.get("type").getAsString();
+					if (type.equals("buttons")) {
+						handleButtonResponse(response, userId);
+					}
+					if (type.equals("error")) {
+						
+					}
+					if (type.equals("text")) {
+						
+					}
 				}
 			}
 		}
@@ -85,71 +84,24 @@ public class RuleEngineDialogue extends RootDialogue {
 			handlePostbackEvent(postbackEvent, userId);
 		}
 	}
-	
-	// Helper method to interact with the user based on the input nodes
-	private void handleNodes(JsonArray nodes, String userId) {
-		try {
-			for (JsonElement e : nodes) {
-				JsonObject node = e.getAsJsonObject();
-				String type = node.get("nodetype").getAsString();
-				if (type.equals("D")) {
-					// print a menu with the next nodes as options
-					ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(
-							node.get("content").getAsString()).build();
-					JsonArray nextNodes = node.getAsJsonArray("nextnode");
-					for (JsonElement nextNode : nextNodes) {
-						String nodeId = nextNode.getAsString();
-						JsonObject nodeObject = findNodeViaId(nodeId);
-						if (nodeObject != null) {
-							String title = nodeObject.get("nodetitle").getAsString();
-							buttons.addAction(new MessageAction(title, nodeId));
-						}
-					}
-					TemplateMessage message = new TemplateMessage(node.get("content").getAsString(), buttons);
-					Util.sendSinglePush(sender, userId, message);
-				}
-				if (type.equals("B")) {
-					// print a menu with the specfied buttons
-					ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(
-							node.get("nodetitle").getAsString()).build();
-					JsonArray content = node.getAsJsonArray("content");
-					for (JsonElement button : content) {
-						JsonObject buttonObject = button.getAsJsonObject();
-						buttons.addAction(new PostbackAction(
-								buttonObject.get("title").getAsString(), 
-								"forward=" + buttonObject.get("forward").getAsString(),
-								buttonObject.get("title").getAsString()));
-					}
-					TemplateMessage message = new TemplateMessage(node.get("nodetitle").getAsString(), buttons);
-					Util.sendSinglePush(sender, userId, message);
-				}
-				if (type.equals("L")) {
-					// print a menu with the specfied buttons
-					ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(
-							node.get("nodetitle").getAsString()).build();
-					try {
-						JsonArray content = node.getAsJsonArray("content");
-						for (JsonElement button : content) {
-							JsonObject buttonObject = button.getAsJsonObject();
-							buttons.addAction(new URIAction(
-									buttonObject.get("title").getAsString(), 
-									buttonObject.get("url").getAsString()));
-						}
-					} catch (Exception ex) {
-						// THIS IS NOT AN ERROR, SOMETIMES LINKS ARE ONLY A SINGLE LINK
-						buttons.addAction(new URIAction(
-								node.get("nodetitle").getAsString(),
-								node.get("content").getAsString()));
-					}
-					TemplateMessage message = new TemplateMessage(node.get("nodetitle").getAsString(), buttons);
-					Util.sendSinglePush(sender, userId, message);
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
+	private void handleButtonResponse(JsonObject response, String userId) {
+		JsonArray buttons = response.getAsJsonArray("content");
+		ButtonsTemplate bt = new ButtonsTemplate.ButtonsTemplateBuilder(
+				response.get("text").getAsString()).build();
+		for (JsonElement e : buttons) {
+			JsonObject button = e.getAsJsonObject();
+			String buttonType = button.get("type").getAsString();
+			if (buttonType.equals("message")) {
+				
+			}
+			bt.addAction(new PostbackAction(button.get("text").getAsString(), 
+					"forward=" + button.get("data").getAsString(), button.get("title").getAsString()));
+		}
+		TemplateMessage message = new TemplateMessage(response.get("nodetitle").getAsString(), bt);
+		Util.sendSinglePush(sender, userId, message);
+	}
+	
 	// Helper method to handle a postback event
 	private void handlePostbackEvent(PostbackEvent event, String userId) {
 		String data = event.postbackData();
@@ -159,10 +111,7 @@ public class RuleEngineDialogue extends RootDialogue {
 			String action = data.substring(7);
 			System.out.println(">>> POSTBACK DATA ACTION: " + action);
 			if (action.equals("balance")) {
-				JsonObject balanceNode = findNodeViaKeyword("AccountServiceList");
-				JsonArray arr = new JsonArray();
-				arr.add(balanceNode);
-				handleNodes(arr, userId);
+				Util.sendSingleTextPush(sender, userId, "BALANCE HERE");
 			}
 			if (action.equals("interest")) {
 				Util.sendSingleTextPush(sender, userId, "INTEREST RATES HERE");
@@ -184,14 +133,7 @@ public class RuleEngineDialogue extends RootDialogue {
 		if (data.substring(0, 8).equals("forward=")) {
 			String forward = data.substring(8);
 			System.out.println(">>> POSTBACK DATA FORWARD: " + forward);
-			JsonObject node = findNodeViaKeyword(forward);
-			if (node != null) {
-				JsonArray arr = new JsonArray();
-				arr.add(node);
-				handleNodes(arr, userId);
-			} else {
-				Util.sendSingleTextPush(sender, userId, "Sorry, something went wrong...");
-			}
+			Util.sendSingleTextPush(sender, userId, "FOrWARD TO: " + forward);
 		}
 	}
 	
@@ -206,7 +148,7 @@ public class RuleEngineDialogue extends RootDialogue {
 		
 		// initialize the HTTP request
 		HttpClient httpclient = HttpClients.createDefault();
-        HttpPost httppost = new HttpPost("https://chatbotapipsc.azurewebsites.net/api/chatbot/");
+        HttpPost httppost = new HttpPost("https://lit-tor-78027.herokuapp.com/");
         
         // request headers
         httppost.setHeader("Content-Type", "application/json");
@@ -249,69 +191,68 @@ public class RuleEngineDialogue extends RootDialogue {
 	
 	// Helper method to send initial menu to user for a list of actions
 	private void sendInitialMessage(String userId) {
-		JsonObject response = ruleEngineRequest("", userId);
-		// We know the response contains all the default nodes, no need to validate
-		if (response == null) {
-			Util.sendSingleTextPush(sender, userId, "Sorry, message could not be understood.");
-		} else {
-			try {
-				JsonArray nodes = response.getAsJsonArray("nodes");
-				// print a menu with the specfied buttons
-				CarouselTemplate carousel = new CarouselTemplate();
-				Column currentColumn = new Column("MENU");
-				int counter = 0;
-				for (JsonElement e : nodes) {
-					JsonObject node = e.getAsJsonObject();
-					currentColumn.addAction(new PostbackAction(
-							node.get("nodetitle").getAsString(), 
-							"forward=" + node.get("forward").getAsString(),
-							node.get("nodetitle").getAsString()));
-					counter++;
-					if (counter % 3 == 0 && counter != 0) {	
-						carousel.addColumn(currentColumn);
-						currentColumn = new Column("MENU");
-					}
-				}
-				if (currentColumn.numActions() != 0) {
-					carousel.addColumn(currentColumn);
-				}
-				TemplateMessage message = new TemplateMessage("Menu", carousel);
-				Util.sendSinglePush(sender, userId, message);
-			} catch (Exception e) {
+		// send a GET request to get all the nodes
+		// initialize the HTTP request
+		HttpClient httpclient = HttpClients.createDefault();
+		HttpGet httpget = new HttpGet("https://lit-tor-78027.herokuapp.com/");
+        
+        // execute and get the response
+        HttpResponse response = null;
+		try {
+			response = httpclient.execute(httpget);
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		// handle the server response
+        HttpEntity entity = response.getEntity();
+        if (entity != null) {
+    		// verify that the status code is what we want
+        	int status = response.getStatusLine().getStatusCode();
+        	String message = response.getStatusLine().toString();
+        	if (status != 200) {
+        		System.out.println("Something went wrong, message: " + message);
+        		return;
+        	}
+    		try {
+    			// Assume the response is always encoded in UTF-8 
+				String data = EntityUtils.toString(entity, "UTF-8");
+				JsonParser parser = new JsonParser();
+				nodeTreeJson = parser.parse(data).getAsJsonObject();
+			} catch (ParseException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
 				e.printStackTrace();
 			}	
-		}
+        } else {
+            // release the connection when finished
+            httpget.releaseConnection();
+        }
+        
+        ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(
+        		"Welcome, pick an option below to get started").build();
+        // parse the data to construct a message to send
+        if (nodeTreeJson != null) {
+        	try {
+        		JsonArray nodes = nodeTreeJson.getAsJsonArray("nodes");
+        		for (JsonElement e : nodes) {
+        			JsonObject node = e.getAsJsonObject();
+        			String nodeType = node.get("nodetype").getAsString();
+        			if (nodeType.equals("D")) {
+        				String text = node.get("nodetitle").getAsString();
+        				buttons.addAction(new MessageAction(text, text));
+        			}
+        		}
+        	} catch (Exception e) {
+        		e.printStackTrace();
+        		return;
+        	}
+        }
+        TemplateMessage message = 
+        		new TemplateMessage("Welcome, pick an option below to get started", buttons);
+        Util.sendSinglePush(sender, userId, message);
 	}
 
-	// Helper method to find a node in the nodetree via the node id
-	private JsonObject findNodeViaId(String id) {
-		try {
-			JsonArray nodes = nodeTreeJson.getAsJsonArray("nodes");
-			for (JsonElement e : nodes) {
-				JsonObject obj = e.getAsJsonObject();
-				if (obj.get("nodeid").getAsString().equals(id)) {
-					return obj;
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	// Helper method to find a node in the nodetree via the node keyword
-	private JsonObject findNodeViaKeyword(String keyword) {
-		try {
-			JsonArray nodes = nodeTreeJson.getAsJsonArray("nodes");
-			for (JsonElement e : nodes) {
-				JsonObject obj = e.getAsJsonObject();
-				if (obj.get("keyword").getAsString().equals(keyword)) {
-					return obj;
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
 }
