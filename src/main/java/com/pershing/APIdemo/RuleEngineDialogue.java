@@ -257,32 +257,22 @@ public class RuleEngineDialogue extends RootDialogue {
 			try {
 				JsonArray nodes = response.getAsJsonArray("nodes");
 				// print a menu with the specfied buttons
-				CarouselTemplate carousel = new CarouselTemplate();
-				Column currentColumn = new Column("MENU");
-				int counter = 0;
+				ButtonsTemplate.ButtonsTemplateBuilder builder = new 
+						ButtonsTemplate.ButtonsTemplateBuilder("Select an option to get started");
 				for (JsonElement e : nodes) {
 					JsonObject node = e.getAsJsonObject();
 					try {
-					currentColumn.addAction(new PostbackAction(
-							node.get("nodetitle").getAsString(), 
-							"forward=" + node.get("forward").getAsString(),
-							node.get("nodetitle").getAsString()));
+						builder.addAction(new PostbackAction(
+								node.get("nodetitle").getAsString(),
+								"forward=" + node.get("forward").getAsString()));
 					} catch (Exception ex) {
 						// skip the current iteration if something went wrong
 						continue;
 					}
-					counter++;
-					if (counter % 3 == 0 && counter != 0) {	
-						carousel.addColumn(currentColumn);
-						currentColumn = new Column("MENU");
-					}
 				}
-				if (currentColumn.numActions() != 0) {
-					carousel.addColumn(currentColumn);
-				}
-				TemplateMessage message = new TemplateMessage("Menu", carousel);
+				ButtonsTemplate buttons = builder.build();
+				TemplateMessage message = new TemplateMessage("Type help to get started", buttons);
 				Util.sendSinglePush(sender, userId, message);
-				System.out.println(message.getAsJsonString());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}	
