@@ -282,6 +282,7 @@ public class RuleEngineDialogue extends RootDialogue {
 				}
 				TemplateMessage message = new TemplateMessage("Menu", carousel);
 				Util.sendSinglePush(sender, userId, message);
+				System.out.println(message.getAsJsonString());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}	
