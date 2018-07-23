@@ -25,6 +25,7 @@ public class CarouselTemplate implements Template {
 	@Override
 	public JsonObject getAsJsonObject() {
 		JsonObject result = new JsonObject();
+		result.addProperty("type", "carousel");
 		if (columns != null) {
 			JsonArray columnsArr = new JsonArray();
 			for (Column c : columns) {
