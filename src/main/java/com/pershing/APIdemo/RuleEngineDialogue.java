@@ -29,8 +29,6 @@ import com.pershing.message.MessageType;
 import com.pershing.message.TemplateMessage;
 import com.pershing.message.TextMessage;
 import com.pershing.template.ButtonsTemplate;
-import com.pershing.template.CarouselTemplate;
-import com.pershing.template.Column;
 import com.pershing.util.Util;
 
 public class RuleEngineDialogue extends RootDialogue {
@@ -108,8 +106,7 @@ public class RuleEngineDialogue extends RootDialogue {
 						JsonObject buttonObject = button.getAsJsonObject();
 						buttons.addAction(new PostbackAction(
 								buttonObject.get("title").getAsString(), 
-								"forward=" + buttonObject.get("forward").getAsString(),
-								buttonObject.get("title").getAsString()));
+								"forward=" + buttonObject.get("forward").getAsString()));
 					}
 					TemplateMessage message = new TemplateMessage(node.get("nodetitle").getAsString(), buttons);
 					Util.sendSinglePush(sender, userId, message);
