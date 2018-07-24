@@ -35,6 +35,14 @@ public class RuleEngineDialogue extends RootDialogue {
 
 	private static final String richMenuId = "richmenu-9a514e3da2598a348836d6460b1fc5e1";
 	
+	private boolean expectingInput;
+	private String nextNodeId;
+	
+	public RuleEngineDialogue() {
+		expectingInput = false;
+		nextNodeId = "";
+	}
+	
 	@Override
 	public RootDialogue create() {
 		return new RuleEngineDialogue();
@@ -45,28 +53,25 @@ public class RuleEngineDialogue extends RootDialogue {
 		if (event.type() == WebHookEventType.MESSAGE) {
 			MessageEvent messageEvent = (MessageEvent) event;
 			if (messageEvent.message().type() == MessageType.TEXT) {
-				TextMessage textMessage = (TextMessage) messageEvent.message();
-				// temporarily override message parsing for LIFF app testing
-				if (textMessage.getText().toLowerCase().contains("test")) {
-					ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder("TEST").build();
-					buttons.addAction(new URIAction("test", "https://line.me/R/app/1588952156-kX2KV06z"));
-					TemplateMessage message = new TemplateMessage("TEST", buttons);
-					Util.sendSinglePush(sender, userId, message);
-				}
-				JsonObject response = ruleEngineRequest("", textMessage.getText(), userId);
-				if (response == null) {
-					Util.sendSingleTextPush(sender, userId, "Sorry, message could not be understood.");
-				} else {
-					try {
-						JsonArray nodes = response.getAsJsonArray("nodes");
-						if (nodes.size() > 0) {
-							handleNodes(nodes, userId);	
-						} else {
-							Util.sendSingleTextReply(sender, messageEvent.replyToken(), "Sorry, message not understood");
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
+				if (expectingInput) {
+					TextMessage textMessage = (TextMessage) messageEvent.message();
+					JsonObject response = ruleEngineRequest(nextNodeId, textMessage.getText(), userId);
+					if (response == null) {
+						Util.sendSingleTextPush(sender, userId, "Sorry, message could not be understood.");
+					} else {
+						try {
+							JsonArray nodes = response.getAsJsonArray("nodes");
+							if (nodes.size() > 0) {
+								handleNodes(nodes, userId);	
+							} else {
+								Util.sendSingleTextReply(sender, messageEvent.replyToken(), "Sorry, message not understood");
+							}
+						} catch (Exception e) {
+							e.printStackTrace();
+						}	
 					}	
+				} else {
+					Util.sendSingleTextReply(sender, messageEvent.replyToken(), "Sorry, not expecting input.");
 				}
 			}
 		}
@@ -91,6 +96,12 @@ public class RuleEngineDialogue extends RootDialogue {
 					String reply = node.get("reply_context").getAsString();
 					if (!reply.equals("")) {
 						Util.sendSingleTextPush(sender, userId, reply);
+						expectingInput = true;
+						if (node.get("forward") != null) {
+							nextNodeId = node.get("forward").getAsString();	
+						} else {
+							nextNodeId = "";
+						}
 						return;	
 					}
 				}
