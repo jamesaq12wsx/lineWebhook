@@ -37,10 +37,12 @@ public class RuleEngineDialogue extends RootDialogue {
 	
 	private boolean expectingInput;
 	private String nextNodeId;
+	private String currentToken;
 	
 	public RuleEngineDialogue() {
 		expectingInput = false;
 		nextNodeId = "";
+		currentToken = "";
 	}
 	
 	@Override
@@ -55,16 +57,17 @@ public class RuleEngineDialogue extends RootDialogue {
 			if (messageEvent.message().type() == MessageType.TEXT) {
 				if (expectingInput) {
 					TextMessage textMessage = (TextMessage) messageEvent.message();
-					JsonObject response = ruleEngineRequest(nextNodeId, textMessage.getText(), userId);
+					JsonObject response = ruleEngineRequest(nextNodeId, textMessage.getText(), currentToken, userId);
 					if (response == null) {
 						Util.sendSingleTextPush(sender, userId, "Sorry, message could not be understood.");
 					} else {
 						try {
 							JsonArray nodes = response.getAsJsonArray("nodes");
+							currentToken = response.get("token").getAsString();
 							if (nodes.size() > 0) {
 								handleNodes(nodes, userId);	
 							} else {
-								Util.sendSingleTextReply(sender, messageEvent.replyToken(), "Sorry, message not understood");
+								Util.sendSingleTextReply(sender, messageEvent.replyToken(), "Sorry, something went wrong");
 							}
 						} catch (Exception e) {
 							e.printStackTrace();
@@ -191,7 +194,7 @@ public class RuleEngineDialogue extends RootDialogue {
 			String forward = data.substring(8);
 			System.out.println(">>> POSTBACK DATA FORWARD: " + forward);
 			// The forward data is always the node Ids
-			JsonObject response = ruleEngineRequest(forward, "", userId);
+			JsonObject response = ruleEngineRequest(forward, "", "", userId);
 			System.out.println(response.toString());
 			try {
 				JsonArray nodes = response.getAsJsonArray("nodes");
@@ -203,7 +206,7 @@ public class RuleEngineDialogue extends RootDialogue {
 	}
 	
 	// Helper method to get the next node depending on the sent message from backend API
-	private JsonObject ruleEngineRequest(String nodeId, String message, String userId) {
+	private JsonObject ruleEngineRequest(String nodeId, String message, String token, String userId) {
 		// construct the json object to be sent first
 		JsonObject obj = new JsonObject();
 		obj.addProperty("channel", "line");
@@ -218,6 +221,9 @@ public class RuleEngineDialogue extends RootDialogue {
         
         // request headers
         httppost.setHeader("Content-Type", "application/json");
+        if (token != null && !token.equals("")) {
+        	httppost.setHeader("Authorization", "Bearer " + token);
+        }
         
         StringEntity params = new StringEntity(obj.toString(), "UTF-8");
 		
@@ -257,7 +263,7 @@ public class RuleEngineDialogue extends RootDialogue {
 	
 	// Helper method to send initial menu to user for a list of actions
 	private void sendInitialMessage(String userId) {
-		JsonObject response = ruleEngineRequest("", "", userId);
+		JsonObject response = ruleEngineRequest("", "", "", userId);
 		// We know the response contains all the default nodes, no need to validate
 		if (response == null) {
 			Util.sendSingleTextPush(sender, userId, "Sorry, message could not be understood.");
