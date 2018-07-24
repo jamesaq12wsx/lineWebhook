@@ -57,26 +57,7 @@ public class RuleEngineDialogue extends RootDialogue {
 			if (messageEvent.message().type() == MessageType.TEXT) {
 				if (expectingInput) {
 					TextMessage textMessage = (TextMessage) messageEvent.message();
-					JsonObject response = ruleEngineRequest(nextNodeId, textMessage.getText(), currentToken, userId);
-					if (response == null) {
-						Util.sendSingleTextPush(sender, userId, "Sorry, message could not be understood.");
-					} else {
-						try {
-							JsonArray nodes = response.getAsJsonArray("nodes");
-							if (response.get("token").isJsonNull()) {
-								currentToken = "";	
-							} else {
-								currentToken = response.get("token").getAsString();
-							}
-							if (nodes.size() > 0) {
-								handleNodes(nodes, userId);	
-							} else {
-								Util.sendSingleTextReply(sender, messageEvent.replyToken(), "Sorry, something went wrong");
-							}
-						} catch (Exception e) {
-							e.printStackTrace();
-						}	
-					}	
+					handleMessage(nextNodeId, textMessage.getText(), currentToken, userId);
 				} else {
 					Util.sendSingleTextReply(sender, messageEvent.replyToken(), "Sorry, not expecting input.");
 				}
@@ -203,6 +184,38 @@ public class RuleEngineDialogue extends RootDialogue {
 			try {
 				JsonArray nodes = response.getAsJsonArray("nodes");
 				handleNodes(nodes, userId);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}	
+		}
+	}
+	
+	private void handleMessage(String nodeId, String message, String token, String userId) {
+		JsonObject response = ruleEngineRequest(nextNodeId, message, currentToken, userId);
+		if (response == null) {
+			Util.sendSingleTextPush(sender, userId, "Sorry, message could not be understood.");
+		} else {
+			try {
+				// If a response message exists, just respond with THAT
+				if (!response.get("message").isJsonNull()) {
+					String responseMessage= response.get("message").getAsString();
+					if (!responseMessage.equals("")) {
+						Util.sendSingleTextPush(sender, userId, responseMessage);
+						// TODO: Parse the nodes into a menu here
+						return;
+					}
+				}
+				JsonArray nodes = response.getAsJsonArray("nodes");
+				if (response.get("token").isJsonNull()) {
+					currentToken = "";	
+				} else {
+					currentToken = response.get("token").getAsString();
+				}
+				if (nodes.size() > 0) {
+					handleNodes(nodes, userId);	
+				} else {
+					sendInitialMessage(userId);
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}	
