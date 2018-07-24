@@ -92,7 +92,7 @@ public class RuleEngineDialogue extends RootDialogue {
 			for (JsonElement e : nodes) {
 				JsonObject node = e.getAsJsonObject();
 				String type = node.get("nodetype").getAsString();
-				if (type.equals("D")) {
+				if (type.equals("D") || type.equals("DD")) {
 					// print a menu with the next nodes as options
 					ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(
 							node.get("content").getAsString()).build();
@@ -183,16 +183,12 @@ public class RuleEngineDialogue extends RootDialogue {
 			System.out.println(">>> POSTBACK DATA FORWARD: " + forward);
 			JsonObject response = ruleEngineRequest(forward, userId);
 			System.out.println(response.toString());
-			if (response == null) {
-				Util.sendSingleTextPush(sender, userId, "Sorry, something went wrong....");
-			} else {
-				try {
-					JsonArray nodes = response.getAsJsonArray("nodes");
-					handleNodes(nodes, userId);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}	
-			}
+			try {
+				JsonArray nodes = response.getAsJsonArray("nodes");
+				handleNodes(nodes, userId);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}	
 		}
 	}
 	
