@@ -37,9 +37,6 @@ public class RuleEngineDialogue extends RootDialogue {
 
 	private static final String richMenuId = "richmenu-9a514e3da2598a348836d6460b1fc5e1";
 	
-	// store the nodes to avoid constantly calling on them
-	private JsonObject nodeTreeJson;
-	
 	@Override
 	public RootDialogue create() {
 		return new RuleEngineDialogue();
@@ -95,16 +92,10 @@ public class RuleEngineDialogue extends RootDialogue {
 				if (type.equals("D") || type.equals("DD")) {
 					// print a menu with the next nodes as options
 					ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(
-							node.get("content").getAsString()).build();
-					JsonArray nextNodes = node.getAsJsonArray("nextnode");
-					for (JsonElement nextNode : nextNodes) {
-						String nodeId = nextNode.getAsString();
-						JsonObject nodeObject = findNodeViaId(nodeId);
-						if (nodeObject != null) {
-							String title = nodeObject.get("nodetitle").getAsString();
-							buttons.addAction(new MessageAction(title, nodeId));
-						}
-					}
+							node.get("nodetitle").getAsString()).build();
+					buttons.addAction(new PostbackAction(
+							node.get("content").getAsString(),
+							"forward=" + node.get("forward").getAsString()));
 					TemplateMessage message = new TemplateMessage(node.get("content").getAsString(), buttons);
 					Util.sendSinglePush(sender, userId, message);
 				}
@@ -275,36 +266,5 @@ public class RuleEngineDialogue extends RootDialogue {
 			}	
 		}
 	}
-
-	// Helper method to find a node in the nodetree via the node id
-	private JsonObject findNodeViaId(String id) {
-		try {
-			JsonArray nodes = nodeTreeJson.getAsJsonArray("nodes");
-			for (JsonElement e : nodes) {
-				JsonObject obj = e.getAsJsonObject();
-				if (obj.get("nodeid").getAsString().equals(id)) {
-					return obj;
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
 	
-	// Helper method to find a node in the nodetree via the node keyword
-	private JsonObject findNodeViaKeyword(String keyword) {
-		try {
-			JsonArray nodes = nodeTreeJson.getAsJsonArray("nodes");
-			for (JsonElement e : nodes) {
-				JsonObject obj = e.getAsJsonObject();
-				if (obj.get("keyword").getAsString().equals(keyword)) {
-					return obj;
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
 }
