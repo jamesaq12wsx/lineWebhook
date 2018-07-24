@@ -278,7 +278,7 @@ public class RuleEngineDialogue extends RootDialogue {
 					try {
 						builder.addAction(new PostbackAction(
 								node.get("nodetitle").getAsString(),
-								"forward=" + node.get("forward").getAsString()));
+								"forward=" + node.get("nodeid").getAsString()));
 					} catch (Exception ex) {
 						// skip the current iteration if something went wrong
 						continue;
