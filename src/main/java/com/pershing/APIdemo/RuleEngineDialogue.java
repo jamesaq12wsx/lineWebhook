@@ -63,7 +63,7 @@ public class RuleEngineDialogue extends RootDialogue {
 					} else {
 						try {
 							JsonArray nodes = response.getAsJsonArray("nodes");
-							if (response.get("token") == null) {
+							if (response.get("token").isJsonNull()) {
 								currentToken = "";	
 							} else {
 								currentToken = response.get("token").getAsString();
