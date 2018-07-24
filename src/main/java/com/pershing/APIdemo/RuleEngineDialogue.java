@@ -163,6 +163,7 @@ public class RuleEngineDialogue extends RootDialogue {
 		// parse the data as a forward action trigger if the data specifies it
 		if (data.substring(0, 8).equals("forward=")) {
 			String forward = data.substring(8); 
+			System.out.println(">>> POSTBACK FORWARD: " + forward);
 			handleMessage(forward, "", "", userId);
 		}
 	}
