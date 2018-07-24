@@ -55,7 +55,7 @@ public class RuleEngineDialogue extends RootDialogue {
 					TemplateMessage message = new TemplateMessage("TEST", buttons);
 					Util.sendSinglePush(sender, userId, message);
 				}
-				JsonObject response = ruleEngineRequest(textMessage.getText(), userId);
+				JsonObject response = ruleEngineRequest(textMessage.getText(), userId, false);
 				if (response == null) {
 					Util.sendSingleTextPush(sender, userId, "Sorry, message could not be understood.");
 				} else {
@@ -172,7 +172,8 @@ public class RuleEngineDialogue extends RootDialogue {
 		if (data.substring(0, 8).equals("forward=")) {
 			String forward = data.substring(8);
 			System.out.println(">>> POSTBACK DATA FORWARD: " + forward);
-			JsonObject response = ruleEngineRequest(forward, userId);
+			// The forward data is always the node Ids
+			JsonObject response = ruleEngineRequest(forward, userId, true);
 			System.out.println(response.toString());
 			try {
 				JsonArray nodes = response.getAsJsonArray("nodes");
@@ -184,12 +185,17 @@ public class RuleEngineDialogue extends RootDialogue {
 	}
 	
 	// Helper method to get the next node depending on the sent message from backend API
-	private JsonObject ruleEngineRequest(String message, String userId) {
+	private JsonObject ruleEngineRequest(String message, String userId, boolean isNodeId) {
 		// construct the json object to be sent first
 		JsonObject obj = new JsonObject();
 		obj.addProperty("channel", "line");
 		obj.addProperty("messagetype", "text");
-		obj.addProperty("message", message);
+		if (isNodeId) {
+			obj.addProperty("nodeid", message);
+		}
+		else { 
+			obj.addProperty("message", message);
+		}
 		obj.addProperty("userid", userId);
 		
 		// initialize the HTTP request
@@ -237,7 +243,7 @@ public class RuleEngineDialogue extends RootDialogue {
 	
 	// Helper method to send initial menu to user for a list of actions
 	private void sendInitialMessage(String userId) {
-		JsonObject response = ruleEngineRequest("", userId);
+		JsonObject response = ruleEngineRequest("", userId, false);
 		// We know the response contains all the default nodes, no need to validate
 		if (response == null) {
 			Util.sendSingleTextPush(sender, userId, "Sorry, message could not be understood.");
