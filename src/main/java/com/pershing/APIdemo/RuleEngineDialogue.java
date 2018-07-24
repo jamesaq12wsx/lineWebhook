@@ -86,6 +86,14 @@ public class RuleEngineDialogue extends RootDialogue {
 		try {
 			for (JsonElement e : nodes) {
 				JsonObject node = e.getAsJsonObject();
+				// If a non empty reply context exists, reply with that
+				if (node.get("reply_context") != null) {
+					String reply = node.get("reply_context").getAsString();
+					if (!reply.equals("")) {
+						Util.sendSingleTextPush(sender, userId, reply);
+						return;	
+					}
+				}
 				String type = node.get("nodetype").getAsString();
 				if (type.equals("D") || type.equals("DD")) {
 					// print a menu with the next nodes as options
