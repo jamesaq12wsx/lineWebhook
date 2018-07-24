@@ -95,7 +95,6 @@ public class RuleEngineDialogue extends RootDialogue {
 							node.get("content").getAsString(),
 							"forward=" + node.get("forward").getAsString()));
 					TemplateMessage message = new TemplateMessage(node.get("content").getAsString(), buttons);
-					System.out.println("MESSAGE: " + message.getAsJsonString());
 					Util.sendSinglePush(sender, userId, message);
 				}
 				if (type.equals("B")) {
@@ -110,7 +109,6 @@ public class RuleEngineDialogue extends RootDialogue {
 								"forward=" + buttonObject.get("forward").getAsString()));
 					}
 					TemplateMessage message = new TemplateMessage(node.get("nodetitle").getAsString(), buttons);
-					System.out.println("MESSAGE: " + message.getAsJsonString());
 					Util.sendSinglePush(sender, userId, message);
 				}
 				if (type.equals("L")) {
@@ -129,12 +127,11 @@ public class RuleEngineDialogue extends RootDialogue {
 						}
 					} else {
 						// HANDLE THE LINK AS A NORMAL FORWARD
-						buttons.addAction(new PostbackAction(
-								node.get("content").getAsString(),	
-								"forward=" + node.get("forward").getAsString()));
+						buttons.addAction(new URIAction(
+								node.get("nodetitle").getAsString(),	
+								node.get("content").getAsString()));
 					}
 					TemplateMessage message = new TemplateMessage(node.get("nodetitle").getAsString(), buttons);
-					System.out.println("MESSAGE: " + message.getAsJsonString());
 					Util.sendSinglePush(sender, userId, message);
 				}
 			}
