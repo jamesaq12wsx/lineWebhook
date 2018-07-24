@@ -112,16 +112,20 @@ public class RuleEngineDialogue extends RootDialogue {
 					Util.sendSinglePush(sender, userId, message);
 				}
 				if (type.equals("L")) {
-					// print a menu with the specfied buttons
+					// print a menu with the specified buttons
 					ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(
 							node.get("nodetitle").getAsString()).build();
+					System.out.println(">>> nodetitle: " + node.get("nodetitle").getAsString());
 					try {
 						JsonArray content = node.getAsJsonArray("content");
+						System.out.println(">>> content: " + node.get("content").getAsString());
 						for (JsonElement button : content) {
 							JsonObject buttonObject = button.getAsJsonObject();
 							buttons.addAction(new URIAction(
 									buttonObject.get("title").getAsString(), 
 									buttonObject.get("url").getAsString()));
+							System.out.println(">>> title: " + node.get("title").getAsString());
+							System.out.println(">>> url: " + node.get("url").getAsString());
 						}
 					} catch (Exception ex) {
 						// THIS IS NOT AN ERROR, SOMETIMES LINKS ARE ONLY A SINGLE LINK
