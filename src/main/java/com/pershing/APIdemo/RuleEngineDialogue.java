@@ -79,20 +79,6 @@ public class RuleEngineDialogue extends RootDialogue {
 		try {
 			for (JsonElement e : nodes) {
 				JsonObject node = e.getAsJsonObject();
-				// If a non empty reply context exists, reply with that
-				if (node.get("reply_context") != null) {
-					String reply = node.get("reply_context").getAsString();
-					if (!reply.equals("")) {
-						Util.sendSingleTextPush(sender, userId, reply);
-						expectingInput = true;
-						if (node.get("forward") != null) {
-							nextNodeId = node.get("forward").getAsString();	
-						} else {
-							nextNodeId = "";
-						}
-						return;	
-					}
-				}
 				String type = node.get("nodetype").getAsString();
 				if (type.equals("D") || type.equals("DD")) {
 					// print a menu with the next nodes as options
@@ -177,16 +163,7 @@ public class RuleEngineDialogue extends RootDialogue {
 		// parse the data as a forward action trigger if the data specifies it
 		if (data.substring(0, 8).equals("forward=")) {
 			String forward = data.substring(8);
-			System.out.println(">>> POSTBACK DATA FORWARD: " + forward);
-			// The forward data is always the node Ids
-			JsonObject response = ruleEngineRequest(forward, "", "", userId);
-			System.out.println(response.toString());
-			try {
-				JsonArray nodes = response.getAsJsonArray("nodes");
-				handleNodes(nodes, userId);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}	
+			handleMessage(forward, "", "", userId);
 		}
 	}
 	
