@@ -182,6 +182,7 @@ public class RuleEngineDialogue extends RootDialogue {
 			String forward = data.substring(8);
 			System.out.println(">>> POSTBACK DATA FORWARD: " + forward);
 			JsonObject response = ruleEngineRequest(forward, userId);
+			System.out.println(response.toString());
 			if (response == null) {
 				Util.sendSingleTextPush(sender, userId, "Sorry, something went wrong....");
 			} else {
