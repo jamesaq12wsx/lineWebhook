@@ -168,7 +168,7 @@ public class RuleEngineDialogue extends RootDialogue {
 	}
 	
 	private void handleMessage(String nodeId, String message, String token, String userId) {
-		JsonObject response = ruleEngineRequest(nextNodeId, message, currentToken, userId);
+		JsonObject response = ruleEngineRequest(nextNodeId, message, token, userId);
 		if (response == null) {
 			Util.sendSingleTextPush(sender, userId, "Sorry, message could not be understood.");
 		} else {
