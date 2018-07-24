@@ -251,6 +251,7 @@ public class RuleEngineDialogue extends RootDialogue {
     		try {
 				String data = EntityUtils.toString(entity);
 				JsonParser parser = new JsonParser();
+				System.out.println(">>> RULE ENGINE RESPONSE: " + parser.parse(data).getAsJsonObject().toString());
 				return parser.parse(data).getAsJsonObject();
 			} 
     		catch (ParseException e) { e.printStackTrace(); } 
