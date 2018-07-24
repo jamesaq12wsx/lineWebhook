@@ -127,9 +127,9 @@ public class RuleEngineDialogue extends RootDialogue {
 						}
 					} else {
 						// HANDLE THE LINK AS A NORMAL FORWARD
-						buttons.addAction(new URIAction(
-								node.get("nodetitle").getAsString(),
-								node.get("content").getAsString()));
+						buttons.addAction(new PostbackAction(
+								node.get("content").getAsString(),
+								node.get("forward").getAsString()));
 					}
 					TemplateMessage message = new TemplateMessage(node.get("nodetitle").getAsString(), buttons);
 					System.out.println("MESSAGE: " + message.getAsJsonString());
