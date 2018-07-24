@@ -162,7 +162,7 @@ public class RuleEngineDialogue extends RootDialogue {
 		}
 		// parse the data as a forward action trigger if the data specifies it
 		if (data.substring(0, 8).equals("forward=")) {
-			String forward = data.substring(8);
+			String forward = data.substring(8); 
 			handleMessage(forward, "", "", userId);
 		}
 	}
@@ -207,6 +207,8 @@ public class RuleEngineDialogue extends RootDialogue {
 		if (nodeId != null && !nodeId.equals("")) obj.addProperty("nodeid", nodeId);
 		obj.addProperty("message", message);
 		obj.addProperty("userid", userId);
+		
+		System.out.println(">>> SENDING REQUEST W/ BODY: " + obj.toString());
 		
 		// initialize the HTTP request
 		HttpClient httpclient = HttpClients.createDefault();
