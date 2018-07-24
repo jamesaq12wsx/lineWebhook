@@ -126,15 +126,13 @@ public class RuleEngineDialogue extends RootDialogue {
 									buttonObject.get("url").getAsString()));
 						}
 					} else {
-						System.out.println("FLAGGGG");
 						// HANDLE THE LINK AS A NORMAL FORWARD
 						buttons.addAction(new URIAction(
 								node.get("nodetitle").getAsString(),
 								node.get("content").getAsString()));
-						System.out.println(node.get("nodetitle").getAsString());
-						System.out.println(node.get("content").getAsString());
 					}
 					TemplateMessage message = new TemplateMessage(node.get("nodetitle").getAsString(), buttons);
+					System.out.println("MESSAGE: " + message.getAsJsonString());
 					Util.sendSinglePush(sender, userId, message);
 				}
 			}
