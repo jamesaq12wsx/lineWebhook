@@ -202,7 +202,6 @@ public class RuleEngineDialogue extends RootDialogue {
 					if (!responseMessage.equals("")) {
 						Util.sendSingleTextPush(sender, userId, responseMessage);
 						// TODO: Parse the nodes into a menu here
-						return;
 					}
 				}
 				JsonArray nodes = response.getAsJsonArray("nodes");
