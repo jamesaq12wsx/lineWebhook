@@ -159,10 +159,7 @@ public class RuleEngineDialogue extends RootDialogue {
 			String action = data.substring(7);
 			System.out.println(">>> POSTBACK DATA ACTION: " + action);
 			if (action.equals("balance")) {
-				JsonObject balanceNode = findNodeViaKeyword("AccountServiceList");
-				JsonArray arr = new JsonArray();
-				arr.add(balanceNode);
-				handleNodes(arr, userId);
+				Util.sendSingleTextPush(sender, userId, "BALANCE HERE");
 			}
 			if (action.equals("interest")) {
 				Util.sendSingleTextPush(sender, userId, "INTEREST RATES HERE");
@@ -184,13 +181,16 @@ public class RuleEngineDialogue extends RootDialogue {
 		if (data.substring(0, 8).equals("forward=")) {
 			String forward = data.substring(8);
 			System.out.println(">>> POSTBACK DATA FORWARD: " + forward);
-			JsonObject node = findNodeViaKeyword(forward);
-			if (node != null) {
-				JsonArray arr = new JsonArray();
-				arr.add(node);
-				handleNodes(arr, userId);
+			JsonObject response = ruleEngineRequest(forward, userId);
+			if (response == null) {
+				Util.sendSingleTextPush(sender, userId, "Sorry, something went wrong....");
 			} else {
-				Util.sendSingleTextPush(sender, userId, "Sorry, something went wrong...");
+				try {
+					JsonArray nodes = response.getAsJsonArray("nodes");
+					handleNodes(nodes, userId);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}	
 			}
 		}
 	}
@@ -256,7 +256,7 @@ public class RuleEngineDialogue extends RootDialogue {
 		} else {
 			try {
 				JsonArray nodes = response.getAsJsonArray("nodes");
-				// print a menu with the specfied buttons
+				// print a menu with the specified buttons
 				ButtonsTemplate.ButtonsTemplateBuilder builder = new 
 						ButtonsTemplate.ButtonsTemplateBuilder("Select an option to get started");
 				for (JsonElement e : nodes) {
