@@ -174,6 +174,12 @@ public class RuleEngineDialogue extends RootDialogue {
 			Util.sendSingleTextPush(sender, userId, "Sorry, message could not be understood.");
 		} else {
 			try {
+				// Get the token first if it exists
+				if (response.get("token").isJsonNull()) {
+					currentToken = "";	
+				} else {
+					currentToken = response.get("token").getAsString();
+				}
 				// If a response message exists, just respond with THAT
 				if (!response.get("message").isJsonNull()) {
 					String responseMessage= response.get("message").getAsString();
@@ -189,11 +195,6 @@ public class RuleEngineDialogue extends RootDialogue {
 					}
 				}
 				JsonArray nodes = response.getAsJsonArray("nodes");
-				if (response.get("token").isJsonNull()) {
-					currentToken = "";	
-				} else {
-					currentToken = response.get("token").getAsString();
-				}
 				if (nodes.size() > 0) {
 					handleNodes(nodes, userId);	
 				} else {
