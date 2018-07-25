@@ -175,24 +175,24 @@ public class RuleEngineDialogue extends RootDialogue {
 		} else {
 			try {
 				// If a response message exists, just respond with THAT
-				if (response.get("message").isJsonNull()) {
-					JsonArray nodes = response.getAsJsonArray("nodes");
-					if (response.get("token").isJsonNull()) {
-						currentToken = "";	
-					} else {
-						currentToken = response.get("token").getAsString();
-					}
-					if (nodes.size() > 0) {
-						handleNodes(nodes, userId);	
-					} else {
-						sendInitialMessage(userId);
-					}	
-				} else {
+				if (!response.get("message").isJsonNull()) {
 					String responseMessage= response.get("message").getAsString();
 					if (!responseMessage.equals("")) {
 						Util.sendSingleTextPush(sender, userId, responseMessage);
-						// TODO: Parse the nodes into a menu here
+						expectingInput = true;
+						return;
 					}
+				}
+				JsonArray nodes = response.getAsJsonArray("nodes");
+				if (response.get("token").isJsonNull()) {
+					currentToken = "";	
+				} else {
+					currentToken = response.get("token").getAsString();
+				}
+				if (nodes.size() > 0) {
+					handleNodes(nodes, userId);	
+				} else {
+					sendInitialMessage(userId);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
