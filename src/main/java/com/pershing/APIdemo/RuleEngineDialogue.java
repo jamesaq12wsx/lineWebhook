@@ -33,7 +33,7 @@ import com.pershing.util.Util;
 
 public class RuleEngineDialogue extends RootDialogue {
 
-	private static final String richMenuId = "richmenu-9a514e3da2598a348836d6460b1fc5e1";
+	private static final String richMenuId = "richmenu-3436290102527a75c64db5b0c8257ab1";
 	
 	private boolean expectingInput;
 	private String nextNodeId;
