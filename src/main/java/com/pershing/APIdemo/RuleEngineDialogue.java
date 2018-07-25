@@ -180,6 +180,11 @@ public class RuleEngineDialogue extends RootDialogue {
 					if (!responseMessage.equals("")) {
 						Util.sendSingleTextPush(sender, userId, responseMessage);
 						expectingInput = true;
+						JsonArray nodes = response.getAsJsonArray("nodes");
+						if (nodes.size() > 0) {
+							JsonObject node = nodes.get(0).getAsJsonObject();
+							nextNodeId = node.get("forward").getAsString();
+						}
 						return;
 					}
 				}
