@@ -141,23 +141,14 @@ public class RuleEngineDialogue extends RootDialogue {
 		if (data.substring(0, 7).equals("action=")) {
 			String action = data.substring(7);
 			System.out.println(">>> POSTBACK DATA ACTION: " + action);
-			if (action.equals("balance")) {
-				Util.sendSingleTextPush(sender, userId, "BALANCE HERE");
+			if (action.equals("transfer")) {
+				Util.sendSingleTextPush(sender, userId, "SMART TRANSFER");
 			}
-			if (action.equals("interest")) {
-				Util.sendSingleTextPush(sender, userId, "INTEREST RATES HERE");
-			}
-			if (action.equals("exchange")) {
-				Util.sendSingleTextPush(sender, userId, "EXCHANGE RATES HERE");
-			}
-			if (action.equals("smart_transfer")) {
-				Util.sendSingleTextPush(sender, userId, "SMART TRANSFER HERE");
-			}
-			if (action.equals("qr_transfer")) {
-				Util.sendSingleTextPush(sender, userId, "QR TRANSFER HERE");
+			if (action.equals("rates")) {
+				handleMessage("5", "", "", userId);
 			}
 			if (action.equals("service")) {
-				Util.sendSingleTextPush(sender, userId, "SERVICE POINTS HERE");
+				Util.sendSingleTextPush(sender, userId, "CUSTOMER SERVICE");
 			}
 		}
 		// parse the data as a forward action trigger if the data specifies it
