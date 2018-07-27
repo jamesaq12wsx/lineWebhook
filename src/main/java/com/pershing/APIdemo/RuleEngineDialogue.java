@@ -40,10 +40,14 @@ public class RuleEngineDialogue extends RootDialogue {
 
 	private static final String richMenuId = "richmenu-76285471ee4ecd698547d0b0087ca22a";
 	
-	private Map<String, UserStruct> users;
+	private boolean expectingInput;
+	private String nextNodeId;
+	private String currentToken;
 	
 	public RuleEngineDialogue() {
-		users = new HashMap<String, UserStruct>();
+		this.expectingInput = false;
+		this.nextNodeId = "";
+		this.currentToken = "";
 	}
 	
 	@Override
@@ -69,21 +73,14 @@ public class RuleEngineDialogue extends RootDialogue {
 						e.printStackTrace();
 					}
 				}
-				if (users.containsKey(userId)) {
-					UserStruct user = users.get(userId);
-					if (user.expectingInput) {
-						handleMessage(user.nextNodeId, textMessage.getText(), user.currentToken, userId);
-					} else {
-						Util.sendSingleTextReply(sender, messageEvent.replyToken(), "Sorry, not expecting input.");
-					}	
+				if (expectingInput) {
+					handleMessage(nextNodeId, textMessage.getText(), currentToken, userId);
 				} else {
-					users.put(userId, new UserStruct());
-				}
+					Util.sendSingleTextReply(sender, messageEvent.replyToken(), "Sorry, not expecting input.");
+				}	
 			}
 		}
 		if (event.type() == WebHookEventType.FOLLOW) {
-			// add the user to the list of users when following
-			if (!users.containsKey(userId)) users.put(userId, new UserStruct());
 			sendInitialMessage(userId);
 			// Also link the rich menu to the user
 			sender.linkRichMenu(richMenuId, userId);
@@ -189,24 +186,22 @@ public class RuleEngineDialogue extends RootDialogue {
 			Util.sendSingleTextPush(sender, userId, "Sorry, message could not be understood.");
 		} else {
 			try {
-				if (!users.containsKey(userId)) users.put(userId, new UserStruct());
-				UserStruct user = users.get(userId);
 				// Get the token first if it exists
 				if (response.get("token").isJsonNull()) {
-					user.currentToken = "";	
+					currentToken = "";	
 				} else {
-					user.currentToken = response.get("token").getAsString();
+					currentToken = response.get("token").getAsString();
 				}
 				// If a response message exists, just respond with THAT
 				if (!response.get("message").isJsonNull()) {
 					String responseMessage= response.get("message").getAsString();
 					if (!responseMessage.equals("")) {
 						Util.sendSingleTextPush(sender, userId, responseMessage);
-						user.expectingInput = true;
+						expectingInput = true;
 						JsonArray nodes = response.getAsJsonArray("nodes");
 						if (nodes.size() > 0) {
 							JsonObject node = nodes.get(0).getAsJsonObject();
-							user.nextNodeId = node.get("forward").getAsString();
+							nextNodeId = node.get("forward").getAsString();
 							List<String> types = Arrays.asList(node.get("nodetype").getAsString().split(","));
 							if (!types.contains("QS") && !types.contains("Q")) return;
 						}
