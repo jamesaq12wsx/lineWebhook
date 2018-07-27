@@ -1,6 +1,8 @@
 package com.pershing.APIdemo;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -35,14 +37,10 @@ public class RuleEngineDialogue extends RootDialogue {
 
 	private static final String richMenuId = "richmenu-76285471ee4ecd698547d0b0087ca22a";
 	
-	private boolean expectingInput;
-	private String nextNodeId;
-	private String currentToken;
+	private Map<String, UserStruct> users;
 	
 	public RuleEngineDialogue() {
-		expectingInput = false;
-		nextNodeId = "";
-		currentToken = "";
+		users = new HashMap<String, UserStruct>();
 	}
 	
 	@Override
@@ -55,15 +53,22 @@ public class RuleEngineDialogue extends RootDialogue {
 		if (event.type() == WebHookEventType.MESSAGE) {
 			MessageEvent messageEvent = (MessageEvent) event;
 			if (messageEvent.message().type() == MessageType.TEXT) {
-				if (expectingInput) {
-					TextMessage textMessage = (TextMessage) messageEvent.message();
-					handleMessage(nextNodeId, textMessage.getText(), currentToken, userId);
+				if (users.containsKey(userId)) {
+					UserStruct user = users.get(userId);
+					if (user.expectingInput) {
+						TextMessage textMessage = (TextMessage) messageEvent.message();
+						handleMessage(user.nextNodeId, textMessage.getText(), user.currentToken, userId);
+					} else {
+						Util.sendSingleTextReply(sender, messageEvent.replyToken(), "Sorry, not expecting input.");
+					}	
 				} else {
-					Util.sendSingleTextReply(sender, messageEvent.replyToken(), "Sorry, not expecting input.");
+					users.put(userId, new UserStruct());
 				}
 			}
 		}
 		if (event.type() == WebHookEventType.FOLLOW) {
+			// add the user to the list of users when following
+			if (!users.containsKey(userId)) users.put(userId, new UserStruct());
 			sendInitialMessage(userId);
 			// Also link the rich menu to the user
 			sender.linkRichMenu(richMenuId, userId);
@@ -91,7 +96,7 @@ public class RuleEngineDialogue extends RootDialogue {
 					Util.sendSinglePush(sender, userId, message);
 				}
 				if (type.equals("B")) {
-					// print a menu with the specfied buttons
+					// print a menu with the specified buttons
 					ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(
 							node.get("nodetitle").getAsString()).build();
 					JsonArray content = node.getAsJsonArray("content");
@@ -142,7 +147,7 @@ public class RuleEngineDialogue extends RootDialogue {
 			String action = data.substring(7);
 			System.out.println(">>> POSTBACK DATA ACTION: " + action);
 			if (action.equals("transfer")) {
-				Util.sendSingleTextPush(sender, userId, "SMART TRANSFER");
+				handleMessage("1.2", "", "", userId); 	
 			}
 			if (action.equals("rates")) {
 				handleMessage("5", "", "", userId);
@@ -165,22 +170,24 @@ public class RuleEngineDialogue extends RootDialogue {
 			Util.sendSingleTextPush(sender, userId, "Sorry, message could not be understood.");
 		} else {
 			try {
+				if (!users.containsKey(userId)) users.put(userId, new UserStruct());
+				UserStruct user = users.get(userId);
 				// Get the token first if it exists
 				if (response.get("token").isJsonNull()) {
-					currentToken = "";	
+					user.currentToken = "";	
 				} else {
-					currentToken = response.get("token").getAsString();
+					user.currentToken = response.get("token").getAsString();
 				}
 				// If a response message exists, just respond with THAT
 				if (!response.get("message").isJsonNull()) {
 					String responseMessage= response.get("message").getAsString();
 					if (!responseMessage.equals("")) {
 						Util.sendSingleTextPush(sender, userId, responseMessage);
-						expectingInput = true;
+						user.expectingInput = true;
 						JsonArray nodes = response.getAsJsonArray("nodes");
 						if (nodes.size() > 0) {
 							JsonObject node = nodes.get(0).getAsJsonObject();
-							nextNodeId = node.get("forward").getAsString();
+							user.nextNodeId = node.get("forward").getAsString();
 						}
 						return;
 					}
