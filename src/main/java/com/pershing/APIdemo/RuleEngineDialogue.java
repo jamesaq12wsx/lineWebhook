@@ -148,6 +148,9 @@ public class RuleEngineDialogue extends RootDialogue {
 					TemplateMessage message = new TemplateMessage(node.get("nodetitle").getAsString(), buttons);
 					Util.sendSinglePush(sender, userId, message);
 				}
+				if (types.contains("QS") || types.contains("Q")) {
+					// TODO: figure out something to do here?
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -204,8 +207,9 @@ public class RuleEngineDialogue extends RootDialogue {
 						if (nodes.size() > 0) {
 							JsonObject node = nodes.get(0).getAsJsonObject();
 							user.nextNodeId = node.get("forward").getAsString();
+							List<String> types = Arrays.asList(node.get("nodetype").getAsString().split(","));
+							if (!types.contains("QS") && !types.contains("Q")) return;
 						}
-						return;
 					}
 				}
 				JsonArray nodes = response.getAsJsonArray("nodes");
