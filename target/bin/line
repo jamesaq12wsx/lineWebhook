@@ -97,7 +97,7 @@ then
   REPO="$BASEDIR"/repo
 fi
 
-CLASSPATH="$BASEDIR"/etc:"$REPO"/com/google/code/gson/gson/2.8.5/gson-2.8.5.jar:"$REPO"/org/apache/httpcomponents/httpclient/4.5.5/httpclient-4.5.5.jar:"$REPO"/org/apache/httpcomponents/httpcore/4.4.9/httpcore-4.4.9.jar:"$REPO"/commons-logging/commons-logging/1.2/commons-logging-1.2.jar:"$REPO"/commons-codec/commons-codec/1.10/commons-codec-1.10.jar:"$REPO"/pershing/lineAPI/0.0.1-SNAPSHOT/lineAPI-0.0.1-SNAPSHOT.jar
+CLASSPATH="$BASEDIR"/etc:"$REPO"/com/google/code/gson/gson/2.8.5/gson-2.8.5.jar:"$REPO"/org/apache/httpcomponents/httpclient/4.5.5/httpclient-4.5.5.jar:"$REPO"/org/apache/httpcomponents/httpcore/4.4.9/httpcore-4.4.9.jar:"$REPO"/commons-logging/commons-logging/1.2/commons-logging-1.2.jar:"$REPO"/commons-codec/commons-codec/1.10/commons-codec-1.10.jar:"$REPO"/com/nexmo/client/3.6.0/client-3.6.0.jar:"$REPO"/commons-io/commons-io/2.5/commons-io-2.5.jar:"$REPO"/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5.jar:"$REPO"/com/fasterxml/jackson/core/jackson-databind/2.9.5/jackson-databind-2.9.5.jar:"$REPO"/com/fasterxml/jackson/core/jackson-annotations/2.9.0/jackson-annotations-2.9.0.jar:"$REPO"/com/fasterxml/jackson/core/jackson-core/2.9.5/jackson-core-2.9.5.jar:"$REPO"/com/auth0/java-jwt/2.2.1/java-jwt-2.2.1.jar:"$REPO"/com/google/zxing/core/3.3.3/core-3.3.3.jar:"$REPO"/pershing/lineAPI/0.0.1-SNAPSHOT/lineAPI-0.0.1-SNAPSHOT.jar
 
 ENDORSED_DIR=
 if [ -n "$ENDORSED_DIR" ] ; then

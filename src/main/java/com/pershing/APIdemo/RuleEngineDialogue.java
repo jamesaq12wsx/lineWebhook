@@ -3,6 +3,7 @@ package com.pershing.APIdemo;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -53,10 +54,22 @@ public class RuleEngineDialogue extends RootDialogue {
 		if (event.type() == WebHookEventType.MESSAGE) {
 			MessageEvent messageEvent = (MessageEvent) event;
 			if (messageEvent.message().type() == MessageType.TEXT) {
+				TextMessage textMessage = (TextMessage) messageEvent.message();
+				// INTERCEPT THIS MESSAGE IF DETECTED!!!!!!
+				if (textMessage.getText().equals("QR") || textMessage.getText().equals("qr")) {
+					String uuid = UUID.randomUUID().toString();
+					String path = "./" + uuid + ".jpeg";
+					try {
+						QRCodeGenerator.generateQRCodeImage("TEST", 240, 240, path);
+						String imagePath = "https://peaceful-plains-74132.herokuapp.com/" + uuid + ".jpeg";
+						Util.sendSingleTextPush(sender, userId, imagePath);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
 				if (users.containsKey(userId)) {
 					UserStruct user = users.get(userId);
 					if (user.expectingInput) {
-						TextMessage textMessage = (TextMessage) messageEvent.message();
 						handleMessage(user.nextNodeId, textMessage.getText(), user.currentToken, userId);
 					} else {
 						Util.sendSingleTextReply(sender, messageEvent.replyToken(), "Sorry, not expecting input.");
