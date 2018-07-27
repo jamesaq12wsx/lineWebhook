@@ -1,7 +1,10 @@
 package com.pershing.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.pershing.message.Message;
 import com.pershing.message.TextMessage;
@@ -31,6 +34,21 @@ public class Util {
 		List<Message> message = new ArrayList<Message>();
 		message.add(new TextMessage(text));
 		sender.sendPush(userId, message, "");
+	}
+	
+	public final static Map<String, String> getQueryStringAsMap(String data) {
+		Map<String, String> result = new HashMap<String, String>();
+		List<String> items = Arrays.asList(data.split("&"));
+		for (String item : items) {
+			String[] split = item.split("=");
+			if (split.length >= 2) {
+				result.put(split[0], split[1]);
+			}
+			if (split.length == 1) {
+				result.put(split[0], "");
+			}
+		}
+		return result;
 	}
 	
 }

@@ -159,8 +159,9 @@ public class RuleEngineDialogue extends RootDialogue {
 		String data = event.postbackData();
 		System.out.println(">>> RECIEVING POSTBACK EVENT: " + data);
 		// parse the data as an action trigger if the data specifies it
-		if (data.substring(0, 7).equals("action=")) {
-			String action = data.substring(7);
+		Map<String, String> parameters = Util.getQueryStringAsMap(data);
+		if (parameters.containsKey("action")) {
+			String action = parameters.get("action");
 			System.out.println(">>> POSTBACK DATA ACTION: " + action);
 			if (action.equals("transfer")) {
 				handleMessage("1.2", "", "", userId); 	
@@ -172,9 +173,8 @@ public class RuleEngineDialogue extends RootDialogue {
 				Util.sendSingleTextPush(sender, userId, "CUSTOMER SERVICE");
 			}
 		}
-		// parse the data as a forward action trigger if the data specifies it
-		if (data.substring(0, 8).equals("forward=")) {
-			String forward = data.substring(8); 
+		if (parameters.containsKey("forward")) {
+			String forward = parameters.get("forward"); 
 			System.out.println(">>> POSTBACK FORWARD: " + forward);
 			handleMessage(forward, "", "", userId);
 		}
