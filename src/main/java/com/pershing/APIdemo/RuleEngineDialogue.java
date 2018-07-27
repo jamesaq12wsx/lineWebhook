@@ -1,7 +1,9 @@
 package com.pershing.APIdemo;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -97,8 +99,9 @@ public class RuleEngineDialogue extends RootDialogue {
 		try {
 			for (JsonElement e : nodes) {
 				JsonObject node = e.getAsJsonObject();
-				String type = node.get("nodetype").getAsString();
-				if (type.equals("D") || type.equals("DD")) {
+				String typeString = node.get("nodetype").getAsString();
+				List<String> types = Arrays.asList(typeString.split(","));
+				if (types.contains("D") || types.contains("DD")) {
 					// print a menu with the next nodes as options
 					ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(
 							node.get("nodetitle").getAsString()).build();
@@ -108,7 +111,7 @@ public class RuleEngineDialogue extends RootDialogue {
 					TemplateMessage message = new TemplateMessage(node.get("content").getAsString(), buttons);
 					Util.sendSinglePush(sender, userId, message);
 				}
-				if (type.equals("B")) {
+				if (types.contains("B")) {
 					// print a menu with the specified buttons
 					ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(
 							node.get("nodetitle").getAsString()).build();
@@ -122,7 +125,7 @@ public class RuleEngineDialogue extends RootDialogue {
 					TemplateMessage message = new TemplateMessage(node.get("nodetitle").getAsString(), buttons);
 					Util.sendSinglePush(sender, userId, message);
 				}
-				if (type.equals("L")) {
+				if (types.contains("L")) {
 					// print a menu with the specified buttons
 					ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(
 							node.get("nodetitle").getAsString()).build();
