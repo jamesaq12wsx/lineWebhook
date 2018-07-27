@@ -168,7 +168,7 @@ public class RuleEngineDialogue extends RootDialogue {
 				handleMessage("1.2", "", "", userId); 	
 			}
 			if (action.equals("rates")) {
-				handleMessage("5", "", "", userId);
+				handleMessage("5	", "", "", userId);
 			}
 			if (action.equals("service")) {
 				Util.sendSingleTextPush(sender, userId, "CUSTOMER SERVICE");
@@ -178,7 +178,7 @@ public class RuleEngineDialogue extends RootDialogue {
 			String forward = parameters.get("forward"); 
 			String paramData = parameters.containsKey("data") ? parameters.get("data") : "";
 			System.out.println(">>> POSTBACK FORWARD: " + forward);
-			handleMessage(forward, paramData, "", userId);
+			handleMessage(forward, paramData, currentToken, userId);
 		}
 	}
 	
