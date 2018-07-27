@@ -117,7 +117,8 @@ public class RuleEngineDialogue extends RootDialogue {
 						JsonObject buttonObject = button.getAsJsonObject();
 						buttons.addAction(new PostbackAction(
 								buttonObject.get("title").getAsString(), 
-								"forward=" + buttonObject.get("forward").getAsString()));
+								"forward=" + buttonObject.get("forward").getAsString() +
+								"&data=" + buttonObject.get("customValue").getAsString()));
 					}
 					TemplateMessage message = new TemplateMessage(node.get("nodetitle").getAsString(), buttons);
 					Util.sendSinglePush(sender, userId, message);
@@ -175,8 +176,9 @@ public class RuleEngineDialogue extends RootDialogue {
 		}
 		if (parameters.containsKey("forward")) {
 			String forward = parameters.get("forward"); 
+			String paramData = parameters.containsKey("data") ? parameters.get("data") : "";
 			System.out.println(">>> POSTBACK FORWARD: " + forward);
-			handleMessage(forward, "", "", userId);
+			handleMessage(forward, paramData, "", userId);
 		}
 	}
 	
