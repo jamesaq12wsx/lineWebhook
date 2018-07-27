@@ -19,7 +19,7 @@ public class RootHandler implements HttpHandler {
 	
 	public RootHandler() {
 		webHookHandler = new WebHookHandler(CHANNEL_SECRET, CHANNEL_ACCESS_TOKEN);
-		webHookHandler.setRootDialogue(new NewRuleEngineDialogue());
+		webHookHandler.setRootDialogue(new RuleEngineDialogue());
 		webHookHandler.setVerbose(true);
 	}
 
