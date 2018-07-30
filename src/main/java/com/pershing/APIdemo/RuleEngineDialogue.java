@@ -104,7 +104,8 @@ public class RuleEngineDialogue extends RootDialogue {
 							node.get("nodetitle").getAsString()).build();
 					buttons.addAction(new PostbackAction(
 							node.get("content").getAsString(),
-							"forward=" + node.get("forward").getAsString()));
+							"forward=" + node.get("forward").getAsString(),
+							"\u200B" + node.get("content").getAsString()));
 					TemplateMessage message = new TemplateMessage(node.get("content").getAsString(), buttons);
 					Util.sendSinglePush(sender, userId, message);
 				}
@@ -118,7 +119,8 @@ public class RuleEngineDialogue extends RootDialogue {
 						buttons.addAction(new PostbackAction(
 								buttonObject.get("title").getAsString(), 
 								"forward=" + buttonObject.get("forward").getAsString() +
-								"&data=" + buttonObject.get("customValue").getAsString()));
+								"&data=" + buttonObject.get("customValue").getAsString(),
+								"\u200B" + buttonObject.get("title")));
 					}
 					TemplateMessage message = new TemplateMessage(node.get("nodetitle").getAsString(), buttons);
 					Util.sendSinglePush(sender, userId, message);
@@ -205,7 +207,7 @@ public class RuleEngineDialogue extends RootDialogue {
 						Util.sendSingleTextPush(sender, userId, responseMessage);
 						expectingInput = true;
 						JsonArray nodes = response.getAsJsonArray("nodes");
-						if (nodes.size() > 0) {
+						if (nodes.isJsonObject() && nodes.size() > 0) {
 							JsonObject node = nodes.get(0).getAsJsonObject();
 							nextNodeId = node.get("forward").getAsString();
 							List<String> types = Arrays.asList(node.get("nodetype").getAsString().split(","));
