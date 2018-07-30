@@ -183,6 +183,10 @@ public class RuleEngineDialogue extends RootDialogue {
 	}
 	
 	private void handleMessage(String nodeId, String message, String token, String userId) {
+		// If the first character is a zero width space, DON'T PARSE THE MESSAGE
+		if (message.length() > 0 && message.substring(0, 1).equals("\u200B")) {
+			return;
+		}
 		JsonObject response = ruleEngineRequest(nodeId, message, token, userId);
 		if (response == null) {
 			Util.sendSingleTextPush(sender, userId, "Sorry, message could not be understood.");
@@ -297,7 +301,8 @@ public class RuleEngineDialogue extends RootDialogue {
 					try {
 						builder.addAction(new PostbackAction(
 								node.get("nodetitle").getAsString(),
-								"forward=" + node.get("nodeid").getAsString()));
+								"forward=" + node.get("nodeid").getAsString(),
+								"\u200B" + node.get("nodetitle").getAsString()));
 					} catch (Exception ex) {
 						// skip the current iteration if something went wrong
 						continue;
