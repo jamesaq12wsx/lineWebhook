@@ -211,7 +211,7 @@ public class RuleEngineDialogue extends RootDialogue {
 						Util.sendSingleTextPush(sender, userId, responseMessage);
 						expectingInput = true;
 						JsonArray nodes = response.getAsJsonArray("nodes");
-						if (nodes.isJsonObject() && nodes.size() > 0) {
+						if (nodes.isJsonArray() && nodes.size() > 0) {
 							JsonObject node = nodes.get(0).getAsJsonObject();
 							nextNodeId = node.get("forward").getAsString();
 							List<String> types = Arrays.asList(node.get("nodetype").getAsString().split(","));
