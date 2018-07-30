@@ -214,8 +214,11 @@ public class RuleEngineDialogue extends RootDialogue {
 						if (nodes.isJsonArray() && nodes.size() > 0) {
 							JsonObject node = nodes.get(0).getAsJsonObject();
 							nextNodeId = node.get("forward").getAsString();
+							// JUST PARSE THE NODES NO MATTER WHAT FOR NOW
+							/*
 							List<String> types = Arrays.asList(node.get("nodetype").getAsString().split(","));
 							if (!types.contains("QS") && !types.contains("Q")) return;
+							*/
 						}
 					}
 				}
