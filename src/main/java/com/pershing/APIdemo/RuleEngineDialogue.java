@@ -57,6 +57,10 @@ public class RuleEngineDialogue extends RootDialogue {
 
 	@Override
 	public void handleEvent(WebHookEvent event, String userId) {
+		// PRINT CURRENT INFO
+		System.out.println("EXPECTING INPUT: " + expectingInput);
+		System.out.println("NEXT NODE ID: " + nextNodeId);
+		System.out.println("CURRENT TOKEN : + currentToken");
 		if (event.type() == WebHookEventType.MESSAGE) {
 			MessageEvent messageEvent = (MessageEvent) event;
 			if (messageEvent.message().type() == MessageType.TEXT) {
