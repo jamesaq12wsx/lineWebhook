@@ -18,8 +18,8 @@ public class Demo {
 		// create the HTTP server
 		HttpServer server = HttpServer.create(new InetSocketAddress(Integer.valueOf(port)), 0);
 		System.out.println("Server started at port: " + port);
-		server.createContext("/", new RootHandler());
-		// server.createContext("/", new ChatbotApiHandler());
+		// server.createContext("/", new RootHandler());
+		server.createContext("/", new ChatbotApiHandler());
 
 		// run the HTTP server
 		server.setExecutor(null);

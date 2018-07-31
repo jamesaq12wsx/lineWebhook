@@ -13,6 +13,13 @@ public class ChatbotApiHandler implements HttpHandler {
 	private static final String CHANNEL_SECRET = "39a7a8b5594e8fe81bac12e31890752e";
 	private static final String CHANNEL_ACCESS_TOKEN = "B+R5Dl03JENfxXW+ALdsS6yHlFvBlB1xIrMh1ReV7qwgxnKflMyV+ludAmyhCq3oLt6XIzXQlv/vSUXSUBFNRbc+HP2TYfLZv5oMCQHGq+xsrZpDmRd+nj+KeJWrVtkYbD8r/uxDPXRUS21iE15iQgdB04t89/1O/w1cDnyilFU=";
 	
+	ChatbotWebHook webHookHandler;
+	
+	public ChatbotApiHandler() {
+		webHookHandler = new ChatbotWebHook(CHANNEL_SECRET, CHANNEL_ACCESS_TOKEN);
+		webHookHandler.setVerbose(true);
+	}
+	
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
 		String method = exchange.getRequestMethod();
@@ -21,6 +28,7 @@ public class ChatbotApiHandler implements HttpHandler {
 			String body = getBody(exchange);
 			String header = getLineVerificationHeader(exchange);
 			// HANDLE THE THING HERE
+			success = webHookHandler.handleWebHookEvent(header, body);
 		}
 		
 		if (success) {
