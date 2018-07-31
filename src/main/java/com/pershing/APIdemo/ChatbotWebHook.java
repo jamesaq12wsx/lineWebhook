@@ -100,7 +100,10 @@ public class ChatbotWebHook extends BaseWebHookHandler {
 	}
 	
 	private final void handleTextMessage(String message, String userId) {
-		// TODO: Handle incoming text messages
+		// If the string starts with a zero width space character, ignore it since
+		//	it means it was sent by the bot on behalf of the user
+		if (message.length() > 0 && message.substring(0, 1).equals("\u200B")) return;
+		handleMessage(message, userId);
 	}
 	
 	private final void handlePostbackEvent(PostbackEvent event, String userId) {
