@@ -38,7 +38,7 @@ public class ChatbotWebHook extends BaseWebHookHandler {
 
 	private static final String CHATBOT_MENU_URL = "https://chatbotapipsc.azurewebsites.net/api/chatbot/menu/top";
 	private static final String CHATBOT_API_URL = "https://chatbotapipsc.azurewebsites.net/api/chatbot/";
-	private static final String RICH_MENU_ID = "richmenu-68348ab1daabbd7e87b16806b314d115";
+	private static final String RICH_MENU_ID = "richmenu-0e6eb9418caf583fcb4b18840d9d4da8";
 	
 	private Map<String, UserData> users;
 	
