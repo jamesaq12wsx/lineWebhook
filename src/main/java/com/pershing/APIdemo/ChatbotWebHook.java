@@ -84,8 +84,8 @@ public class ChatbotWebHook extends BaseWebHookHandler {
 		}
 		try {
 			JsonArray nodes = response.getAsJsonArray("nodes");
-			ButtonsTemplate.ButtonsTemplateBuilder builder = new 
-					ButtonsTemplate.ButtonsTemplateBuilder("Select an option to get started");
+			ButtonsTemplate.ButtonsTemplateBuilder builder = 
+					new ButtonsTemplate.ButtonsTemplateBuilder("請選擇一個選項");
 			for (JsonElement e : nodes) {
 				JsonObject node = e.getAsJsonObject();
 				try {
@@ -99,7 +99,7 @@ public class ChatbotWebHook extends BaseWebHookHandler {
 				}
 			}
 			ButtonsTemplate buttons = builder.build();
-			TemplateMessage message = new TemplateMessage("Type help to get started", buttons);
+			TemplateMessage message = new TemplateMessage("輸入help以開始使用", buttons);
 			Util.sendSinglePush(messageSender, userId, message);
 		} 
 		catch (ParseException e) { e.printStackTrace(); }
