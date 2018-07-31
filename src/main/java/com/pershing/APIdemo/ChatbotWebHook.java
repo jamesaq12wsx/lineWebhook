@@ -77,16 +77,13 @@ public class ChatbotWebHook extends BaseWebHookHandler {
 	
 	private final void sendWelcomeMessage(String userId) {
 		// First send a get request to chatbot API to get initial menu
-		HttpEntity response = HttpUtils.sendGet(CHATBOT_MENU_URL, null);
+		JsonObject response = HttpUtils.sendGet(CHATBOT_MENU_URL, null);
 		if (response == null) {
 			log(">>> [ChatbotWebHook] ERROR, initial menu failed to load");
 			return;
 		}
 		try {
-			String data = EntityUtils.toString(response);
-			JsonParser parser = new JsonParser();
-			JsonObject obj = parser.parse(data).getAsJsonObject();
-			JsonArray nodes = obj.getAsJsonArray("nodes");
+			JsonArray nodes = response.getAsJsonArray("nodes");
 			ButtonsTemplate.ButtonsTemplateBuilder builder = new 
 					ButtonsTemplate.ButtonsTemplateBuilder("Select an option to get started");
 			for (JsonElement e : nodes) {
@@ -106,7 +103,6 @@ public class ChatbotWebHook extends BaseWebHookHandler {
 			Util.sendSinglePush(messageSender, userId, message);
 		} 
 		catch (ParseException e) { e.printStackTrace(); }
-		catch(IOException e) {e.printStackTrace(); }
 	}
 	
 	private final void handleTextMessage(String message, String userId) {
