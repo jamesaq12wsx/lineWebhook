@@ -72,86 +72,31 @@ public class RuleEngineDialogue extends RootDialogue {
 	
 	// Helper method to interact with the user based on the input nodes
 	private void handleNodes(JsonArray nodes, String userId) {
-		// Store a list for default actions since they will be stored in separate nodes
-		List<JsonObject> defaultActions = new ArrayList<JsonObject>();
 		try {
-			for (JsonElement e : nodes) {
-				JsonObject node = e.getAsJsonObject();
-				String typeString = node.get("nodetype").getAsString();
-				List<String> types = Arrays.asList(typeString.split(","));
-				if (types.contains("D") || types.contains("DD")) {
-					defaultActions.add(node);
-				}
-				if (types.contains("B")) {
-					// print a menu with the specified buttons
-					ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(
-							node.get("nodetitle").getAsString()).build();
-					JsonArray content = node.getAsJsonArray("content");
-					for (JsonElement button : content) {
-						JsonObject buttonObject = button.getAsJsonObject();
-						buttons.addAction(new PostbackAction(
-								buttonObject.get("title").getAsString(), 
-								"forward=" + buttonObject.get("forward").getAsString() +
-								"&data=" + buttonObject.get("customValue").getAsString(),
-								"\u200B" + buttonObject.get("title")));
+			if (nodes.size() == 1) {
+				for (JsonElement e : nodes) {
+					JsonObject node = e.getAsJsonObject();
+					String typeString = node.get("nodetype").getAsString();
+					List<String> types = Arrays.asList(typeString.split(","));
+					if (types.contains("D") || types.contains("DD")) {
+						ChatbotNodeHandler.handleDefaultNode(node, userId, sender);
 					}
-					TemplateMessage message = new TemplateMessage(node.get("nodetitle").getAsString(), buttons);
-					Util.sendSinglePush(sender, userId, message);
-				}
-				if (types.contains("L")) {
-					// print a menu with the specified buttons
-					ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(
-							node.get("nodetitle").getAsString()).build();
-					JsonElement content = node.get("content");
-					if (content.isJsonArray()) {
-						// HANDLE THE LINK AS AN ARRAY
-						JsonArray contentArray = node.getAsJsonArray("content");
-						for (JsonElement button : contentArray) {
-							JsonObject buttonObject = button.getAsJsonObject();
-							buttons.addAction(new URIAction(
-									buttonObject.get("title").getAsString(), 
-									buttonObject.get("url").getAsString()));
-						}
-					} else {
-						// HANDLE THE LINK AS A NORMAL FORWARD
-						buttons.addAction(new URIAction(
-								node.get("nodetitle").getAsString(),	
-								node.get("content").getAsString()));
+					if (types.contains("B")) {
+						ChatbotNodeHandler.handleButtonsNode(node, userId, sender);
 					}
-					TemplateMessage message = new TemplateMessage(node.get("nodetitle").getAsString(), buttons);
-					Util.sendSinglePush(sender, userId, message);
-				}
-				if (types.contains("QS") || types.contains("Q")) {
-					// TODO: figure out something to do here?
-				}
+					if (types.contains("L")) {
+						ChatbotNodeHandler.handleLinkNode(node, userId, sender);
+					}
+					if (types.contains("QS") || types.contains("Q")) {
+						// TODO: figure out something to do here?
+					}
+				}	
+			}
+			if (nodes.size() > 1) {
+				ChatbotNodeHandler.constructMenuFromNodes(nodes, userId, sender);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-		// Construct a menu of the single node if there is only 1
-		if (defaultActions.size() == 1) {
-			JsonObject node = defaultActions.get(0);
-			// print a menu with the next nodes as options
-			ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(
-					node.get("nodetitle").getAsString()).build();
-			buttons.addAction(new PostbackAction(
-					node.get("content").getAsString(),
-					"forward=" + node.get("forward").getAsString(),
-					"\u200B" + node.get("content").getAsString()));
-			TemplateMessage message = new TemplateMessage(node.get("content").getAsString(), buttons);
-			Util.sendSinglePush(sender, userId, message);
-		}
-		// Construct a menu of the default options if there are many
-		if (defaultActions.size() > 1) {
-			ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder("選項").build();
-			for (JsonObject node : defaultActions) {
-				buttons.addAction(new PostbackAction(
-						node.get("content").getAsString(),
-						"forward=" + node.get("forward").getAsString(),
-						"\u200B" + node.get("content").getAsString()));
-			}
-			TemplateMessage message = new TemplateMessage("選項", buttons);
-			Util.sendSinglePush(sender, userId, message);
 		}
 	}
 
@@ -276,22 +221,7 @@ public class RuleEngineDialogue extends RootDialogue {
 		if (!response.has("nodes") || !response.get("nodes").isJsonArray()) return;
 		// Construct the initial menu from the nodes data
 		JsonArray nodes = response.getAsJsonArray("nodes");
-		ButtonsTemplate.ButtonsTemplateBuilder builder = new ButtonsTemplate.ButtonsTemplateBuilder("選擇一個選項");
-		for (JsonElement e : nodes) {
-			JsonObject node = e.getAsJsonObject();
-			try {
-				builder.addAction(new PostbackAction(
-						node.get("nodetitle").getAsString(),
-						"forward=" + node.get("nodeid").getAsString(),
-						"\u200B" + node.get("nodetitle").getAsString()));
-			} catch (Exception ex) {
-				// skip the current iteration if something went wrong
-				continue;
-			}
-		}
-		ButtonsTemplate buttons = builder.build();
-		TemplateMessage message = new TemplateMessage("輸入help以開始使用", buttons);
-		Util.sendSinglePush(sender, userId, message);
+		ChatbotNodeHandler.constructMenuFromNodes(nodes, userId, sender);
 	}
 	
 }
