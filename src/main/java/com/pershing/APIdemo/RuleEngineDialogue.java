@@ -129,7 +129,12 @@ public class RuleEngineDialogue extends RootDialogue {
 				// TODO: Handle transfer 	
 			}
 			if (action.equals("exchange")) {
-				DemoUtils.sendCurrencyExchangeCarousel(userId, sender);
+				if (parameters.containsKey("data")) {
+					String currency = parameters.get("data");
+					Util.sendSingleTextPush(sender, userId, "GETTING CURRENCY FOR: " + currency);
+				} else {
+					DemoUtils.sendCurrencyExchangeCarousel(userId, sender);	
+				}
 			}
 		}
 		if (parameters.containsKey("forward")) {
