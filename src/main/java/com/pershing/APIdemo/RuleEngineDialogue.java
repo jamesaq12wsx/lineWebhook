@@ -9,6 +9,7 @@ import java.util.UUID;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.pershing.action.URIAction;
 import com.pershing.dialogue.RootDialogue;
 import com.pershing.event.MessageEvent;
 import com.pershing.event.PostbackEvent;
@@ -16,7 +17,9 @@ import com.pershing.event.WebHookEvent;
 import com.pershing.event.WebHookEventType;
 import com.pershing.message.MessageType;
 import com.pershing.message.TextMessage;
+import com.pershing.message.TemplateMessage;
 import com.pershing.mockAPI.MockAPI;
+import com.pershing.template.ButtonsTemplate;
 import com.pershing.util.Util;
 
 public class RuleEngineDialogue extends RootDialogue {
@@ -101,20 +104,30 @@ public class RuleEngineDialogue extends RootDialogue {
 		String text = message.getText();
 		// INTERCEPT THIS MESSAGE IF DETECTED!!!!!!
 		if (text.equals("QR") || text.equals("qr")) {
+			/*
 			String uuid = UUID.randomUUID().toString();
 			String path = "./" + uuid + ".jpeg";
 			try {
-				QRCodeGenerator.generateQRCodeImage("TEST", 240, 240, path);
 				String imagePath = "https://peaceful-plains-74132.herokuapp.com/" + uuid + ".jpeg";
+				QRCodeGenerator.generateQRCodeImage("TEST", 240, 240, path);
 				Util.sendSingleTextPush(sender, userId, imagePath);
+				return;
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			*/
+			// Send a button for the user to bring up the LIFF app
+			ButtonsTemplate.ButtonsTemplateBuilder builder = 
+					new ButtonsTemplate.ButtonsTemplateBuilder("QR");
+			builder.addAction(new URIAction("LIFF APP", "https://line.me/R/app/1588952156-kX2KV06z"));
+			ButtonsTemplate buttons = builder.build();
+			TemplateMessage qrTemplate = new TemplateMessage("QR Code link", buttons);
+			Util.sendSinglePush(sender, userId, qrTemplate);
 		}
 		if (expectingInput) {
 			handleMessage(nextNodeId, text, currentToken, userId);
 		} else {
-			Util.sendSingleTextPush(sender, userId, "Sorry, not expecting input.");
+			Util.sendSingleTextPush(sender, userId, "對不起，無法解析輸入");
 		}
 	}
 	
