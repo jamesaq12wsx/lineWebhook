@@ -213,6 +213,7 @@ public class RuleEngineDialogue extends RootDialogue {
 						expectingInput = true;
 						JsonArray nodes = response.getAsJsonArray("nodes");
 						if (nodes.isJsonArray() && nodes.size() > 0) {
+							System.out.println(nodes.toString());
 							JsonObject node = nodes.get(0).getAsJsonObject();
 							nextNodeId = node.get("forward").getAsString();
 							// JUST PARSE THE NODES NO MATTER WHAT FOR NOW
