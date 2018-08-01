@@ -38,6 +38,9 @@ public class RuleEngineDialogue extends RootDialogue {
 
 	private static final String richMenuId = "richmenu-e1b00252e15c21c6bed945d4ab1f1657";
 	
+	private static final String CHATBOT_API_URL = "https://chatbotapipsc.azurewebsites.net/api/chatbot/";
+	private static final String CHATBOT_MENU_URL = "https://chatbotapipsc.azurewebsites.net/api/chatbot/menu/top";
+	
 	private boolean expectingInput;
 	private String nextNodeId;
 	private String currentToken;
@@ -244,60 +247,19 @@ public class RuleEngineDialogue extends RootDialogue {
 		
 		System.out.println(">>> SENDING REQUEST W/ BODY: " + obj.toString());
 		
-		// initialize the HTTP request
-		HttpClient httpclient = HttpClients.createDefault();
-        HttpPost httppost = new HttpPost("https://chatbotapipsc.azurewebsites.net/api/chatbot/");
-        
         // request headers
-        httppost.setHeader("Content-Type", "application/json");
-        if (token != null && !token.equals("")) {
-        	httppost.setHeader("Authorization", "Bearer " + token);
-        }
+        Map<String, String> headers = new HashMap<String, String>();
+        headers.put("Content-Type", "application/json");
+        if (token != null && !token.equals("")) headers.put("Authorization", "Bearer " + token);
         
-        StringEntity params = new StringEntity(obj.toString(), "UTF-8");
-		
-		httppost.setEntity(params);
-        // execute and get the response
-        HttpResponse response = null;
-		try {
-			response = httpclient.execute(httppost);
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-        
-		// handle the server response
-        HttpEntity entity = response.getEntity();
-        if (entity != null) {
-    		// verify that the status code is what we want
-        	int status = response.getStatusLine().getStatusCode();
-        	if (status != 200) return null;
-    		try {
-				String data = EntityUtils.toString(entity);
-				JsonParser parser = new JsonParser();
-				System.out.println(">>> RULE ENGINE RESPONSE: " + parser.parse(data).getAsJsonObject().toString());
-				return parser.parse(data).getAsJsonObject();
-			} 
-    		catch (ParseException e) { e.printStackTrace(); } 
-    		catch (IOException e) { e.printStackTrace(); }	
-        } else {
-            // release the connection when finished
-            httppost.releaseConnection();
-            return null;
-        }
-		
-        // The code should not run to this point
-		return null;
+        return HttpUtils.sendPost(CHATBOT_API_URL, headers, obj);
 	}
 	
 	// Helper method to send initial menu to user for a list of actions
 	private void sendInitialMessage(String userId) {
-		JsonObject response = ruleEngineRequest("", "", "", userId);
+		JsonObject response = HttpUtils.sendGet(CHATBOT_MENU_URL, null);
 		// We know the response contains all the default nodes, no need to validate
-		if (response == null) {
-			Util.sendSingleTextPush(sender, userId, "Sorry, message could not be understood.");
-		} else {
+		if (response != null) {
 			try {
 				JsonArray nodes = response.getAsJsonArray("nodes");
 				// print a menu with the specified buttons
