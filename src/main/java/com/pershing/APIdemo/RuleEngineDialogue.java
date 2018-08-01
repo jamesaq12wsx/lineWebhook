@@ -16,6 +16,7 @@ import com.pershing.event.WebHookEvent;
 import com.pershing.event.WebHookEventType;
 import com.pershing.message.MessageType;
 import com.pershing.message.TextMessage;
+import com.pershing.mockAPI.MockAPI;
 import com.pershing.util.Util;
 
 public class RuleEngineDialogue extends RootDialogue {
@@ -131,9 +132,7 @@ public class RuleEngineDialogue extends RootDialogue {
 			if (action.equals("exchange")) {
 				if (parameters.containsKey("data")) {
 					String currency = parameters.get("data");
-					// Util.sendSingleTextPush(sender, userId, "GETTING CURRENCY FOR: " + currency);
-					// Node 5.1 is the one that corresponds to foreign currency exchange rates
-					handleMessage("5.1", currency, currentToken, userId);
+					Util.sendSingleTextPush(sender, userId, "1 NTD = " + MockAPI.getCurrency(currency, "NTD") + currency);
 				} else {
 					DemoUtils.sendCurrencyExchangeCarousel(userId, sender);	
 				}
