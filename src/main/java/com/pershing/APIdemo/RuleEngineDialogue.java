@@ -132,8 +132,8 @@ public class RuleEngineDialogue extends RootDialogue {
 			if (action.equals("exchange")) {
 				if (parameters.containsKey("data")) {
 					String currency = parameters.get("data");
-					float result = MockAPI.getCurrency(currency, "NTD");
-					Util.sendSingleTextPush(sender, userId, "1 NTD = " + Float.toString(result) + currency);
+					float result = MockAPI.getCurrency(currency, "TWD");
+					Util.sendSingleTextPush(sender, userId, "1 TWD = " + Float.toString(result) + currency);
 				} else {
 					DemoUtils.sendCurrencyExchangeCarousel(userId, sender);	
 				}
