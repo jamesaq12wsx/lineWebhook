@@ -1,26 +1,15 @@
 package com.pershing.APIdemo;
 
-import java.io.IOException;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.ParseException;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.pershing.action.PostbackAction;
 import com.pershing.action.URIAction;
 import com.pershing.dialogue.RootDialogue;
@@ -62,27 +51,12 @@ public class RuleEngineDialogue extends RootDialogue {
 		System.out.println("EXPECTING INPUT: " + expectingInput);
 		System.out.println("NEXT NODE ID: " + nextNodeId);
 		System.out.println("CURRENT TOKEN : + currentToken");
+		// Handle the event based on its type
 		if (event.type() == WebHookEventType.MESSAGE) {
 			MessageEvent messageEvent = (MessageEvent) event;
 			if (messageEvent.message().type() == MessageType.TEXT) {
 				TextMessage textMessage = (TextMessage) messageEvent.message();
-				// INTERCEPT THIS MESSAGE IF DETECTED!!!!!!
-				if (textMessage.getText().equals("QR") || textMessage.getText().equals("qr")) {
-					String uuid = UUID.randomUUID().toString();
-					String path = "./" + uuid + ".jpeg";
-					try {
-						QRCodeGenerator.generateQRCodeImage("TEST", 240, 240, path);
-						String imagePath = "https://peaceful-plains-74132.herokuapp.com/" + uuid + ".jpeg";
-						Util.sendSingleTextPush(sender, userId, imagePath);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-				if (expectingInput) {
-					handleMessage(nextNodeId, textMessage.getText(), currentToken, userId);
-				} else {
-					Util.sendSingleTextReply(sender, messageEvent.replyToken(), "Sorry, not expecting input.");
-				}	
+				handleTextMessageEvent(textMessage, userId);	
 			}
 		}
 		if (event.type() == WebHookEventType.FOLLOW) {
@@ -98,21 +72,15 @@ public class RuleEngineDialogue extends RootDialogue {
 	
 	// Helper method to interact with the user based on the input nodes
 	private void handleNodes(JsonArray nodes, String userId) {
+		// Store a list for default actions since they will be stored in separate nodes
+		List<JsonObject> defaultActions = new ArrayList<JsonObject>();
 		try {
 			for (JsonElement e : nodes) {
 				JsonObject node = e.getAsJsonObject();
 				String typeString = node.get("nodetype").getAsString();
 				List<String> types = Arrays.asList(typeString.split(","));
 				if (types.contains("D") || types.contains("DD")) {
-					// print a menu with the next nodes as options
-					ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(
-							node.get("nodetitle").getAsString()).build();
-					buttons.addAction(new PostbackAction(
-							node.get("content").getAsString(),
-							"forward=" + node.get("forward").getAsString(),
-							"\u200B" + node.get("content").getAsString()));
-					TemplateMessage message = new TemplateMessage(node.get("content").getAsString(), buttons);
-					Util.sendSinglePush(sender, userId, message);
+					defaultActions.add(node);
 				}
 				if (types.contains("B")) {
 					// print a menu with the specified buttons
@@ -160,25 +128,68 @@ public class RuleEngineDialogue extends RootDialogue {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		// Construct a menu of the single node if there is only 1
+		if (defaultActions.size() == 1) {
+			JsonObject node = defaultActions.get(0);
+			// print a menu with the next nodes as options
+			ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(
+					node.get("nodetitle").getAsString()).build();
+			buttons.addAction(new PostbackAction(
+					node.get("content").getAsString(),
+					"forward=" + node.get("forward").getAsString(),
+					"\u200B" + node.get("content").getAsString()));
+			TemplateMessage message = new TemplateMessage(node.get("content").getAsString(), buttons);
+			Util.sendSinglePush(sender, userId, message);
+		}
+		// Construct a menu of the default options if there are many
+		if (defaultActions.size() > 1) {
+			ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder("選項").build();
+			for (JsonObject node : defaultActions) {
+				buttons.addAction(new PostbackAction(
+						node.get("content").getAsString(),
+						"forward=" + node.get("forward").getAsString(),
+						"\u200B" + node.get("content").getAsString()));
+			}
+			TemplateMessage message = new TemplateMessage("選項", buttons);
+			Util.sendSinglePush(sender, userId, message);
+		}
 	}
 
+	// Helper method to handle a text message
+	private void handleTextMessageEvent(TextMessage message, String userId) {
+		String text = message.getText();
+		// INTERCEPT THIS MESSAGE IF DETECTED!!!!!!
+		if (text.equals("QR") || text.equals("qr")) {
+			String uuid = UUID.randomUUID().toString();
+			String path = "./" + uuid + ".jpeg";
+			try {
+				QRCodeGenerator.generateQRCodeImage("TEST", 240, 240, path);
+				String imagePath = "https://peaceful-plains-74132.herokuapp.com/" + uuid + ".jpeg";
+				Util.sendSingleTextPush(sender, userId, imagePath);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		if (expectingInput) {
+			handleMessage(nextNodeId, text, currentToken, userId);
+		} else {
+			Util.sendSingleTextPush(sender, userId, "Sorry, not expecting input.");
+		}
+	}
+	
 	// Helper method to handle a postback event
 	private void handlePostbackEvent(PostbackEvent event, String userId) {
 		String data = event.postbackData();
-		System.out.println(">>> RECIEVING POSTBACK EVENT: " + data);
 		// parse the data as an action trigger if the data specifies it
 		Map<String, String> parameters = Util.getQueryStringAsMap(data);
 		if (parameters.containsKey("action")) {
 			String action = parameters.get("action");
 			System.out.println(">>> POSTBACK DATA ACTION: " + action);
-			if (action.equals("transfer")) {
-				handleMessage("1.2", "", "", userId); 	
+			if (action.equals("account")) {
+				// TODO: Handle transfer 	
 			}
-			if (action.equals("rates")) {
-				handleMessage("5	", "", "", userId);
-			}
-			if (action.equals("service")) {
-				Util.sendSingleTextPush(sender, userId, "CUSTOMER SERVICE");
+			if (action.equals("exchange")) {
+				// TODO: Handle currency exchange
 			}
 		}
 		if (parameters.containsKey("forward")) {
@@ -189,54 +200,50 @@ public class RuleEngineDialogue extends RootDialogue {
 		}
 	}
 	
+	// Helper method to handle a message to the chatbot API
 	private void handleMessage(String nodeId, String message, String token, String userId) {
 		// If the first character is a zero width space, DON'T PARSE THE MESSAGE
 		if (message.length() > 0 && message.substring(0, 1).equals("\u200B")) {
 			return;
 		}
+		// Then get the response from the chatbot API and parse it
 		JsonObject response = ruleEngineRequest(nodeId, message, token, userId);
+		// Clear current state before setting it again
+		currentToken = "";
+		expectingInput = false;
+		nextNodeId = "";
 		if (response == null) {
-			Util.sendSingleTextPush(sender, userId, "Sorry, message could not be understood.");
+			Util.sendSingleTextPush(sender, userId, "對不起，無法理解訊息.");
+			return;
+		}
+		// Get the token first if it exists
+		if (response.has("token") && !response.get("token").isJsonNull()) {
+			currentToken = response.get("token").getAsString();
+		}
+		// If a response message exists, just respond with THAT
+		if (response.has("message") && !response.get("message").isJsonNull()) {
+			String responseMessage = response.get("message").getAsString();
+			Util.sendSingleTextPush(sender, userId, responseMessage);
+			// Set the next node if it exists
+			expectingInput = true;
+			JsonArray nodes = response.getAsJsonArray("nodes");
+			if (nodes != null && nodes.isJsonArray() && nodes.size() > 0) {
+				JsonObject node = nodes.get(0).getAsJsonObject();
+				if (node.has("forward") && !node.get("forward").isJsonNull()) {
+					nextNodeId = node.get("forward").getAsString();	
+				}
+				// JUST PARSE THE NODES NO MATTER WHAT FOR NOW
+				/*
+				List<String> types = Arrays.asList(node.get("nodetype").getAsString().split(","));
+				if (!types.contains("QS") && !types.contains("Q")) return;
+				*/
+			}
+		}
+		JsonArray nodes = response.getAsJsonArray("nodes");
+		if (nodes.size() > 0) {
+			handleNodes(nodes, userId);	
 		} else {
-			try {
-				// Get the token first if it exists
-				if (response.get("token").isJsonNull()) {
-					currentToken = "";	
-				} else {
-					currentToken = response.get("token").getAsString();
-				}
-				// If a response message exists, just respond with THAT
-				if (!response.get("message").isJsonNull()) {
-					String responseMessage= response.get("message").getAsString();
-					if (!responseMessage.equals("")) {
-						Util.sendSingleTextPush(sender, userId, responseMessage);
-						expectingInput = true;
-						JsonArray nodes = response.getAsJsonArray("nodes");
-						if (nodes.isJsonArray() && nodes.size() > 0) {
-							System.out.println(nodes.toString());
-							JsonObject node = nodes.get(0).getAsJsonObject();
-							if (node.has("forward") && !node.get("forward").isJsonNull()) {
-								nextNodeId = node.get("forward").getAsString();	
-							} else {
-								nextNodeId = "";
-							}
-							// JUST PARSE THE NODES NO MATTER WHAT FOR NOW
-							/*
-							List<String> types = Arrays.asList(node.get("nodetype").getAsString().split(","));
-							if (!types.contains("QS") && !types.contains("Q")) return;
-							*/
-						}
-					}
-				}
-				JsonArray nodes = response.getAsJsonArray("nodes");
-				if (nodes.size() > 0) {
-					handleNodes(nodes, userId);	
-				} else {
-					sendInitialMessage(userId);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}	
+			sendInitialMessage(userId);
 		}
 	}
 	
@@ -250,7 +257,7 @@ public class RuleEngineDialogue extends RootDialogue {
 		obj.addProperty("message", message);
 		obj.addProperty("userid", userId);
 		
-		System.out.println(">>> SENDING REQUEST W/ BODY: " + obj.toString());
+		System.out.println("> DEBUG: " + ">>> SENDING REQUEST W/ BODY: " + obj.toString());
 		
         // request headers
         Map<String, String> headers = new HashMap<String, String>();
@@ -258,39 +265,33 @@ public class RuleEngineDialogue extends RootDialogue {
         if (token != null && !token.equals("")) headers.put("Authorization", "Bearer " + token);
         
         JsonObject response = HttpUtils.sendPost(CHATBOT_API_URL, headers, obj);
-        System.out.println(response.toString());
+        System.out.println("> DEBUG: " + response.toString());
         return response;
 	}
 	
 	// Helper method to send initial menu to user for a list of actions
 	private void sendInitialMessage(String userId) {
 		JsonObject response = HttpUtils.sendGet(CHATBOT_MENU_URL, null);
-		// We know the response contains all the default nodes, no need to validate
-		if (response != null) {
+		if (response == null) return;
+		if (!response.has("nodes") || !response.get("nodes").isJsonArray()) return;
+		// Construct the initial menu from the nodes data
+		JsonArray nodes = response.getAsJsonArray("nodes");
+		ButtonsTemplate.ButtonsTemplateBuilder builder = new ButtonsTemplate.ButtonsTemplateBuilder("選擇一個選項");
+		for (JsonElement e : nodes) {
+			JsonObject node = e.getAsJsonObject();
 			try {
-				JsonArray nodes = response.getAsJsonArray("nodes");
-				// print a menu with the specified buttons
-				ButtonsTemplate.ButtonsTemplateBuilder builder = new 
-						ButtonsTemplate.ButtonsTemplateBuilder("Select an option to get started");
-				for (JsonElement e : nodes) {
-					JsonObject node = e.getAsJsonObject();
-					try {
-						builder.addAction(new PostbackAction(
-								node.get("nodetitle").getAsString(),
-								"forward=" + node.get("nodeid").getAsString(),
-								"\u200B" + node.get("nodetitle").getAsString()));
-					} catch (Exception ex) {
-						// skip the current iteration if something went wrong
-						continue;
-					}
-				}
-				ButtonsTemplate buttons = builder.build();
-				TemplateMessage message = new TemplateMessage("Type help to get started", buttons);
-				Util.sendSinglePush(sender, userId, message);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}	
+				builder.addAction(new PostbackAction(
+						node.get("nodetitle").getAsString(),
+						"forward=" + node.get("nodeid").getAsString(),
+						"\u200B" + node.get("nodetitle").getAsString()));
+			} catch (Exception ex) {
+				// skip the current iteration if something went wrong
+				continue;
+			}
 		}
+		ButtonsTemplate buttons = builder.build();
+		TemplateMessage message = new TemplateMessage("輸入help以開始使用", buttons);
+		Util.sendSinglePush(sender, userId, message);
 	}
 	
 }
