@@ -21,6 +21,14 @@ public class CarouselTemplate implements Template {
 		if (this.columns == null) this.columns = new ArrayList<Column>();
 		this.columns.add(column);
 	}
+	
+	public void setImageAspectRatio(String aspectRatio) {
+		this.imageAspectRatio = aspectRatio;
+	}
+	
+	public void setImageSize(String imageSize) {
+		this.imageSize = imageSize;
+	}
 
 	@Override
 	public JsonObject getAsJsonObject() {

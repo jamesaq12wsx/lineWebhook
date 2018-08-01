@@ -1,7 +1,6 @@
 package com.pershing.APIdemo;
 
 import java.util.Arrays;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,17 +9,13 @@ import java.util.UUID;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.pershing.action.PostbackAction;
-import com.pershing.action.URIAction;
 import com.pershing.dialogue.RootDialogue;
 import com.pershing.event.MessageEvent;
 import com.pershing.event.PostbackEvent;
 import com.pershing.event.WebHookEvent;
 import com.pershing.event.WebHookEventType;
 import com.pershing.message.MessageType;
-import com.pershing.message.TemplateMessage;
 import com.pershing.message.TextMessage;
-import com.pershing.template.ButtonsTemplate;
 import com.pershing.util.Util;
 
 public class RuleEngineDialogue extends RootDialogue {
@@ -134,7 +129,7 @@ public class RuleEngineDialogue extends RootDialogue {
 				// TODO: Handle transfer 	
 			}
 			if (action.equals("exchange")) {
-				// TODO: Handle currency exchange
+				DemoUtils.sendCurrencyExchangeCarousel(userId, sender);
 			}
 		}
 		if (parameters.containsKey("forward")) {
