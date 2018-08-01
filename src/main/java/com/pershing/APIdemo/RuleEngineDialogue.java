@@ -252,7 +252,9 @@ public class RuleEngineDialogue extends RootDialogue {
         headers.put("Content-Type", "application/json");
         if (token != null && !token.equals("")) headers.put("Authorization", "Bearer " + token);
         
-        return HttpUtils.sendPost(CHATBOT_API_URL, headers, obj);
+        JsonObject response = HttpUtils.sendPost(CHATBOT_API_URL, headers, obj);
+        System.out.println(response.toString());
+        return response;
 	}
 	
 	// Helper method to send initial menu to user for a list of actions
