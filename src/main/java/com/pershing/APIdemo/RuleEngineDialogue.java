@@ -131,7 +131,9 @@ public class RuleEngineDialogue extends RootDialogue {
 			if (action.equals("exchange")) {
 				if (parameters.containsKey("data")) {
 					String currency = parameters.get("data");
-					Util.sendSingleTextPush(sender, userId, "GETTING CURRENCY FOR: " + currency);
+					// Util.sendSingleTextPush(sender, userId, "GETTING CURRENCY FOR: " + currency);
+					// Node 5.1 is the one that corresponds to foreign currency exchange rates
+					handleMessage("5.1", currency, currentToken, userId);
 				} else {
 					DemoUtils.sendCurrencyExchangeCarousel(userId, sender);	
 				}
