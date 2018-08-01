@@ -1,5 +1,6 @@
 package com.pershing.APIdemo;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -9,15 +10,18 @@ import java.util.UUID;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.pershing.action.PostbackAction;
 import com.pershing.action.URIAction;
 import com.pershing.dialogue.RootDialogue;
 import com.pershing.event.MessageEvent;
 import com.pershing.event.PostbackEvent;
 import com.pershing.event.WebHookEvent;
 import com.pershing.event.WebHookEventType;
+import com.pershing.message.Message;
 import com.pershing.message.MessageType;
 import com.pershing.message.TextMessage;
 import com.pershing.message.TemplateMessage;
+import com.pershing.mockAPI.Account;
 import com.pershing.mockAPI.MockAPI;
 import com.pershing.template.ButtonsTemplate;
 import com.pershing.util.Util;
@@ -62,6 +66,8 @@ public class RuleEngineDialogue extends RootDialogue {
 			sendInitialMessage(userId);
 			// Also link the rich menu to the user
 			sender.linkRichMenu(richMenuId, userId);
+			// Also setup user data on mock API
+			MockAPI.generateAccount(userId, "");
 		}
 		if (event.type() == WebHookEventType.POSTBACK) {
 			PostbackEvent postbackEvent = (PostbackEvent) event;
@@ -123,6 +129,7 @@ public class RuleEngineDialogue extends RootDialogue {
 			ButtonsTemplate buttons = builder.build();
 			TemplateMessage qrTemplate = new TemplateMessage("QR Code link", buttons);
 			Util.sendSinglePush(sender, userId, qrTemplate);
+			return;
 		}
 		if (expectingInput) {
 			handleMessage(nextNodeId, text, currentToken, userId);
@@ -140,7 +147,36 @@ public class RuleEngineDialogue extends RootDialogue {
 			String action = parameters.get("action");
 			System.out.println(">>> POSTBACK DATA ACTION: " + action);
 			if (action.equals("account")) {
-				// TODO: Handle transfer 	
+				if (parameters.containsKey("data")) {
+					String accountId = parameters.get("data");
+					List<Account> accounts = MockAPI.getUserAccounts(userId);
+					for (Account account : accounts) {
+						if (account.id.equals(accountId)) {
+							String overview = account.name + '\n';
+							overview += "ID: " + account.id + '\n';
+							overview += "BALANCE: " + account.balance;
+							// skip the history for now
+							Util.sendSingleTextPush(sender, userId, overview);
+							return;
+						}
+					}
+				} else {
+					// Print an overview of the accounts
+					List<Account> accounts = MockAPI.getUserAccounts(userId);
+					String reply = "ACCOUNTS:\n";
+					ButtonsTemplate buttons = 
+							new ButtonsTemplate.ButtonsTemplateBuilder("選擇一個帳戶").build();
+					for (Account account : accounts) {
+						reply += account.name + ": " + Integer.toString(account.balance)+ '\n';
+						buttons.addAction(new PostbackAction(account.name, "action=account&data=" + account.id));
+					}
+					TextMessage overView = new TextMessage(reply);
+					TemplateMessage menu = new TemplateMessage("選擇帳戶", buttons);
+					List<Message> messages = new ArrayList<Message>();
+					messages.add(overView);
+					messages.add(menu);
+					sender.sendPush(userId, messages, "");
+				}
 			}
 			if (action.equals("exchange")) {
 				if (parameters.containsKey("data")) {
