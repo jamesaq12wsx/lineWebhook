@@ -215,7 +215,11 @@ public class RuleEngineDialogue extends RootDialogue {
 						if (nodes.isJsonArray() && nodes.size() > 0) {
 							System.out.println(nodes.toString());
 							JsonObject node = nodes.get(0).getAsJsonObject();
-							nextNodeId = node.get("forward").getAsString();
+							if (node.has("forward") && !node.get("forward").isJsonNull()) {
+								nextNodeId = node.get("forward").getAsString();	
+							} else {
+								nextNodeId = "";
+							}
 							// JUST PARSE THE NODES NO MATTER WHAT FOR NOW
 							/*
 							List<String> types = Arrays.asList(node.get("nodetype").getAsString().split(","));
