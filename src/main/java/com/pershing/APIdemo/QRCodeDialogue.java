@@ -55,7 +55,7 @@ public class QRCodeDialogue extends Dialogue {
 	private final void sendQRCodeMessage(String userId) {
 		String url = "https://peaceful-plains-74132.herokuapp.com/";
 		url += '?';
-		url += "target=" + target;
+		url += "target=" + target.replaceAll(" ", "%20");
 		url += '&';
 		url += "amount=" + Integer.toString(amount);
 		List<Message> messages = new ArrayList<Message>();
