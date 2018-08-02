@@ -25,32 +25,24 @@ public class QRCodeGenerator {
 	}
 
 	public final static boolean handleQRCodeFromGet(HttpExchange exchange) {
+		String parameters = exchange.getRequestURI().getQuery();
+		System.out.println("GET REQUEST QUERY: " + parameters);
+		
+		QRCodeWriter qrCodeWriter = new QRCodeWriter();
 		try {
-			String parameters = exchange.getRequestURI().getQuery();
-			System.out.println("GET REQUEST QUERY: " + parameters);
-			
-			QRCodeWriter qrCodeWriter = new QRCodeWriter();
-			BitMatrix bitMatrix = null;
-			try {
-				bitMatrix = qrCodeWriter.encode(parameters, BarcodeFormat.QR_CODE, 240, 240);
-			} catch (WriterException e) {
-				e.printStackTrace();
-			}
-			if (bitMatrix == null) return false;
-			try {
-				exchange.sendResponseHeaders(200, 0);
-				OutputStream os = exchange.getResponseBody();
-				MatrixToImageWriter.writeToStream(bitMatrix, FORMAT, os);
-				os.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-				return false;
-			}
-			return true;
-		} catch (Exception e) {
+			BitMatrix bitMatrix = qrCodeWriter.encode(parameters, BarcodeFormat.QR_CODE, 240, 240);
+			exchange.sendResponseHeaders(200, 0);
+			OutputStream os = exchange.getResponseBody();
+			MatrixToImageWriter.writeToStream(bitMatrix, FORMAT, os);
+			os.close();
+		} catch (WriterException e) {
 			e.printStackTrace();
 			return false;
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+			return false;
 		}
+		return true;
 	}
 	
 }
