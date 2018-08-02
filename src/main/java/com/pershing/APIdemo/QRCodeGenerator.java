@@ -32,6 +32,7 @@ public class QRCodeGenerator {
 		try {
 			QRCodeWriter qrCodeWriter = new QRCodeWriter();
 			BitMatrix bitMatrix = qrCodeWriter.encode(parameters, BarcodeFormat.QR_CODE, 240, 240);
+			exchange.getResponseHeaders().add("Content-Type", "image/jpeg");
 			exchange.sendResponseHeaders(200, 0);
 			OutputStream os = exchange.getResponseBody();
 			MatrixToImageWriter.writeToStream(bitMatrix, FORMAT, os);
