@@ -38,7 +38,7 @@ public class QRCodeGenerator {
 			}
 			if (bitMatrix == null) return false;
 			try {
-				exchange.sendResponseHeaders(200, 10000);
+				exchange.sendResponseHeaders(200, 0);
 				OutputStream os = exchange.getResponseBody();
 				MatrixToImageWriter.writeToStream(bitMatrix, FORMAT, os);
 				os.close();
