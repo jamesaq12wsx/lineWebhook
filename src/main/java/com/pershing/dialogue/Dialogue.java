@@ -11,7 +11,7 @@ public abstract class Dialogue {
 	// A reference to the previous dialogue
 	private Dialogue previous;
 	// A reference to the root dialogue
-	private Dialogue root;
+	protected Dialogue root;
 	/**
 	 * The top of the stack, only the root dialogue needs to worry about this so that the
 	 * 	correct handler function can be called when necessary.

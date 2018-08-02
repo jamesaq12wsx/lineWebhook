@@ -49,7 +49,7 @@ public class QRCodeDialogue extends Dialogue {
 			}
 		} else {
 			pop();
-			this.top().handleEvent(event, userId);
+			this.root.handleEvent(event, userId);
 		}
 	}
 	
