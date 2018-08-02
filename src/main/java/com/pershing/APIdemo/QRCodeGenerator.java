@@ -28,8 +28,8 @@ public class QRCodeGenerator {
 		String parameters = exchange.getRequestURI().getQuery();
 		System.out.println("GET REQUEST QUERY: " + parameters);
 		
-		QRCodeWriter qrCodeWriter = new QRCodeWriter();
 		try {
+			QRCodeWriter qrCodeWriter = new QRCodeWriter();
 			BitMatrix bitMatrix = qrCodeWriter.encode(parameters, BarcodeFormat.QR_CODE, 240, 240);
 			exchange.sendResponseHeaders(200, 0);
 			OutputStream os = exchange.getResponseBody();
@@ -40,6 +40,9 @@ public class QRCodeGenerator {
 			return false;
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
+			return false;
+		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
 		}
 		return true;
