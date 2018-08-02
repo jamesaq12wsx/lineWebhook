@@ -17,6 +17,7 @@ import com.pershing.event.MessageEvent;
 import com.pershing.event.PostbackEvent;
 import com.pershing.event.WebHookEvent;
 import com.pershing.event.WebHookEventType;
+import com.pershing.message.ImageMessage;
 import com.pershing.message.Message;
 import com.pershing.message.MessageType;
 import com.pershing.message.TextMessage;
@@ -28,7 +29,7 @@ import com.pershing.util.Util;
 
 public class RuleEngineDialogue extends RootDialogue {
 
-	private static final String richMenuId = "richmenu-e1b00252e15c21c6bed945d4ab1f1657";
+	private static final String richMenuId = "richmenu-949e4ac74b5b932f062ef11d20316c32";
 	
 	private static final String CHATBOT_API_URL = "https://chatbotapipsc.azurewebsites.net/api/chatbot/";
 	private static final String CHATBOT_MENU_URL = "https://chatbotapipsc.azurewebsites.net/api/chatbot/menu/top";
@@ -177,6 +178,18 @@ public class RuleEngineDialogue extends RootDialogue {
 					messages.add(menu);
 					sender.sendPush(userId, messages, "");
 				}
+			}
+			if (action.equals("qr")) {
+				// JUST DO TEST DATA FOR NOW
+				String url = "https://peaceful-plains-74132.herokuapp.com/";
+				url += '?';
+				url += "target=TEST";
+				url += '&';
+				url += "amount=12345";
+				List<Message> messages = new ArrayList<Message>();
+				messages.add(new TextMessage("掃描下面的QR碼付款"));
+				messages.add(new ImageMessage(url, url));
+				sender.sendPush(userId, messages, "");
 			}
 			if (action.equals("exchange")) {
 				if (parameters.containsKey("data")) {

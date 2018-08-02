@@ -37,6 +37,8 @@ public class RootHandler implements HttpHandler {
 		if (method.equals("GET")) {
 			System.out.println(">>> [ROOT HANDLER] recieved GET Request");
 			success = QRCodeGenerator.handleQRCodeFromGet(exchange);
+			// if the QR code generation was successful, then a response was already sent
+			if (success) return;
 		}
 		
 		if (success) {
