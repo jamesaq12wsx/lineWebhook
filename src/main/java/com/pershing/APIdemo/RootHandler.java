@@ -34,6 +34,10 @@ public class RootHandler implements HttpHandler {
 			String header = getHeader(exchange);
 			success = webHookHandler.handleWebHookEvent(header, body);
 		}
+		if (method.equals("GET")) {
+			System.out.println(">>> [ROOT HANDLER] recieved GET Request");
+			success = QRCodeGenerator.handleQRCodeFromGet(exchange);
+		}
 		
 		if (success) {
 			System.out.println(">>> [ROOT HANDLER] HTTP request processed successfully");
