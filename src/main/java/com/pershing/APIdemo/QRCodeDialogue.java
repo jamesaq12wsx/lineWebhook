@@ -20,7 +20,7 @@ public class QRCodeDialogue extends Dialogue {
 	private int amount;
 	
 	public QRCodeDialogue(String userId) {
-		Util.sendSingleTextPush(sender, userId, "Please enter the target of the QR code payment");
+		Util.sendSingleTextPush(sender, userId, "請輸入轉帳帳戶");
 	}
 	
 	@Override
@@ -31,13 +31,13 @@ public class QRCodeDialogue extends Dialogue {
 				TextMessage textMessage = (TextMessage) messageEvent.message();
 				if (target == null) {
 					target = textMessage.getText();
-					Util.sendSingleTextPush(sender, userId, "Please enter the transfer amount");
+					Util.sendSingleTextPush(sender, userId, "請輸入轉帳金額");
 				} else {
 					String amountString = textMessage.getText();
 					try {
 						amount = Integer.parseInt(amountString);
 					} catch (Exception e) {
-						Util.sendSingleTextPush(sender, userId, "Error occured when parsing: " + amountString);
+						Util.sendSingleTextPush(sender, userId, "發生了錯誤: " + amountString);
 						pop();
 						return;
 					}
