@@ -26,6 +26,7 @@ public class QRCodeGenerator {
 
 	public final static boolean handleQRCodeFromGet(HttpExchange exchange) {
 		String parameters = exchange.getRequestURI().getQuery();
+		if (parameters == null) parameters = "";
 		System.out.println("GET REQUEST QUERY: " + parameters);
 		
 		try {
