@@ -180,6 +180,7 @@ public class RuleEngineDialogue extends RootDialogue {
 				}
 			}
 			if (action.equals("qr")) {
+				/*
 				// JUST DO TEST DATA FOR NOW
 				String url = "https://peaceful-plains-74132.herokuapp.com/";
 				url += '?';
@@ -190,6 +191,8 @@ public class RuleEngineDialogue extends RootDialogue {
 				messages.add(new TextMessage("掃描下面的QR碼付款"));
 				messages.add(new ImageMessage(url, url));
 				sender.sendPush(userId, messages, "");
+				*/
+				push(new QRCodeDialogue(userId));
 			}
 			if (action.equals("exchange")) {
 				if (parameters.containsKey("data")) {
