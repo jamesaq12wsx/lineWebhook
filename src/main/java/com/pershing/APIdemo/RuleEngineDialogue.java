@@ -34,6 +34,8 @@ public class RuleEngineDialogue extends RootDialogue {
 	private static final String CHATBOT_API_URL = "https://chatbotapipsc.azurewebsites.net/api/chatbot/";
 	private static final String CHATBOT_MENU_URL = "https://chatbotapipsc.azurewebsites.net/api/chatbot/menu/top";
 	
+	private static final String LIFF_APP_URL = "https://line.me/R/app/1588952156-kX2KV06z";
+	
 	private boolean expectingInput;
 	private String nextNodeId;
 	private String currentToken;
@@ -126,7 +128,7 @@ public class RuleEngineDialogue extends RootDialogue {
 			// Send a button for the user to bring up the LIFF app
 			ButtonsTemplate.ButtonsTemplateBuilder builder = 
 					new ButtonsTemplate.ButtonsTemplateBuilder("QR");
-			builder.addAction(new URIAction("LIFF APP", "https://line.me/R/app/1588952156-kX2KV06z"));
+			builder.addAction(new URIAction("LIFF APP", LIFF_APP_URL));
 			ButtonsTemplate buttons = builder.build();
 			TemplateMessage qrTemplate = new TemplateMessage("QR Code link", buttons);
 			Util.sendSinglePush(sender, userId, qrTemplate);
