@@ -191,9 +191,8 @@ public class RuleEngineDialogue extends RootDialogue {
 									"\u200B" + obj.get("value").getAsString()
 								));
 					} catch (Exception ex) {}
-					Util.sendSinglePush(sender, userId, 
-							new TemplateMessage(responseMessage, buttons));
 				}
+				Util.sendSinglePush(sender, userId, new TemplateMessage(responseMessage, buttons));
 			} else {
 				Util.sendSingleTextPush(sender, userId, responseMessage);
 				// Set the next node if it exists
