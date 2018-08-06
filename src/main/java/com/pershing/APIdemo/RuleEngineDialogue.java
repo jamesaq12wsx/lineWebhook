@@ -114,6 +114,7 @@ public class RuleEngineDialogue extends RootDialogue {
 		// INTERCEPT THIS MESSAGE IF DETECTED!!!!!!
 		if (text.toLowerCase().equals("id")) {
 			Util.sendSingleTextPush(sender, userId, "USER ID: " + userId);
+			return;
 		}
 		if (expectingInput) {
 			handleMessage(nextNodeId, text, currentToken, userId);
