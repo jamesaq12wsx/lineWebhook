@@ -150,6 +150,7 @@ public class RuleEngineDialogue extends RootDialogue {
 			String action = parameters.get("action");
 			System.out.println(">>> POSTBACK DATA ACTION: " + action);
 			if (action.equals("account")) {
+				/*
 				if (parameters.containsKey("data")) {
 					String accountId = parameters.get("data");
 					List<Account> accounts = MockAPI.getUserAccounts(userId);
@@ -180,6 +181,8 @@ public class RuleEngineDialogue extends RootDialogue {
 					messages.add(menu);
 					sender.sendPush(userId, messages, "");
 				}
+				*/
+				handleMessage("1.1", "", currentToken, userId);
 			}
 			if (action.equals("qr")) {
 				/*
