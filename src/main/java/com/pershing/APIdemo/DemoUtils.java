@@ -1,8 +1,14 @@
 package com.pershing.APIdemo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.pershing.action.PostbackAction;
+import com.pershing.action.URIAction;
+import com.pershing.message.Message;
 import com.pershing.message.TemplateMessage;
 import com.pershing.sender.MessageSender;
+import com.pershing.template.ButtonsTemplate;
 import com.pershing.template.CarouselTemplate;
 import com.pershing.template.Column;
 import com.pershing.util.Util;
@@ -11,6 +17,7 @@ public class DemoUtils {
 
 	// HARD CODED TEMPORARY UTILITY FUNCTION
 	public static void sendCurrencyExchangeCarousel(String userId, MessageSender sender) {
+		// Construct the image carousel
 		CarouselTemplate carousel = new CarouselTemplate();
 		// EUR currency
 		Column EUR_column = new Column("歐元 EUR");
@@ -38,8 +45,19 @@ public class DemoUtils {
 		USD_column.addAction(new PostbackAction("我要兌換", "action=exchange&data=USD", "\u200B" + "兌換美元"));
 		carousel.addColumn(USD_column);
 		// Construct the final carousel template
-		TemplateMessage message = new TemplateMessage("外幣兌換", carousel);
-		Util.sendSinglePush(sender, userId, message);
+		TemplateMessage carouselMessage = new TemplateMessage("外幣兌換", carousel);
+		
+		// Construct a button to open a link to PWA
+		ButtonsTemplate link = new ButtonsTemplate.ButtonsTemplateBuilder("其他匯率").build();
+		link.addAction(new URIAction("其他匯率", "https://pwa-web-page.herokuapp.com/"));
+		TemplateMessage buttonsMessage = new TemplateMessage("其他匯率", link);
+		
+		// Construct the list of messages to send
+		List<Message> messages = new ArrayList<Message>();
+		messages.add(carouselMessage);
+		messages.add(buttonsMessage);
+		
+		sender.sendPush(userId, messages, "");
 	}
 	
 }
