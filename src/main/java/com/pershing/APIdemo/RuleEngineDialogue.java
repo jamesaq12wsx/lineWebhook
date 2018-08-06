@@ -112,27 +112,8 @@ public class RuleEngineDialogue extends RootDialogue {
 	private void handleTextMessageEvent(TextMessage message, String userId) {
 		String text = message.getText();
 		// INTERCEPT THIS MESSAGE IF DETECTED!!!!!!
-		if (text.equals("QR") || text.equals("qr")) {
-			/*
-			String uuid = UUID.randomUUID().toString();
-			String path = "./" + uuid + ".jpeg";
-			try {
-				String imagePath = "https://peaceful-plains-74132.herokuapp.com/" + uuid + ".jpeg";
-				QRCodeGenerator.generateQRCodeImage("TEST", 240, 240, path);
-				Util.sendSingleTextPush(sender, userId, imagePath);
-				return;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			*/
-			// Send a button for the user to bring up the LIFF app
-			ButtonsTemplate.ButtonsTemplateBuilder builder = 
-					new ButtonsTemplate.ButtonsTemplateBuilder("QR");
-			builder.addAction(new URIAction("LIFF APP", LIFF_APP_URL));
-			ButtonsTemplate buttons = builder.build();
-			TemplateMessage qrTemplate = new TemplateMessage("QR Code link", buttons);
-			Util.sendSinglePush(sender, userId, qrTemplate);
-			return;
+		if (text.toLowerCase().equals("id")) {
+			Util.sendSingleTextPush(sender, userId, "USER ID: " + userId);
 		}
 		if (expectingInput) {
 			handleMessage(nextNodeId, text, currentToken, userId);
