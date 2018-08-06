@@ -42,6 +42,8 @@ public class ChatbotNodeHandler {
 	}
 	
 	public static void handleLinkNode(JsonObject node, String userId, MessageSender sender) {
+		// If the format is wrong, just exit the function
+		if (!node.get("content").isJsonArray()) return;
 		// print a menu with the specified buttons
 		ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(
 				node.get("nodetitle").getAsString()).build();

@@ -21,9 +21,8 @@ import com.pershing.message.ImageMessage;
 import com.pershing.message.Message;
 import com.pershing.message.MessageType;
 import com.pershing.message.TextMessage;
-import com.pershing.message.TemplateMessage;
-import com.pershing.mockAPI.Account;
 import com.pershing.mockAPI.MockAPI;
+import com.pershing.message.TemplateMessage;
 import com.pershing.template.ButtonsTemplate;
 import com.pershing.util.Util;
 
@@ -69,8 +68,6 @@ public class RuleEngineDialogue extends RootDialogue {
 			sendInitialMessage(userId);
 			// Also link the rich menu to the user
 			sender.linkRichMenu(richMenuId, userId);
-			// Also setup user data on mock API
-			MockAPI.generateAccount(userId, "");
 		}
 		if (event.type() == WebHookEventType.POSTBACK) {
 			PostbackEvent postbackEvent = (PostbackEvent) event;
@@ -132,53 +129,9 @@ public class RuleEngineDialogue extends RootDialogue {
 			String action = parameters.get("action");
 			System.out.println(">>> POSTBACK DATA ACTION: " + action);
 			if (action.equals("account")) {
-				/*
-				if (parameters.containsKey("data")) {
-					String accountId = parameters.get("data");
-					List<Account> accounts = MockAPI.getUserAccounts(userId);
-					for (Account account : accounts) {
-						if (account.id.equals(accountId)) {
-							String overview = account.name + '\n';
-							overview += "ID: " + account.id + '\n';
-							overview += "BALANCE: " + account.balance;
-							// skip the history for now
-							Util.sendSingleTextPush(sender, userId, overview);
-							return;
-						}
-					}
-				} else {
-					// Print an overview of the accounts
-					List<Account> accounts = MockAPI.getUserAccounts(userId);
-					String reply = "ACCOUNTS:\n";
-					ButtonsTemplate buttons = 
-							new ButtonsTemplate.ButtonsTemplateBuilder("選擇一個帳戶").build();
-					for (Account account : accounts) {
-						reply += account.name + ": " + Integer.toString(account.balance)+ '\n';
-						buttons.addAction(new PostbackAction(account.name, "action=account&data=" + account.id));
-					}
-					TextMessage overView = new TextMessage(reply);
-					TemplateMessage menu = new TemplateMessage("選擇帳戶", buttons);
-					List<Message> messages = new ArrayList<Message>();
-					messages.add(overView);
-					messages.add(menu);
-					sender.sendPush(userId, messages, "");
-				}
-				*/
 				handleMessage("1.1", "", currentToken, userId);
 			}
 			if (action.equals("qr")) {
-				/*
-				// JUST DO TEST DATA FOR NOW
-				String url = "https://peaceful-plains-74132.herokuapp.com/";
-				url += '?';
-				url += "target=TEST";
-				url += '&';
-				url += "amount=12345";
-				List<Message> messages = new ArrayList<Message>();
-				messages.add(new TextMessage("掃描下面的QR碼付款"));
-				messages.add(new ImageMessage(url, url));
-				sender.sendPush(userId, messages, "");
-				*/
 				push(new QRCodeDialogue(userId));
 			}
 			if (action.equals("exchange")) {
@@ -222,20 +175,35 @@ public class RuleEngineDialogue extends RootDialogue {
 		// If a response message exists, just respond with THAT
 		if (response.has("message") && !response.get("message").isJsonNull()) {
 			String responseMessage = response.get("message").getAsString();
-			Util.sendSingleTextPush(sender, userId, responseMessage);
-			// Set the next node if it exists
 			expectingInput = true;
-			JsonArray nodes = response.getAsJsonArray("nodes");
-			if (nodes != null && nodes.isJsonArray() && nodes.size() > 0) {
-				JsonObject node = nodes.get(0).getAsJsonObject();
-				if (node.has("forward") && !node.get("forward").isJsonNull()) {
-					nextNodeId = node.get("forward").getAsString();	
+			// Only print out buttons if there is a message to use as the title
+			if (response.has("content") && response.get("content").isJsonArray()) {
+				ButtonsTemplate buttons = 
+						new ButtonsTemplate.ButtonsTemplateBuilder(responseMessage).build();
+				JsonArray content = response.getAsJsonArray("content");
+				for (JsonElement e : content) {
+					JsonObject obj = e.getAsJsonObject();
+					try {
+						buttons.addAction(new PostbackAction(
+									obj.get("title").getAsString(),
+									"forward=" + obj.get("forward").getAsString() +
+									"&data=" + obj.get("value").getAsString(),
+									"\u200B" + obj.get("value").getAsString()
+								));
+					} catch (Exception ex) {}
+					Util.sendSinglePush(sender, userId, 
+							new TemplateMessage(responseMessage, buttons));
 				}
-				// JUST PARSE THE NODES NO MATTER WHAT FOR NOW
-				/*
-				List<String> types = Arrays.asList(node.get("nodetype").getAsString().split(","));
-				if (!types.contains("QS") && !types.contains("Q")) return;
-				*/
+			} else {
+				Util.sendSingleTextPush(sender, userId, responseMessage);
+				// Set the next node if it exists
+				JsonArray nodes = response.getAsJsonArray("nodes");
+				if (nodes != null && nodes.isJsonArray() && nodes.size() > 0) {
+					JsonObject node = nodes.get(0).getAsJsonObject();
+					if (node.has("forward") && !node.get("forward").isJsonNull()) {
+						nextNodeId = node.get("forward").getAsString();	
+					}
+				}
 			}
 		}
 		JsonArray nodes = response.getAsJsonArray("nodes");
