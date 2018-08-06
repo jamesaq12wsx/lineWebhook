@@ -10,6 +10,7 @@ import java.util.UUID;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.pershing.action.MessageAction;
 import com.pershing.action.PostbackAction;
 import com.pershing.action.URIAction;
 import com.pershing.dialogue.RootDialogue;
@@ -184,11 +185,9 @@ public class RuleEngineDialogue extends RootDialogue {
 				for (JsonElement e : content) {
 					JsonObject obj = e.getAsJsonObject();
 					try {
-						buttons.addAction(new PostbackAction(
+						buttons.addAction(new MessageAction(
 									obj.get("title").getAsString(),
-									"forward=" + obj.get("forward").getAsString() +
-									"&data=" + obj.get("value").getAsString(),
-									"\u200B" + obj.get("value").getAsString()
+									obj.get("value").getAsString()
 								));
 					} catch (Exception ex) {}
 				}
