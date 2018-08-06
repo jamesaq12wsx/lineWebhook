@@ -189,6 +189,9 @@ public class RuleEngineDialogue extends RootDialogue {
 									obj.get("title").getAsString(),
 									obj.get("value").getAsString()
 								));
+						// FOR NOW JUST SET THE FORWARD EVERY TIME
+						// TODO: DEFINITELY WANT TO CHANGE THIS IMPLEMENTATION
+						nextNodeId = obj.get("forward").getAsString();
 					} catch (Exception ex) {}
 				}
 				Util.sendSinglePush(sender, userId, new TemplateMessage(responseMessage, buttons));
