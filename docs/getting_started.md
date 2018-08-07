@@ -9,7 +9,7 @@ If not, make sure the following dependencies are added to the project:
 - [junit](https://junit.org/junit5/)
 - [gson](https://github.com/google/gson)
 - [httpclient](https://hc.apache.org/httpcomponents-client-ga/)
-- [http](http://www.java2s.com/Code/Jar/h/Downloadhttp221jar.htm)
+- [httpserver](https://docs.oracle.com/javase/8/docs/jre/api/net/httpserver/spec/com/sun/net/httpserver/HttpServer.html)
 
 *NOTE :* The http library is only used to setup an HTTP server for the demo, if using another library to setup an HTTP server then the dependency is not needed.
 

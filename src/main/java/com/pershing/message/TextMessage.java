@@ -1,11 +1,14 @@
 package com.pershing.message;
 
 import com.google.gson.JsonObject;
+import com.pershing.quickReply.QuickReply;
 
 public class TextMessage implements Message {
 
 	// The text contained in the text message
 	private final String text;
+	
+	private QuickReply reply;
 	
 	/**
 	 * Type getter method for calling program to handle messages correctly
@@ -38,6 +41,7 @@ public class TextMessage implements Message {
 		JsonObject obj = new JsonObject();
 		obj.addProperty("type", "text");
 		obj.addProperty("text", text);
+		if (reply != null) obj.add("quickReply", reply.getAsJsonObject());
 		return obj;
 	}
 	
@@ -47,6 +51,11 @@ public class TextMessage implements Message {
 	 */
 	public String getAsJsonString() {
 		return getAsJsonObject().toString();
+	}
+
+	@Override
+	public void setQuickReply(QuickReply reply) {
+		this.reply = reply;
 	}
 
 }

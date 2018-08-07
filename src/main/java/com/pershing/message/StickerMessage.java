@@ -1,6 +1,7 @@
 package com.pershing.message;
 
 import com.google.gson.JsonObject;
+import com.pershing.quickReply.QuickReply;
 
 public class StickerMessage implements Message {
 
@@ -59,6 +60,12 @@ public class StickerMessage implements Message {
 	 */
 	public String getAsJsonString() {
 		return getAsJsonObject().getAsString();
+	}
+
+	@Override
+	public void setQuickReply(QuickReply reply) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

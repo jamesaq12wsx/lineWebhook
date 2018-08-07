@@ -23,6 +23,8 @@ import com.pershing.message.Message;
 import com.pershing.message.MessageType;
 import com.pershing.message.TextMessage;
 import com.pershing.mockAPI.MockAPI;
+import com.pershing.quickReply.LocationQuickReply;
+import com.pershing.quickReply.QuickReply;
 import com.pershing.message.TemplateMessage;
 import com.pershing.template.ButtonsTemplate;
 import com.pershing.util.Util;
@@ -84,19 +86,33 @@ public class RuleEngineDialogue extends RootDialogue {
 					JsonObject node = e.getAsJsonObject();
 					String typeString = node.get("nodetype").getAsString();
 					List<String> types = Arrays.asList(typeString.split(","));
+					// STORE THE MESSAGES BEFORE SENDING THEM SO THEY CAN BE SENT AT ONCE
+					List<Message> messages = new ArrayList<Message>();
 					if (types.contains("D") || types.contains("DD")) {
-						ChatbotNodeHandler.handleDefaultNode(node, userId, sender);
+						TemplateMessage message = ChatbotNodeHandler.handleDefaultNode(node, userId, sender);
+						if (message != null) messages.add(message);
 					}
 					if (types.contains("B")) {
-						ChatbotNodeHandler.handleButtonsNode(node, userId, sender);
+						TemplateMessage message = ChatbotNodeHandler.handleButtonsNode(node, userId, sender);
+						if (message != null) messages.add(message);
 					}
 					if (types.contains("L")) {
-						ChatbotNodeHandler.handleLinkNode(node, userId, sender);
+						TemplateMessage message = ChatbotNodeHandler.handleLinkNode(node, userId, sender);
+						if (message != null) messages.add(message);
 					}
 					if (types.contains("QS") || types.contains("Q")) {
 						// TODO: figure out something to do here?
 					}
+					if (types.contains("LO")) {
+						// SEND A LOCATION QUICKREPLY LMAO
+						if (messages.size() > 0) {
+							QuickReply reply = new QuickReply();
+							reply.addItem(new LocationQuickReply("發送位置"));
+							messages.get(0).setQuickReply(reply);
+						}
+					}
 				}	
+				
 			}
 			if (nodes.size() > 1) {
 				ChatbotNodeHandler.constructMenuFromNodes(nodes, userId, sender);

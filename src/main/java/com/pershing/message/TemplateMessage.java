@@ -1,12 +1,14 @@
 package com.pershing.message;
 
 import com.google.gson.JsonObject;
+import com.pershing.quickReply.QuickReply;
 import com.pershing.template.Template;
 
 public class TemplateMessage implements Message {
 
 	private String altText;
 	private Template template;
+	private QuickReply reply;
 	
 	/**
 	 * Type getter method for calling program to handle messages correctly
@@ -40,6 +42,7 @@ public class TemplateMessage implements Message {
 		obj.addProperty("type", "template");
 		obj.addProperty("altText", altText);
 		obj.add("template", template.getAsJsonObject());
+		if (reply != null) obj.add("quickReply", reply.getAsJsonObject());
 		return obj;
 	}
 
@@ -49,6 +52,11 @@ public class TemplateMessage implements Message {
 	 */
 	public String getAsJsonString() {
 		return getAsJsonObject().toString();
+	}
+
+	@Override
+	public void setQuickReply(QuickReply reply) {
+		this.reply = reply;
 	}
 
 }

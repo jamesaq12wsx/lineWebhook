@@ -12,7 +12,7 @@ import com.pershing.util.Util;
 
 public class ChatbotNodeHandler {
 
-	public static void handleDefaultNode(JsonObject node, String userId, MessageSender sender) {
+	public static TemplateMessage handleDefaultNode(JsonObject node, String userId, MessageSender sender) {
 		// print a menu with the next nodes as options
 		ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(
 				node.get("nodetitle").getAsString()).build();
@@ -21,12 +21,13 @@ public class ChatbotNodeHandler {
 				"forward=" + node.get("forward").getAsString(),
 				"\u200B" + node.get("content").getAsString()));
 		TemplateMessage message = new TemplateMessage(node.get("content").getAsString(), buttons);
-		Util.sendSinglePush(sender, userId, message);
+		// Util.sendSinglePush(sender, userId, message);
+		return message;
 	}
 	
-	public static void handleButtonsNode(JsonObject node, String userId, MessageSender sender) {
+	public static TemplateMessage handleButtonsNode(JsonObject node, String userId, MessageSender sender) {
 		// If the format is wrong, just exit the function
-		if (!node.get("content").isJsonArray()) return;
+		if (!node.get("content").isJsonArray()) return null;
 		// print a menu with the specified buttons
 		ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(
 				node.get("nodetitle").getAsString()).build();
@@ -40,10 +41,11 @@ public class ChatbotNodeHandler {
 					"\u200B" + buttonObject.get("title")));
 		}
 		TemplateMessage message = new TemplateMessage(node.get("nodetitle").getAsString(), buttons);
-		Util.sendSinglePush(sender, userId, message);
+		// Util.sendSinglePush(sender, userId, message);
+		return message;
 	}
 	
-	public static void handleLinkNode(JsonObject node, String userId, MessageSender sender) {
+	public static TemplateMessage handleLinkNode(JsonObject node, String userId, MessageSender sender) {
 		// print a menu with the specified buttons
 		ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(
 				node.get("nodetitle").getAsString()).build();
@@ -64,7 +66,8 @@ public class ChatbotNodeHandler {
 					node.get("content").getAsString()));
 		}
 		TemplateMessage message = new TemplateMessage(node.get("nodetitle").getAsString(), buttons);
-		Util.sendSinglePush(sender, userId, message);
+		// Util.sendSinglePush(sender, userId, message);
+		return message;
 	}
 	
 	public static void constructMenuFromNodes(JsonArray nodes, String userId, MessageSender sender) {

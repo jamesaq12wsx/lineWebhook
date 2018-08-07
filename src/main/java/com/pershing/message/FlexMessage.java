@@ -1,6 +1,7 @@
 package com.pershing.message;
 
 import com.google.gson.JsonObject;
+import com.pershing.quickReply.QuickReply;
 
 // ---------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------
@@ -47,6 +48,12 @@ public class FlexMessage implements Message {
 	public String getAsJsonString() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void setQuickReply(QuickReply reply) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	

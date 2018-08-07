@@ -1,6 +1,7 @@
 package com.pershing.message;
 
 import com.google.gson.JsonObject;
+import com.pershing.quickReply.QuickReply;
 
 public class ImageMessage implements Message {
 
@@ -29,6 +30,12 @@ public class ImageMessage implements Message {
 	@Override
 	public String getAsJsonString() {
 		return getAsJsonObject().toString();
+	}
+
+	@Override
+	public void setQuickReply(QuickReply reply) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

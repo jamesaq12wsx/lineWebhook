@@ -1,47 +1,49 @@
 # Using The API
 
-## The WebHookHandler
+## The BaseWebHookHandler
 
-The WebHookHandler is the center of the API. It takes incoming events and parses the raw data into various classes so that their properties can be easily accessed.
+The BaseWebHookHandler is the center of the API. It takes incoming events and parses the raw data into various classes so that their properties can be easily accessed.
 
 The WebHookHandler is constructed with 3 properties, the **channelSecret**, **channelAccessToken** and a **MessageSender**. The channelSecret and channelAccessToken properties are just the string values taken from the LINE@ channel page.
 
 ## The MessageSender
 
-A MessageSender is an interface for sending push/reply messages. The reason the interface is separate from the WebHookHandler is to allow custom implementations of message sending. For example, you might want to push all message requests to a central server before sending it to the LINE Messaging API, or perhaps you want to log each sent message. Using an interface allows the user to customize the functionality of the message sending functions to acheive different user goals. The interface itself only has two methods:
+A MessageSender is an interface for sending push/reply messages. The reason the interface is separate from the WebHookHandler is to allow custom implementations of message sending. For example, you might want to push all message requests to a central server before sending it to the LINE Messaging API, or perhaps you want to log each sent message. Using an interface allows the user to customize the functionality of the message sending functions to acheive different user goals. The interface itself only has four methods:
 
 ```java
 public interface MessageSender {
 
     public Response sendReply(String channelAccessToken, String token, List<Message> replyMessages);
     public Response sendPush(String channelAccessToken, String userId, List<Message> pushMessages);
+    public Response linkRichMenu(String richMenuId, String userId);
+    public Response UnlinkRichMenu(String userId);
 
 }
 ```
 
+There is a default **HTTPMessageSender** class that is included in the project which directly sends the messages it receives to the LINE Messaging API. This class utilizes the *httpclient* library, which is included as a dependency for the project setup.
+
 <div style="page-break-after: always;"></div>
 
-## Inheriting the WebHookHandler
+## Inheriting the BaseWebHookHandler
 
-With the API, custom bots are created via inheritance to the WebHookHandler class. There is a base handle function for each event type, which can be overriden to allow the user to write their own handlers. Bellow is a sample implementation of a custom handler function which echos text messages from LINE users that message the bot:
+With the API, custom bots are created via inheritance to the BaseWebHookHandler class. There is a central event handler function which receives incoming events of all different types, and can be overriden to customize the functionality of the bot. Bellow is a sample implementation of a custom handler function which echos text messages from LINE users that message the bot:
 
 ```java
 @Override
-protected void handleMessageEvent(MessageEvent event) {
-    String replyToken = event.replyToken();
-    // find the userId
-    String lineId = event.source().getId();
-    // parse the message and handle appropriately
-    Message message = event.message();
-    if (message.type() == MessageType.TEXT) {
-        TextMessage textMessage = (TextMessage)message;
-        String text = textMessage.getText();
-        sendSingleTextReply(replyToken, text);
+protected void handleEvent(String userId, WebHookEvent event) {
+    if (event.type() == WebHookEventType.MESSAGE) {
+        MessageEvent messageEvent = (MessageEvent) event;
+        if (messageEvent.message().type() == MessageType.TEXT) {
+            TextMessage textMessage = (TextMessage) messageEvent.message();
+            // Just send an echo reply
+            Util.sendSingleTextPush(messageSender, userId, textMessage.getText());
+        }
     }
 }
 ```
 
-## Setting up the WebHookHandler
+## Setting up the BaseWebHookHandler
 
 The LINE Messaging API sends its events to a WebHook, which is usually a server that accepts HTTPS POST requests. The API does not have a built in HTTPS server, but instead has specifications on how it should take in data from HTTPS POST requests. Every interaction goes through the **handleWebHookEvent** function, and the function signature looks like so:
 > public final boolean handleWebHookEvent(String headerSignature, String body);
@@ -49,6 +51,30 @@ The LINE Messaging API sends its events to a WebHook, which is usually a server 
 The **headerSignature** is a request header with the key **X-Line-Signature**, and it is used to verify the message source. The validation is taken care of by the WebHookHandler and does not need to be done by the user of the API. The body should be a big chunk of JSON data passed into the function as a String.
 
 Thus, to hook up the WebHookHandler to your bot server, simply call the central function from your POST request receiver with the corresponding fields set properly.
+
+An example is included in the project under the *APIdemo* package, and is implemented using the [**httpserver**](https://docs.oracle.com/javase/8/docs/jre/api/net/httpserver/spec/com/sun/net/httpserver/HttpServer.html) library.
+
+<div style="page-break-after: always;"></div>
+
+## Dialogue Stacks
+
+A more streamlined method of developing bot applications, called **dialogue stacks**, are implemented in the API as well. A *Dialogue* defines how the bot server handles the incoming events of a certain user, and each user is allocated their own dialogue stack. More information can be found in the dialogue stack documentation.
+
+The biggest benefit of dialogue stacks is that it is easy to reason dialogue flow. Each dialogue can be thought of as a 'page' in the sense of a traditional app. Each dialogue handles the inputs differently, just like how each page has different functions for the user to interact with. The stack implementation allows user to easily return to a 'previous' dialogue, just like how using the back button in an app or website will lead you to where you were before. Once a traditional app flow diagram is drawn out, it is essentially trivial to convert it to a dialogue flow using dialogue stacks.
+
+Another big benefit is the implicit separation of user states. Since each user gets their own dialogue stack, then we know that variables stored inside a dialogue is individual to each user. Thus, storing temporary data from users becomes as trivial as creating a new variable inside a dialogue to keep track of whatever it is that needs to be kept track of.
+
+One concern that could be raised with the implementation of dialogue stacks is performace. Since each user is allocated a dialogue stack, the program has to allocate extra memory for each user as well as pass through some extra levels of indirection. However, in most cases, these concerns will not have too significant of an impact as long as the dialogue flow is well designed.
+
+First, to address the issue of dialogue stacks requiring too much memory, a deeper look into the implementation of dialogue stacks is required. Each Dialogue contains 4 object references, which is 4 * 32 bits in most JVMs, which means that the dialogue object itself takes up 16 bytes of data. The dialogue stack itself also contains an object reference, which is another 32 bits (4 bytes) of data, so each user takes up at least 20 bytes of memory to store its dialogue stack. Since everything is stored in a Hashmap, another object reference is stored alongside the userId String. Since the userId is stored anyways, its cost will not be counted towards the cost of Dialogue Stacks. Thus, each user takes an extra 24 bytes of memory total at minimum.
+
+If the bot server were to handle 1000 users, it would need roughly 24 kilobytes of memory to store the dialogue stacks of each user, which is easily handled by any modern machine. Even at 1,000,000 users, there would be 24 megabytes of memory needed to store all the dialogue stacks, which still isn't much for modern processors to handle. The problem comes when dialogue flow is badly designed and dialogue stacks start to contain too many dialogues. The average number of dialogues per stack is directly proportional to the memory used, so if there are on average 3 dialogues per stack, then we will require roughly 3 times the memory of one dialogue in each dialogue stack. Therefore, a well designed dialogue flow averaging one dialogue per user will not have a significant impact on the memory required to run the program.
+
+Addressing the efficiency issues with the levels of indirection using dialogue stacks, only the implementation of the storing of dialogue stacks needs to be examined. Looking at the implementation without dialogue stacks, an incoming event goes through a central routing function to convert the JSON data into a Message object, and then calls the handleEvent function. With dialogue stacks, the program finds the dialogue stack of the corresponding user after converting the data into a Message object, and then calls the handleEvent function of the top dialogue of the stack.
+
+One extra function call is small enough to not be noticable, so the biggest performance difference should be finding the dialogue stack of the user. Since a HashMap is used to store the users and their corresponding dialogue stacks, finding the correct stack in a map is constant time, the Map is big enough for there to be minimal collisions. Even with collisions, the HashMap will detect if the entry is big enough to justify using a Binary Search Tree, which will result in logarithmic time at worst.
+
+As shown above, the performance issues of dialogue stacks don't have a significant impact, and is easily worth it for easier dialogue design and code readability.
 
 ## Documentation
 
