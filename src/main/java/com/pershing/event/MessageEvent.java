@@ -18,7 +18,8 @@ public class MessageEvent extends WebHookEvent {
 	// Token for replying to the event
 	private final String replyToken;
 	// Object containing the contents of the message
-	private final Message message;
+	// TODO: restore final modifier for message 
+	private Message message;
 	
 	/**
 	 * Main constructor which requires all properties to be set
