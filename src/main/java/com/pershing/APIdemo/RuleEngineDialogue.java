@@ -25,6 +25,7 @@ import com.pershing.message.TextMessage;
 import com.pershing.mockAPI.MockAPI;
 import com.pershing.quickReply.LocationQuickReply;
 import com.pershing.quickReply.QuickReply;
+import com.pershing.sender.Response;
 import com.pershing.message.TemplateMessage;
 import com.pershing.template.ButtonsTemplate;
 import com.pershing.util.Util;
@@ -111,7 +112,8 @@ public class RuleEngineDialogue extends RootDialogue {
 							messages.get(0).setQuickReply(reply);
 						}
 					}
-					sender.sendPush(userId, messages, "");
+					Response resp = sender.sendPush(userId, messages, "");
+					System.out.println("LINEAPI RESPONSE: " + resp.status() + " => " + resp.message());
 				}	
 				
 			}

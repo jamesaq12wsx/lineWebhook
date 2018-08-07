@@ -1,5 +1,7 @@
 # Getting Started
 
+Author: Ian Wang
+
 ## Setting up the project
 
 If using Eclipse and Maven, just download the Project and import into your workspace.
