@@ -20,6 +20,7 @@ import com.pershing.event.PostbackEvent;
 import com.pershing.event.WebHookEvent;
 import com.pershing.event.WebHookEventType;
 import com.pershing.message.ImageMessage;
+import com.pershing.message.LocationMessage;
 import com.pershing.message.Message;
 import com.pershing.message.MessageType;
 import com.pershing.message.TextMessage;
@@ -67,6 +68,11 @@ public class RuleEngineDialogue extends RootDialogue {
 				TextMessage textMessage = (TextMessage) messageEvent.message();
 				handleTextMessageEvent(textMessage, userId);	
 			}
+			if (messageEvent.message().type() == MessageType.LOCATION) {
+				// JUST USE THE ADDRESS AS A MESSAGE FOR NOW
+				LocationMessage locationMessage = (LocationMessage) messageEvent.message();
+				handleMessage(nextNodeId, locationMessage.getAddress(), currentToken, userId);
+			}
 		}
 		if (event.type() == WebHookEventType.FOLLOW) {
 			sendInitialMessage(userId);
@@ -111,6 +117,9 @@ public class RuleEngineDialogue extends RootDialogue {
 							reply.addItem(new LocationAction("發送位置"));
 							messages.get(0).setQuickReply(reply);
 						}
+						// TODO: Figure out a better way to do this
+						// SET THE NEXT NODE
+						nextNodeId = node.get("forward").getAsString();
 					}
 					Response resp = sender.sendPush(userId, messages, "");
 					System.out.println("LINEAPI RESPONSE: " + resp.status() + " => " + resp.message());

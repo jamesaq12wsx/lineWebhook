@@ -1,6 +1,7 @@
 package com.pershing.event;
 
 import com.google.gson.JsonObject;
+import com.pershing.message.LocationMessage;
 import com.pershing.message.Message;
 import com.pershing.message.StickerMessage;
 import com.pershing.message.TextMessage;
@@ -57,6 +58,8 @@ public class MessageEvent extends WebHookEvent {
 			String packageId = message.get("packageId").getAsString();
 			String stickerId = message.get("stickerId").getAsString();
 			this.message = new StickerMessage(packageId, stickerId);
+		} else if (type.equals("location")) {
+			this.message = new LocationMessage(message);
 		} else {
 			// catch all unknown cases with an error message (possibly throw an exception)
 			this.message = new TextMessage("PLACEHOLDER");
