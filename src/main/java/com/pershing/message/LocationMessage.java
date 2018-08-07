@@ -23,6 +23,7 @@ public class LocationMessage implements Message {
 	}
 	
 	public LocationMessage(JsonObject obj) {
+		System.out.println("PARSING: " + obj.toString() + "AS LOCATION MESSAGE");
 		// MAY THROW EXCEPTION IF PARSED WRONG
 		this.title = obj.get("title").getAsString();
 		this.address = obj.get("address").getAsString();
