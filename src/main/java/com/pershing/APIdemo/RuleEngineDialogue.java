@@ -96,15 +96,15 @@ public class RuleEngineDialogue extends RootDialogue {
 					// STORE THE MESSAGES BEFORE SENDING THEM SO THEY CAN BE SENT AT ONCE
 					List<Message> messages = new ArrayList<Message>();
 					if (types.contains("D") || types.contains("DD")) {
-						TemplateMessage message = ChatbotNodeHandler.handleDefaultNode(node, userId, sender);
+						TemplateMessage message = ChatbotNodeHandler.handleDefaultNode(node, userId);
 						if (message != null) messages.add(message);
 					}
 					if (types.contains("B")) {
-						TemplateMessage message = ChatbotNodeHandler.handleButtonsNode(node, userId, sender);
+						TemplateMessage message = ChatbotNodeHandler.handleButtonsNode(node, userId);
 						if (message != null) messages.add(message);
 					}
 					if (types.contains("L")) {
-						TemplateMessage message = ChatbotNodeHandler.handleLinkNode(node, userId, sender);
+						TemplateMessage message = ChatbotNodeHandler.handleLinkNode(node, userId);
 						if (message != null) messages.add(message);
 					}
 					if (types.contains("QS") || types.contains("Q")) {
@@ -207,22 +207,7 @@ public class RuleEngineDialogue extends RootDialogue {
 			expectingInput = true;
 			// Only print out buttons if there is a message to use as the title
 			if (response.has("content") && response.get("content").isJsonArray()) {
-				ButtonsTemplate buttons = 
-						new ButtonsTemplate.ButtonsTemplateBuilder(responseMessage).build();
-				JsonArray content = response.getAsJsonArray("content");
-				for (JsonElement e : content) {
-					JsonObject obj = e.getAsJsonObject();
-					try {
-						buttons.addAction(new MessageAction(
-									obj.get("title").getAsString(),
-									obj.get("value").getAsString()
-								));
-						// FOR NOW JUST SET THE FORWARD EVERY TIME
-						// TODO: DEFINITELY WANT TO CHANGE THIS IMPLEMENTATION
-						nextNodeId = obj.get("forward").getAsString();
-					} catch (Exception ex) {}
-				}
-				Util.sendSinglePush(sender, userId, new TemplateMessage(responseMessage, buttons));
+				handleResponseContent(response, userId, responseMessage);
 			} else {
 				Util.sendSingleTextPush(sender, userId, responseMessage);
 				// Set the next node if it exists
@@ -274,5 +259,46 @@ public class RuleEngineDialogue extends RootDialogue {
 		JsonArray nodes = response.getAsJsonArray("nodes");
 		ChatbotNodeHandler.constructMenuFromNodes(nodes, userId, sender);
 	}
+	
+	public void handleResponseContent(JsonObject response, String userId, String responseMessage) {
+		String contentType = "";
+		if (response.has("contentType") && response.get("contentType").isJsonPrimitive()) {
+			contentType = response.get("contentType").getAsString();
+		}
+		if (contentType.equals("LO")) {
+			Util.sendSingleTextPush(sender, userId, responseMessage);
+			// Go through the locations and add them one by one
+			List<Message> messages = new ArrayList<Message>();
+			JsonArray content = response.getAsJsonArray("content");
+			for (JsonElement e : content) {
+				JsonObject locationObject = e.getAsJsonObject();
+				LocationMessage message = new LocationMessage(
+							locationObject.get("title").getAsString(),
+							locationObject.get("address").getAsString(),
+							locationObject.get("lat").getAsFloat(),
+							locationObject.get("lng").getAsFloat()
+						);
+				messages.add(message);
+			}
+			sender.sendPush(userId, messages, "");
+		} else {
+			ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(responseMessage).build();
+			JsonArray content = response.getAsJsonArray("content");
+			for (JsonElement e : content) {
+				JsonObject obj = e.getAsJsonObject();
+				try {
+					buttons.addAction(new MessageAction(
+								obj.get("title").getAsString(),
+								obj.get("value").getAsString()
+							));
+					// FOR NOW JUST SET THE FORWARD EVERY TIME
+					// TODO: DEFINITELY WANT TO CHANGE THIS IMPLEMENTATION
+					nextNodeId = obj.get("forward").getAsString();
+				} catch (Exception ex) {}
+			}
+			Util.sendSinglePush(sender, userId, new TemplateMessage(responseMessage, buttons));
+		}
+	}
+
 	
 }
