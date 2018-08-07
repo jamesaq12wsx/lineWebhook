@@ -24,7 +24,6 @@ import com.pershing.message.Message;
 import com.pershing.message.MessageType;
 import com.pershing.message.TextMessage;
 import com.pershing.mockAPI.MockAPI;
-import com.pershing.quickReply.LocationQuickReply;
 import com.pershing.quickReply.QuickReply;
 import com.pershing.sender.Response;
 import com.pershing.message.TemplateMessage;
