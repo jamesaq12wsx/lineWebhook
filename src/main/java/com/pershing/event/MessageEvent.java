@@ -59,7 +59,12 @@ public class MessageEvent extends WebHookEvent {
 			String stickerId = message.get("stickerId").getAsString();
 			this.message = new StickerMessage(packageId, stickerId);
 		} else if (type.equals("location")) {
-			this.message = new LocationMessage(message);
+			try {
+				this.message = new LocationMessage(message);
+			} catch (Exception e) {
+				e.printStackTrace();
+				this.message = new LocationMessage("", "", 0f, 0f);
+			}
 		} else {
 			// catch all unknown cases with an error message (possibly throw an exception)
 			this.message = new TextMessage("PLACEHOLDER");
