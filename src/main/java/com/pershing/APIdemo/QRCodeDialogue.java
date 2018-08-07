@@ -16,11 +16,17 @@ import com.pershing.util.Util;
 
 public class QRCodeDialogue extends Dialogue {
 
+	// The rich menu to link back to the user once QR code is done
+	private final String returnMenu;
+	
 	private String target;
 	private int amount;
 	
-	public QRCodeDialogue(String userId) {
+	public QRCodeDialogue(String userId, String returnMenu) {
 		Util.sendSingleTextPush(sender, userId, "請輸入轉帳帳戶");
+		// UNLINK USER RICH MENU WHEN 
+		this.returnMenu = returnMenu;
+		sender.UnlinkRichMenu(userId);
 	}
 	
 	@Override
@@ -38,17 +44,17 @@ public class QRCodeDialogue extends Dialogue {
 						amount = Integer.parseInt(amountString);
 					} catch (Exception e) {
 						Util.sendSingleTextPush(sender, userId, "發生了錯誤: " + amountString);
-						pop();
+						customPop(userId);
 						return;
 					}
 					sendQRCodeMessage(userId);
-					pop();
+					customPop(userId);
 				}
 			} else {
-				pop();
+				customPop(userId);
 			}
 		} else {
-			pop();
+			customPop(userId);
 			this.root.handleEvent(event, userId);
 		}
 	}
@@ -65,6 +71,12 @@ public class QRCodeDialogue extends Dialogue {
 		messages.add(new TextMessage("PAY: " + Integer.toString(amount) + " TO " + target));
 		messages.add(new ImageMessage(url, url));
 		sender.sendPush(userId, messages, "");
+	}
+	
+	// Custom pop function since we want to link back rich menu when done
+	private final void customPop(String userId) {
+		sender.linkRichMenu(returnMenu, userId);
+		pop();
 	}
 
 }
