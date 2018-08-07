@@ -1,18 +1,18 @@
-package com.pershing.quickReply;
+package com.pershing.action;
 
 import com.google.gson.JsonObject;
 
-public class LocationQuickReply implements QuickReplyItem {
+public class LocationAction implements Action {
 
 	private final String label;
 	
-	public LocationQuickReply(String label) {
+	public LocationAction(String label) {
 		this.label = label;
 	}
 	
 	@Override
-	public QuickReplyType type() {
-		return QuickReplyType.LOCATION;
+	public ActionType type() {
+		return ActionType.LOCATION;
 	}
 
 	@Override

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonArray;
+import com.pershing.action.Action;
 
 public class QuickReply {
 
@@ -16,6 +17,10 @@ public class QuickReply {
 	
 	public void addItem(QuickReplyItem item) {
 		items.add(item);
+	}
+	
+	public void addItem(Action action) {
+		items.add(new QuickReplyItem(action));
 	}
 	
 	public final JsonObject getAsJsonObject() {

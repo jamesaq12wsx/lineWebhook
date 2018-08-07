@@ -10,6 +10,7 @@ import java.util.UUID;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.pershing.action.LocationAction;
 import com.pershing.action.MessageAction;
 import com.pershing.action.PostbackAction;
 import com.pershing.action.URIAction;
@@ -108,7 +109,7 @@ public class RuleEngineDialogue extends RootDialogue {
 						// SEND A LOCATION QUICKREPLY LMAO
 						if (messages.size() > 0) {
 							QuickReply reply = new QuickReply();
-							reply.addItem(new LocationQuickReply("發送位置"));
+							reply.addItem(new LocationAction("發送位置"));
 							messages.get(0).setQuickReply(reply);
 						}
 					}
