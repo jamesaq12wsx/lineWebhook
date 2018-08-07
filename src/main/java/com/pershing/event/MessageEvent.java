@@ -63,7 +63,6 @@ public class MessageEvent extends WebHookEvent {
 				this.message = new LocationMessage(message);
 			} catch (Exception e) {
 				e.printStackTrace();
-				this.message = new LocationMessage("", "", 0f, 0f);
 			}
 		} else {
 			// catch all unknown cases with an error message (possibly throw an exception)
