@@ -29,7 +29,7 @@ import com.pershing.util.Util;
 
 public class RuleEngineDialogue extends RootDialogue {
 
-	private static final String richMenuId = "richmenu-949e4ac74b5b932f062ef11d20316c32";
+	private static final String RICH_MENU_ID = "richmenu-949e4ac74b5b932f062ef11d20316c32";
 	
 	private static final String CHATBOT_API_URL = "https://chatbotapipsc.azurewebsites.net/api/chatbot/";
 	private static final String CHATBOT_MENU_URL = "https://chatbotapipsc.azurewebsites.net/api/chatbot/menu/top";
@@ -68,7 +68,7 @@ public class RuleEngineDialogue extends RootDialogue {
 		if (event.type() == WebHookEventType.FOLLOW) {
 			sendInitialMessage(userId);
 			// Also link the rich menu to the user
-			sender.linkRichMenu(richMenuId, userId);
+			sender.linkRichMenu(RICH_MENU_ID, userId);
 		}
 		if (event.type() == WebHookEventType.POSTBACK) {
 			PostbackEvent postbackEvent = (PostbackEvent) event;
@@ -133,7 +133,7 @@ public class RuleEngineDialogue extends RootDialogue {
 				handleMessage("1.1", "", currentToken, userId);
 			}
 			if (action.equals("qr")) {
-				push(new QRCodeDialogue(userId));
+				push(new QRCodeDialogue(userId, RICH_MENU_ID));
 			}
 			if (action.equals("exchange")) {
 				if (parameters.containsKey("data")) {
