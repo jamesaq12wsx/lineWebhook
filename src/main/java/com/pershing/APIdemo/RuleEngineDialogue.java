@@ -111,6 +111,7 @@ public class RuleEngineDialogue extends RootDialogue {
 							messages.get(0).setQuickReply(reply);
 						}
 					}
+					sender.sendPush(userId, messages, "");
 				}	
 				
 			}
