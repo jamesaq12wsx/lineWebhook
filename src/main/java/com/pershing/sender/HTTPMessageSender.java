@@ -140,6 +140,8 @@ public class HTTPMessageSender implements MessageSender {
 			e.printStackTrace();
 		}
 		
+		System.out.println("SENDING MESSAGE TO LINE: " + body.toString());
+		
 		int status = -1;
 		String message = "";
 		String data = "";
