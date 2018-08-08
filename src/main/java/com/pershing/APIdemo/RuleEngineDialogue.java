@@ -288,6 +288,28 @@ public class RuleEngineDialogue extends RootDialogue {
 				messages.add(message);
 			}
 			sender.sendPush(userId, messages, "");
+		} else if (contentType.equals("L")) {
+			ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(responseMessage).build();
+			if (response.get("content").isJsonArray()) {
+				JsonArray content = response.getAsJsonArray("content");
+				for (JsonElement e : content) {
+					JsonObject obj = e.getAsJsonObject();
+					try {
+						buttons.addAction(new URIAction(
+									obj.get("title").getAsString(),
+									obj.get("url").getAsString()
+								));
+					} catch (Exception ex) {}
+				}
+			}
+			if (response.get("content").isJsonObject()) {
+				JsonObject content = response.getAsJsonObject("content");
+				buttons.addAction(new URIAction(
+							content.get("title").getAsString(),
+							content.get("url").getAsString()
+						));
+			}
+			Util.sendSinglePush(sender, userId, new TemplateMessage(responseMessage, buttons));
 		} else {
 			ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(responseMessage).build();
 			JsonArray content = response.getAsJsonArray("content");
@@ -308,9 +330,12 @@ public class RuleEngineDialogue extends RootDialogue {
 	}
 	
 	private void handleVerification(String userId) {
+		handleMessage("9", "", "", userId);
+		/*
 		ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder("帳戶尚未綁定").build();
 		buttons.addAction(new URIAction("綁定", LIFF_APP_URL));
 		Util.sendSinglePush(sender, userId, new TemplateMessage("帳戶尚未綁定", buttons));
+		*/
 	}
 	
 }
