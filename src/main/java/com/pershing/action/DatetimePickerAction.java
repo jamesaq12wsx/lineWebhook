@@ -59,8 +59,8 @@ public class DatetimePickerAction implements Action {
 	}
 
 	/**
-	 * Returns the JSON representation of the message action
-	 * @return	the JSON representation of the message action
+	 * Returns the JSON representation of the datetime picker action
+	 * @return	the JSON representation of the datetime picker action
 	 */
 	public JsonObject getAsJsonObject() {
 		JsonObject result = new JsonObject();
@@ -75,8 +75,8 @@ public class DatetimePickerAction implements Action {
 	}
 
 	/**
-	 * Returns the JSON representation of the message action as a String
-	 * @return	The string containing the JSON data of the message action
+	 * Returns the JSON representation of the datetime picker action as a String
+	 * @return	The string containing the JSON data of the datetime picker action
 	 */
 	public String getAsJsonString() {
 		return getAsJsonObject().getAsString();

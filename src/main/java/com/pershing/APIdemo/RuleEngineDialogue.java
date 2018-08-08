@@ -38,16 +38,19 @@ public class RuleEngineDialogue extends RootDialogue {
 	private static final String CHATBOT_API_URL = "https://chatbotapipsc.azurewebsites.net/api/chatbot/";
 	private static final String CHATBOT_MENU_URL = "https://chatbotapipsc.azurewebsites.net/api/chatbot/menu/top";
 	
-	private static final String LIFF_APP_URL = "https://line.me/R/app/1588952156-kX2KV06z";
+	private static final String LIFF_APP_URL = "line://app/1599437019-DalpOzwK";
 	
 	private boolean expectingInput;
 	private String nextNodeId;
 	private String currentToken;
 	
+	private boolean verified;
+	
 	public RuleEngineDialogue() {
 		this.expectingInput = false;
 		this.nextNodeId = "";
 		this.currentToken = "";
+		this.verified = false;
 	}
 	
 	@Override
@@ -61,27 +64,31 @@ public class RuleEngineDialogue extends RootDialogue {
 		System.out.println("EXPECTING INPUT: " + expectingInput);
 		System.out.println("NEXT NODE ID: " + nextNodeId);
 		System.out.println("CURRENT TOKEN : + currentToken");
-		// Handle the event based on its type
-		if (event.type() == WebHookEventType.MESSAGE) {
-			MessageEvent messageEvent = (MessageEvent) event;
-			if (messageEvent.message().type() == MessageType.TEXT) {
-				TextMessage textMessage = (TextMessage) messageEvent.message();
-				handleTextMessageEvent(textMessage, userId);	
+		if (verified) {
+			// Handle the event based on its type
+			if (event.type() == WebHookEventType.MESSAGE) {
+				MessageEvent messageEvent = (MessageEvent) event;
+				if (messageEvent.message().type() == MessageType.TEXT) {
+					TextMessage textMessage = (TextMessage) messageEvent.message();
+					handleTextMessageEvent(textMessage, userId);	
+				}
+				if (messageEvent.message().type() == MessageType.LOCATION) {
+					// JUST USE THE ADDRESS AS A MESSAGE FOR NOW
+					LocationMessage locationMessage = (LocationMessage) messageEvent.message();
+					handleMessage(nextNodeId, locationMessage.getAddress(), currentToken, userId);
+				}
 			}
-			if (messageEvent.message().type() == MessageType.LOCATION) {
-				// JUST USE THE ADDRESS AS A MESSAGE FOR NOW
-				LocationMessage locationMessage = (LocationMessage) messageEvent.message();
-				handleMessage(nextNodeId, locationMessage.getAddress(), currentToken, userId);
+			if (event.type() == WebHookEventType.FOLLOW) {
+				sendInitialMessage(userId);
+				// Also link the rich menu to the user
+				sender.linkRichMenu(RICH_MENU_ID, userId);
 			}
-		}
-		if (event.type() == WebHookEventType.FOLLOW) {
-			sendInitialMessage(userId);
-			// Also link the rich menu to the user
-			sender.linkRichMenu(RICH_MENU_ID, userId);
-		}
-		if (event.type() == WebHookEventType.POSTBACK) {
-			PostbackEvent postbackEvent = (PostbackEvent) event;
-			handlePostbackEvent(postbackEvent, userId);
+			if (event.type() == WebHookEventType.POSTBACK) {
+				PostbackEvent postbackEvent = (PostbackEvent) event;
+				handlePostbackEvent(postbackEvent, userId);
+			}
+		} else {
+			handleVerification(userId);
 		}
 	}
 	
@@ -299,6 +306,11 @@ public class RuleEngineDialogue extends RootDialogue {
 			Util.sendSinglePush(sender, userId, new TemplateMessage(responseMessage, buttons));
 		}
 	}
-
+	
+	private void handleVerification(String userId) {
+		ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder("帳戶尚未綁定").build();
+		buttons.addAction(new URIAction("綁定", LIFF_APP_URL));
+		Util.sendSinglePush(sender, userId, new TemplateMessage("帳戶尚未綁定", buttons));
+	}
 	
 }

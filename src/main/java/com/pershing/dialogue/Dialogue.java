@@ -3,6 +3,12 @@ package com.pershing.dialogue;
 import com.pershing.event.WebHookEvent;
 import com.pershing.sender.MessageSender;
 
+/**
+ * Base dialogue class of a dialogue stack
+ * 
+ * @author ianw3214
+ *
+ */
 public abstract class Dialogue {
 
 	// The MessageSender for the dialogues to send messages with
