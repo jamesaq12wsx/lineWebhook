@@ -328,7 +328,11 @@ public class RuleEngineDialogue extends RootDialogue {
 	}
 	
 	private void handleVerification(String userId) {
-		handleMessage("9", "", "", userId);
+		try {
+			handleMessage("9", "", "", userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		/*
 		ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder("帳戶尚未綁定").build();
 		buttons.addAction(new URIAction("綁定", LIFF_APP_URL));
