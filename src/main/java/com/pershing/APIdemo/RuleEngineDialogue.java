@@ -213,17 +213,15 @@ public class RuleEngineDialogue extends RootDialogue {
 			String responseMessage = response.get("message").getAsString();
 			expectingInput = true;
 			// Only print out buttons if there is a message to use as the title
-			if (response.has("content") && response.get("content").isJsonArray()) {
+			if (response.has("content")) {
 				handleResponseContent(response, userId, responseMessage);
-			} else {
-				Util.sendSingleTextPush(sender, userId, responseMessage);
-				// Set the next node if it exists
-				JsonArray nodes = response.getAsJsonArray("nodes");
-				if (nodes != null && nodes.isJsonArray() && nodes.size() > 0) {
-					JsonObject node = nodes.get(0).getAsJsonObject();
-					if (node.has("forward") && !node.get("forward").isJsonNull()) {
-						nextNodeId = node.get("forward").getAsString();	
-					}
+			}
+			// Set the next node if it exists
+			JsonArray nodes = response.getAsJsonArray("nodes");
+			if (nodes != null && nodes.isJsonArray() && nodes.size() > 0) {
+				JsonObject node = nodes.get(0).getAsJsonObject();
+				if (node.has("forward") && !node.get("forward").isJsonNull()) {
+					nextNodeId = node.get("forward").getAsString();	
 				}
 			}
 		}
