@@ -79,6 +79,7 @@ public class RuleEngineDialogue extends RootDialogue {
 		System.out.println("CURRENT TOKEN : + currentToken");
 		// if (verified) {
 			// Handle the event based on its type
+		try {
 			if (event.type() == WebHookEventType.MESSAGE) {
 				MessageEvent messageEvent = (MessageEvent) event;
 				if (messageEvent.message().type() == MessageType.TEXT) {
@@ -100,6 +101,9 @@ public class RuleEngineDialogue extends RootDialogue {
 				PostbackEvent postbackEvent = (PostbackEvent) event;
 				handlePostbackEvent(postbackEvent, userId);
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 			/*
 		} else {
 			handleVerification(userId);
