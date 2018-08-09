@@ -346,7 +346,7 @@ public class RuleEngineDialogue extends RootDialogue {
 					} catch (Exception ex) {}
 				}
 				Util.sendSinglePush(sender, userId, new TemplateMessage(responseMessage, buttons));	
-			} else if (response.get("content").isJsonPrimitive()){
+			} else {
 				Util.sendSingleTextPush(sender, userId, responseMessage);
 			}
 		}
