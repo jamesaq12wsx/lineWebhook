@@ -179,7 +179,6 @@ public class ButtonsTemplate implements Template {
 	
 	/**
 	 * Add an action to the current list of actions
-	 * 
 	 * @param action		The new action to be added
 	 */
 	public void addAction(Action action) {

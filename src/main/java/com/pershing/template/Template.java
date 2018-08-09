@@ -10,8 +10,11 @@ import com.google.gson.JsonObject;
  */
 public interface Template {
 
+	// A type getter function to differentiate between template types
 	public TemplateType type();	
+	// A getter function to convert template classes into a JSON object
 	public JsonObject getAsJsonObject();
+	// A getter function to convert template classes into a JSON object string
 	public String getAsJsonString();
 	
 }

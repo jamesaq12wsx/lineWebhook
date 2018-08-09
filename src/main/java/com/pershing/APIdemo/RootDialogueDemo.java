@@ -22,15 +22,27 @@ import com.pershing.mockAPI.UserData;
 import com.pershing.template.ButtonsTemplate;
 import com.pershing.util.Util;
 
+/**
+ * The root dialogue of a basic bank bot demo
+ * 
+ * @author ianw3214
+ *
+ */
 public class RootDialogueDemo extends RootDialogue {
 
-	private static final String richMenuId = "richmenu-052dac80d35611ab4c4984c78891e437";
+	// private static final String richMenuId = "richmenu-052dac80d35611ab4c4984c78891e437";
 	
+	/**
+	 * The required create function that simply instantiates a new demo root dialogue
+	 */
 	@Override
 	public RootDialogue create() {
 		return new RootDialogueDemo();
 	}
 
+	/**
+	 * The general event handler function that contains the logic of the root dialogue
+	 */
 	@Override
 	public void handleEvent(WebHookEvent event, String userId) {
 		if (event.type() == WebHookEventType.MESSAGE) {
@@ -60,9 +72,14 @@ public class RootDialogueDemo extends RootDialogue {
 		}
 	}
 	
+	/**
+	 * Handler function for incoming text messages
+	 * @param text		The text contained in the incoming message
+	 * @param userId	The userId of the sender of the message
+	 */
 	private void parseTextMessage(String text, String userId) {
 		if (text.toLowerCase().contains("help")) {
-			Util.sendSingleTextPush(sender, userId, "Type accounts to check your account details");			
+			Util.sendSingleTextPush(sender, userId, "Type accounts to check your account details");
 		} else if (text.toLowerCase().contains("setup")) {
 			push(new SetupDialogue(userId));
 		} else if (text.toLowerCase().contains("accounts")) {
@@ -71,7 +88,7 @@ public class RootDialogueDemo extends RootDialogue {
 			push(new BillingDialogue(userId));
 		} else if (text.toLowerCase().contains("rates")) {
 			push(new RatesDialogue(userId));
-		} else if (text.toLowerCase().contains("\ninfo")) {
+		} else if (text.toLowerCase().contains("info")) {
 			// get user info and print it
 			UserData data = MockAPI.getUserInfo(userId);
 			if (data != null) {
@@ -82,6 +99,7 @@ public class RootDialogueDemo extends RootDialogue {
 				Util.sendSingleTextPush(sender, userId, "User data could not be retrieved");
 			}
 		} else if (text.toLowerCase().contains("test")) {
+			// temporary code to test LIFF apps
 			ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder("TEST").build();
 			buttons.addAction(new URIAction("test", "https://line.me/R/app/1588952156-1ObPN3nK"));
 			TemplateMessage message = new TemplateMessage("TEST", buttons);
@@ -91,6 +109,10 @@ public class RootDialogueDemo extends RootDialogue {
 		}
 	}
 	
+	/**
+	 * Hanlder function for when the user wants to interact with their accounts
+	 * @param userId		The userId that issued an account command
+	 */
 	private void handleAccountCommand(String userId) {
 		// Make sure the account is verified first
 		if (!MockAPI.userValid(userId)) {
@@ -114,6 +136,11 @@ public class RootDialogueDemo extends RootDialogue {
 		sender.sendPush(userId, messages, "");
 	}
 	
+	/**
+	 * Handler function for incoming postback events
+	 * @param event		The postback event object
+	 * @param userId	The userId that triggerd the postback event
+	 */
 	private void handlePostbackEvent(PostbackEvent event, String userId) {
 		String data = event.postbackData();
 		if (data.substring(0, 7).equals("ACCOUNT")) {
@@ -123,11 +150,9 @@ public class RootDialogueDemo extends RootDialogue {
 				return;
 			}
 			String id = data.substring(7);
-			System.out.println("LOOKING FOR: " + id);
 			// try to get the user account info
 			List<Account> accounts = MockAPI.getUserAccounts(userId);
 			for (Account account : accounts) {
-				System.out.println("ACCOUNT ID: " + account.id);
 				if (account.id.equals(id)) {
 					String overview  = account.name + '\n';
 					overview += "ID: " + account.id + '\n';

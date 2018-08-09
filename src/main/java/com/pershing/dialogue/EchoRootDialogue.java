@@ -10,8 +10,18 @@ import com.pershing.message.Message;
 import com.pershing.message.MessageType;
 import com.pershing.message.TextMessage;
 
+/**
+ * Example Dialogue implementation that echoes incoming text messages
+ * 
+ * @author ianw3214
+ *
+ */
 public class EchoRootDialogue extends RootDialogue {
 
+	/**
+	 * The create function is required for root dialogues, and in this case it
+	 * 	simply returns a new instance of the class.
+	 */
 	@Override
 	public RootDialogue create() {
 		return new EchoRootDialogue();
@@ -19,8 +29,8 @@ public class EchoRootDialogue extends RootDialogue {
 
 	@Override
 	public void handleEvent(WebHookEvent event, String userId) {
+		// only respond to text message events with the echo bot
 		if (event.type() == WebHookEventType.MESSAGE) {
-			// only respond to message events with the echo bot
 			List<Message> reply = new ArrayList<Message>();
 			MessageEvent messageEvent = (MessageEvent) event;
 			if (messageEvent.message().type() == MessageType.TEXT) {

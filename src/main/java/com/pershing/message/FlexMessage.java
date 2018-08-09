@@ -23,6 +23,7 @@ import com.pershing.quickReply.QuickReply;
  */
 public class FlexMessage implements Message {
 
+	// Text to show when flex message can't be displayed
 	String altText;
 	
 	/**
@@ -37,7 +38,7 @@ public class FlexMessage implements Message {
 	 * @return	the JSON representation of the message
 	 */
 	public JsonObject getAsJsonObject() {
-		// TODO Auto-generated method stub
+		// TODO: implement this!
 		return null;
 	}
 
@@ -46,14 +47,13 @@ public class FlexMessage implements Message {
 	 * @return	The string containing the JSON data of the message
 	 */
 	public String getAsJsonString() {
-		// TODO Auto-generated method stub
+		// TODO: implement this!
 		return null;
 	}
 
 	@Override
 	public void setQuickReply(QuickReply reply) {
-		// TODO Auto-generated method stub
-		
+		// TODO: implement this!
 	}
 
 	

@@ -11,6 +11,12 @@ import com.pershing.message.TextMessage;
 import com.pershing.mockAPI.MockAPI;
 import com.pershing.util.Util;
 
+/**
+ * A demo dialogue used to verify a users phone number
+ * 
+ * @author ianw3214
+ *
+ */
 public class VerifyPhoneDialogue extends Dialogue {
 	
 	// The number of tries left for the user to validate the account
@@ -19,6 +25,11 @@ public class VerifyPhoneDialogue extends Dialogue {
 	// The code used to verify the user
 	private String code;
 
+	/**
+	 * Constructor of the phone verification dialogue which sends a prompt to the user
+	 * @param userId	The user that the phone verification dialogue was pushed onto
+	 * @param phone		The phone number the user to verify
+	 */
 	public VerifyPhoneDialogue(String userId, String phone) {
 		code = getFourDigitCode();
 		Util.sendSingleTextPush(sender, userId, "A 4 digit code has been sent to your phone, please enter it below for validation.");
@@ -27,6 +38,9 @@ public class VerifyPhoneDialogue extends Dialogue {
 		triesLeft = 3;
 	}
 	
+	/**
+	 * The general event handler that contains the logic of the phone verification dialogue
+	 */
 	@Override
 	public void handleEvent(WebHookEvent event, String userId) {
 		if (event.type() == WebHookEventType.MESSAGE) {
@@ -51,6 +65,10 @@ public class VerifyPhoneDialogue extends Dialogue {
 		}
 	}
 	
+	/**
+	 * Helper method that returns a numerical four digit code
+	 * @return		The string representation of a four digit code
+	 */
 	private final String getFourDigitCode() {
 		Random rand = new Random();
 		int digit1 = rand.nextInt(9);

@@ -22,6 +22,20 @@ import com.pershing.sender.MessageSender;
 import com.pershing.sender.MessageSenderFactory;
 import com.pershing.util.Util;
 
+/**
+ * A base webhook handler class to catch incoming webhook events
+ * 	- The handleWebHookEvent should be called on incoming post events to a web
+ * 		server, which is not part of the API in order to allow the user to use 
+ * 		a web server of their choosing
+ * 
+ * 	- The class should be extended to customize functionality of the event handler
+ * 		by overriding the handleEvent method
+ * 
+ * 	- See the documentation for more details about the API
+ * 
+ * @author ianw3214
+ *
+ */
 public class BaseWebHookHandler {
 
 	// The channel secret of the bot
@@ -104,7 +118,6 @@ public class BaseWebHookHandler {
 	 * @param body				The body of the HTTP request
 	 */
 	public final boolean handleWebHookEvent(String headerSignature, String body) {
-		log(">>> [WebHookHandler] INCOMING REQUEST");
 		// first validate that the header is valid
 		if (validateHeader(headerSignature, body)) {
 			log(">>> [WebHookHandler] Header validated, handling http request");
@@ -118,35 +131,35 @@ public class BaseWebHookHandler {
 				WebHookEvent webHookEvent = null;
 				// call the corresponding handler function for the event types
 				if (type.equals("message")) {
-					log(">>> [WebHookHandler] Message event received");
+					log(">>> [WebHookHandler] Message event received: " + event.toString());
 					webHookEvent = new MessageEvent(event);
 				}
 				if (type.equals("follow")) {
-					log(">>> [WebHookHandler] Follow event received");
+					log(">>> [WebHookHandler] Follow event received: " + event.toString());
 					webHookEvent = new FollowEvent(event);
 				}
 				if (type.equals("unfollow")) {
-					log(">>> [WebHookHandler] Unfollow event received");
+					log(">>> [WebHookHandler] Unfollow event received: " + event.toString());
 					webHookEvent = new UnfollowEvent(event);
 				}
 				if (type.equals("join")) {
-					log(">>> [WebHookHandler] Join event received");
+					log(">>> [WebHookHandler] Join event received: " + event.toString());
 					webHookEvent = new JoinEvent(event);
 				}
 				if (type.equals("leave")) {
-					log(">>> [WebHookHandler] Leave event received");
+					log(">>> [WebHookHandler] Leave event received: " + event.toString());
 					webHookEvent = new LeaveEvent(event);
 				}
 				if (type.equals("postback")) {
-					log(">>> [WebHookHandler] Postback event received");
+					log(">>> [WebHookHandler] Postback event received: " + event.toString());
 					webHookEvent = new PostbackEvent(event);
 				}
 				if (type.equals("beacon")) {
-					log(">>> [WebHookHandler] Beacon event received");
+					log(">>> [WebHookHandler] Beacon event received: " + event.toString());
 					webHookEvent = new BeaconEvent(event);
 				}
 				if (type.equals("accountLink")) {
-					log(">>> [WebHookHandler] Account Link event received");
+					log(">>> [WebHookHandler] Account Link event received: " + event.toString());
 					webHookEvent = new AccountLinkEvent(event);
 				}
 				if (webHookEvent != null) {

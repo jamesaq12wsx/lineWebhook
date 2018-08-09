@@ -5,6 +5,12 @@ import java.net.InetSocketAddress;
 
 import com.sun.net.httpserver.HttpServer;
 
+/**
+ * The main executable for the demo of the line API 
+ * 
+ * @author ianw3214
+ *
+ */
 public class Demo {
 
 	public static void main(String[] args) throws NumberFormatException, IOException {
@@ -18,6 +24,7 @@ public class Demo {
 		// create the HTTP server
 		HttpServer server = HttpServer.create(new InetSocketAddress(Integer.valueOf(port)), 0);
 		System.out.println("Server started at port: " + port);
+		// Use a root handler to handle every incoming HTTP request
 		server.createContext("/", new RootHandler());
 
 		// run the HTTP server

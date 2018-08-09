@@ -3,7 +3,6 @@ package com.pershing.APIdemo;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.pershing.action.MessageAction;
 import com.pershing.action.PostbackAction;
 import com.pershing.action.URIAction;
 import com.pershing.message.TemplateMessage;
@@ -11,8 +10,22 @@ import com.pershing.sender.MessageSender;
 import com.pershing.template.ButtonsTemplate;
 import com.pershing.util.Util;
 
+/**
+ * A utility class that handles nodes returned from the chatbot API
+ * 
+ * @author ianw3214
+ *
+ */
 public class ChatbotNodeHandler {
 
+	/**
+	 * Handle a default node (type 'D' or 'DD')
+	 * 	- Default nodes are handled by just providing a button to go to the next node
+	 * 
+	 * @param node		The JSON data of the default node
+	 * @param userId	The userId associated with the current node state
+	 * @return			The message that should be sent to the user
+	 */
 	public static TemplateMessage handleDefaultNode(JsonObject node, String userId) {
 		// print a menu with the next nodes as options
 		ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(
@@ -25,6 +38,14 @@ public class ChatbotNodeHandler {
 		return message;
 	}
 	
+	/**
+	 * Handle a buttons node (type 'B')
+	 * 	- Buttons nodes are handled by providing a list of buttons to send to the user 
+	 * 
+	 * @param node		The JSON data of the buttons node
+	 * @param userId	The userId associated with the current node state
+	 * @return			The message that should be sent to the user
+	 */
 	public static TemplateMessage handleButtonsNode(JsonObject node, String userId) {
 		// If the format is wrong, just exit the function
 		if (!node.get("content").isJsonArray()) return null;
@@ -44,6 +65,15 @@ public class ChatbotNodeHandler {
 		return message;
 	}
 	
+	/**
+	 * Handle a link node (type 'L')
+	 * 	- Links can either be returned in the form of an array or a single link, so both cases
+	 * 		must be hanlded by the method since they both use the 'L' node type
+	 * 
+	 * @param node		The JSON data of the link node
+	 * @param userId	The userId associated with the current node state
+	 * @return			The message that should be sent to the user
+	 */
 	public static TemplateMessage handleLinkNode(JsonObject node, String userId) {
 		// print a menu with the specified buttons
 		ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(
@@ -68,7 +98,15 @@ public class ChatbotNodeHandler {
 		return message;
 	}
 	
-	public static void constructMenuFromNodes(JsonArray nodes, String userId, MessageSender sender) {
+	/**
+	 * Construct a menu to forward to a list of nodes
+	 * 	- Used when more than one node is returned in the nodes array of the chatbot API
+	 * 
+	 * @param nodes		The nodes array in the chatbot API response
+	 * @param userId	The userId to send the menu to
+	 * @return			The menu that should be sent to the user
+	 */
+	public static TemplateMessage constructMenuFromNodes(JsonArray nodes, String userId) {
 		ButtonsTemplate.ButtonsTemplateBuilder builder = new ButtonsTemplate.ButtonsTemplateBuilder("選擇一個選項");
 		for (JsonElement e : nodes) {
 			JsonObject node = e.getAsJsonObject();
@@ -83,8 +121,7 @@ public class ChatbotNodeHandler {
 			}
 		}
 		ButtonsTemplate buttons = builder.build();
-		TemplateMessage message = new TemplateMessage("輸入help以開始使用", buttons);
-		Util.sendSinglePush(sender, userId, message);
+		return new TemplateMessage("輸入help以開始使用", buttons);
 	}
 	
 }

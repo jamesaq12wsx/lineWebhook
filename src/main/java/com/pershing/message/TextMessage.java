@@ -3,11 +3,18 @@ package com.pershing.message;
 import com.google.gson.JsonObject;
 import com.pershing.quickReply.QuickReply;
 
+/**
+ * A class to represent a text message for the LINE Messaging API
+ * 	- See documentation @ https://developers.line.me/en/reference/messaging-api/#text-message
+ * 
+ * @author ianw3214
+ *
+ */
 public class TextMessage implements Message {
 
 	// The text contained in the text message
 	private final String text;
-	
+	// The quickReply object to send along with the message 
 	private QuickReply reply;
 	
 	/**
@@ -52,7 +59,11 @@ public class TextMessage implements Message {
 	public String getAsJsonString() {
 		return getAsJsonObject().toString();
 	}
-
+	
+	/**
+	 * Sets the quick reply of the template message
+	 * @reply 	The quick reply object to be stored as the quick reply
+	 */
 	@Override
 	public void setQuickReply(QuickReply reply) {
 		this.reply = reply;

@@ -12,11 +12,20 @@ import com.pershing.sender.MessageSender;
 import com.pershing.template.ButtonsTemplate;
 import com.pershing.template.CarouselTemplate;
 import com.pershing.template.Column;
-import com.pershing.util.Util;
 
+/**
+ * A utility for demo specific utility methods 
+ * @author ianw3214
+ *
+ */
 public class DemoUtils {
 
-	// HARD CODED TEMPORARY UTILITY FUNCTION
+	/**
+	 * Sends a currency exchange carousel for when the rich menu action is triggered
+	 * 
+	 * @param userId	The userId that triggered the action
+	 * @param sender	The sender used to send the carousel message
+	 */
 	public static void sendCurrencyExchangeCarousel(String userId, MessageSender sender) {
 		// Construct the image carousel
 		CarouselTemplate carousel = new CarouselTemplate();

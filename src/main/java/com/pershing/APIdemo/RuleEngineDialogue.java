@@ -31,21 +31,34 @@ import com.pershing.message.TemplateMessage;
 import com.pershing.template.ButtonsTemplate;
 import com.pershing.util.Util;
 
+/**
+ * The dialogue used to interact with the backend chatbot API
+ * 	- Chatbot API documentation @ https://bitbucket.org/PershingAppDev/chatbotapi/src/master/Doc/
+ * 
+ * @author ianw3214
+ *
+ */
 public class RuleEngineDialogue extends RootDialogue {
 
+	// The ID of the rich menu to link to users
 	private static final String RICH_MENU_ID = "richmenu-949e4ac74b5b932f062ef11d20316c32";
 	
+	// The endpoints of the chatbot API
 	private static final String CHATBOT_API_URL = "https://chatbotapipsc.azurewebsites.net/api/chatbot/";
 	private static final String CHATBOT_MENU_URL = "https://chatbotapipsc.azurewebsites.net/api/chatbot/menu/top";
 	
 	private static final String LIFF_APP_URL = "line://app/1599437019-DalpOzwK";
 	
+	// State variables to keep track where the user is in the nodTree
 	private boolean expectingInput;
 	private String nextNodeId;
 	private String currentToken;
 	
 	private boolean verified;
 	
+	/**
+	 * 
+	 */
 	public RuleEngineDialogue() {
 		this.expectingInput = false;
 		this.nextNodeId = "";
@@ -134,7 +147,8 @@ public class RuleEngineDialogue extends RootDialogue {
 				
 			}
 			if (nodes.size() > 1) {
-				ChatbotNodeHandler.constructMenuFromNodes(nodes, userId, sender);
+				TemplateMessage menu = ChatbotNodeHandler.constructMenuFromNodes(nodes, userId);
+				Util.sendSinglePush(sender, userId, menu);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

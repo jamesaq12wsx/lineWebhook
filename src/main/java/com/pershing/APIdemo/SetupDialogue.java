@@ -12,13 +12,24 @@ import com.pershing.mockAPI.MockAPI;
 import com.pershing.template.ButtonsTemplate;
 import com.pershing.util.Util;
 
+/**
+ * A demo dialogue that querys setup information from the user and handles setup logic
+ * 
+ * @author ianw3214
+ *
+ */
 public class SetupDialogue extends Dialogue {
 
+	// The rich menu to link to the user once setup is successful
 	private static final String richMenuId = "richmenu-052dac80d35611ab4c4984c78891e437";
 	
+	// The userId that is being setup
 	String userId;
 	
-	// constructor of the dialogue
+	/**
+	 * Constructor of the setup dialouge which sends a prompt to the user
+	 * @param userId	The user that the setup dialogue was pushed onto
+	 */
 	public SetupDialogue(String userId) {
 		this.userId = userId;
 		// send a push message to prompt for phone number to start the setup process
@@ -26,6 +37,9 @@ public class SetupDialogue extends Dialogue {
 				"Please start the setup process by typing your phone number.");
 	}
 	
+	/**
+	 * The general event handler function that contains the logic of the setup dialogue
+	 */
 	@Override
 	public void handleEvent(WebHookEvent event, String userId) {
 		if (event.type() == WebHookEventType.MESSAGE) {
@@ -41,6 +55,11 @@ public class SetupDialogue extends Dialogue {
 		}
 	}
 	
+	/**
+	 * The recieve function that runs when the VerifyPhoneDialogue pops
+	 * 	- The validation of the user is stored on the Mock remote API, so the success of the
+	 * 		operation can be queried from there.
+	 */
 	@Override
 	public void recieve() {
 		// send a message based on whether the phone was verified or not

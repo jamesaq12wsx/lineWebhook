@@ -5,7 +5,7 @@ import java.util.List;
 import com.pershing.message.Message;
 
 /**
- * Interface for sending push/reply messages
+ * Interface for sending push/reply messages as well as linking/unlinking rich menus
  * 
  * @author ianw3214
  *

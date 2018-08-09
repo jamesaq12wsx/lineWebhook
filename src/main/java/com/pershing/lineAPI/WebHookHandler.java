@@ -1,35 +1,16 @@
 package com.pershing.lineAPI;
 
-import java.util.ArrayList;
-import java.util.Base64;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.pershing.dialogue.Dialogue;
 import com.pershing.dialogue.DialogueStack;
 import com.pershing.dialogue.RootDialogue;
-import com.pershing.event.AccountLinkEvent;
-import com.pershing.event.BeaconEvent;
-import com.pershing.event.FollowEvent;
-import com.pershing.event.JoinEvent;
-import com.pershing.event.LeaveEvent;
-import com.pershing.event.MessageEvent;
-import com.pershing.event.PostbackEvent;
-import com.pershing.event.UnfollowEvent;
 import com.pershing.event.WebHookEvent;
 import com.pershing.sender.MessageSender;
-import com.pershing.sender.MessageSenderFactory;
 
 /**
  * Webhook handler that uses dialogue stacks to handle logic
+ * 	- See the documentation for more details about the API
  * 
  * @author ianw3214
  *

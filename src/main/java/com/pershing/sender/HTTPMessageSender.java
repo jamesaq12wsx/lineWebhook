@@ -1,7 +1,6 @@
 package com.pershing.sender;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.apache.http.HttpEntity;
@@ -30,8 +29,14 @@ import com.pershing.message.Message;
  */
 public class HTTPMessageSender implements MessageSender {
 
+	// The channel access token used to verify messages sent to the LINE messaging API
 	private final String channelAccessToken;
 	
+	/**
+	 * HTTP message sennder constructor which sets the channel access token
+	 * 
+	 * @param channelAccessToken	The channel access token of the line bot
+	 */
 	public HTTPMessageSender(String channelAccessToken) {
 		this.channelAccessToken = channelAccessToken;
 	}
@@ -184,10 +189,8 @@ public class HTTPMessageSender implements MessageSender {
 		try {
 			response = httpclient.execute(httppost);
 		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -204,10 +207,8 @@ public class HTTPMessageSender implements MessageSender {
     		try {
 				data = EntityUtils.toString(entity);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}	
         } else {
@@ -222,51 +223,47 @@ public class HTTPMessageSender implements MessageSender {
 	@Override
 	public Response UnlinkRichMenu(String userId) {
 		// initialize the HTTP request
-				HttpClient httpclient = HttpClients.createDefault();
-				String url = "https://api.line.me/v2/bot/user/" + userId + "/richmenu";
-		        HttpDelete httpDelete = new HttpDelete(url);
-		        
-		        // request headers
-		        httpDelete.setHeader("Authorization", "Bearer " + channelAccessToken);
-				
-		        // execute and get the response
-		        HttpResponse response = null;
-				try {
-					response = httpclient.execute(httpDelete);
-				} catch (ClientProtocolException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				int status = -1;
-				String message = "";
-				String data = "";
-				
-				// handle the server response
-		        HttpEntity entity = response.getEntity();
-		        if (entity != null) {
-		    		// verify that the status code is what we want
-		        	status = response.getStatusLine().getStatusCode();
-		        	message = response.getStatusLine().toString();
-		    		try {
-						data = EntityUtils.toString(entity);
-					} catch (ParseException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}	
-		        } else {
-		            // release the connection when finished
-		        	httpDelete.releaseConnection();
-		            return Response.constructEmptyResponse();
-		        }	
-		        
-				return new Response(status, message, data);
+		HttpClient httpclient = HttpClients.createDefault();
+		String url = "https://api.line.me/v2/bot/user/" + userId + "/richmenu";
+        HttpDelete httpDelete = new HttpDelete(url);
+        
+        // request headers
+        httpDelete.setHeader("Authorization", "Bearer " + channelAccessToken);
+		
+        // execute and get the response
+        HttpResponse response = null;
+		try {
+			response = httpclient.execute(httpDelete);
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		int status = -1;
+		String message = "";
+		String data = "";
+		
+		// handle the server response
+        HttpEntity entity = response.getEntity();
+        if (entity != null) {
+    		// verify that the status code is what we want
+        	status = response.getStatusLine().getStatusCode();
+        	message = response.getStatusLine().toString();
+    		try {
+				data = EntityUtils.toString(entity);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}	
+        } else {
+            // release the connection when finished
+        	httpDelete.releaseConnection();
+            return Response.constructEmptyResponse();
+        }	
+        
+		return new Response(status, message, data);
 	}
 
 }

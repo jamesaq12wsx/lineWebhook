@@ -15,6 +15,14 @@ import org.apache.http.impl.client.HttpClients;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+/**
+ * A simulation of a bank API that would be used in conjunction with a bank bot
+ * 
+ * This package should not be used anymore now that a chatbot backend has been developed
+ * 
+ * @author ianw3214
+ *
+ */
 public class MockAPI {
 
 	public static Map<String, UserData> users = new HashMap<String, UserData>();

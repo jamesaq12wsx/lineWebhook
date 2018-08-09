@@ -16,16 +16,30 @@ import org.apache.http.util.EntityUtils;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+/**
+ * A utility class for sending http requests
+ * 
+ * @author ianw3214
+ *
+ */
 public class HttpUtils {
 
-	// Send a post request with a Json object body
+	/**
+	 * Send a POST request with a JSON object body
+	 * 	- fails silently if a HTTP request doesn't succeed
+	 * 
+	 * @param url		The endpoint to send the request to
+	 * @param headers	A map of headers to add to the HTTP request
+	 * @param obj		The JSON data to be sent with the request
+	 * @return			The JSON data response from the server
+	 */
 	public static JsonObject sendPost(String url, Map<String, String> headers, JsonObject obj) {	
 		// initialize the HTTP request
 		HttpClient httpclient = HttpClients.createDefault();
         HttpPost httppost = new HttpPost(url);
         
+    	// request headers
         if (headers != null) {
-        	// request headers
             for (String key : headers.keySet()) {
             	httppost.setHeader(key, headers.get(key));
             }	
@@ -65,14 +79,21 @@ public class HttpUtils {
     	return result;
 	}
 	
-	// Send a get request
+	/**
+	 * Send a GET request
+	 * 	- fails silently if a HTTP request doesn't succeed
+	 * 
+	 * @param url		The endpoint to send the request to
+	 * @param headers	A map of headers to add to the HTTP request
+	 * @return			The JSON data response from the server
+	 */
 	public static JsonObject sendGet(String url, Map<String, String> headers) {
 		// initialize the HTTP request
 		HttpClient httpClient = HttpClients.createDefault();
 		HttpGet httpget = new HttpGet(url);
 		
+		// request headers
 		if (headers != null) {
-			// request headers
 			for (String key : headers.keySet()) {
 				httpget.setHeader(key, headers.get(key));
 			}	

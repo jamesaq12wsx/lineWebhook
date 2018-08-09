@@ -5,10 +5,20 @@ import com.google.gson.JsonObject;
 import com.pershing.action.Action;
 import com.pershing.action.MessageAction;
 
+/**
+ * A confirm template is a tempalte with two buttons
+ * 	- See documentation @ https://developers.line.me/en/reference/messaging-api/#confirm
+ * 
+ * @author ianw3214
+ *
+ */
 public class ConfirmTemplate implements Template {
 
+	// The text to be sent with the template message
 	String text;
+	// The action set for the left button of the template
 	Action yesAction;
+	// The action set for the right button of the template
 	Action noAction;
 	
 	/**
@@ -30,19 +40,19 @@ public class ConfirmTemplate implements Template {
 		text = newText;
 	}
 	
-	// yes action setter method
+	// Yes action setter method (left action)
 	public void setYesAction(Action action) {
 		yesAction = action;
 	}
 	
-	// no action setter method
+	// No action setter method (right action)
 	public void setNoAction(Action action) {
 		noAction = action;
 	}
 	
 	/**
-	 * Returns the JSON representation of the template message
-	 * @return	the JSON representation of the message
+	 * Returns the JSON representation of the confirm template
+	 * @return	the JSON representation of the confirm template
 	 */
 	public JsonObject getAsJsonObject() {
 		// return an empty object if any actions are missing
@@ -60,8 +70,8 @@ public class ConfirmTemplate implements Template {
 	}
 
 	/**
-	 * Returns the JSON representation of the template message as a String
-	 * @return	The string containing the JSON data of the message
+	 * Returns the JSON representation of the confirm template as a String
+	 * @return	The string containing the JSON data of the confirm template
 	 */
 	public String getAsJsonString() {
 		return getAsJsonObject().getAsString();

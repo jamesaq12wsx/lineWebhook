@@ -3,6 +3,13 @@ package com.pershing.message;
 import com.google.gson.JsonObject;
 import com.pershing.quickReply.QuickReply;
 
+/**
+ * A class to represent an sticker message for the LINE Messaging API
+ * - See more documentation @ https://developers.line.me/en/reference/messaging-api/#sticker-message
+ * 
+ * @author ianw3214
+ *
+ */
 public class StickerMessage implements Message {
 
 	private final String packageId;
@@ -64,8 +71,7 @@ public class StickerMessage implements Message {
 
 	@Override
 	public void setQuickReply(QuickReply reply) {
-		// TODO Auto-generated method stub
-		
+		// TODO: implement this!
 	}
 
 }

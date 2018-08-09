@@ -4,10 +4,22 @@ import com.google.gson.JsonObject;
 import com.pershing.quickReply.QuickReply;
 import com.pershing.template.Template;
 
+/**
+ * Template messages are messages with predefined layouts which are customizable
+ * 	- See documentation @ https://developers.line.me/en/reference/messaging-api/#template-messages
+ * 
+ * TODO: remove quickreply from template message once it is implemented in base message class
+ * 
+ * @author ianw3214
+ *
+ */
 public class TemplateMessage implements Message {
 
-	private String altText;
-	private Template template;
+	// Text to show when template message can't be dispalyed
+	private final String altText;
+	// The template associated with the current template message
+	private final Template template;
+	// The quickReply object to send along with the message
 	private QuickReply reply;
 	
 	/**
@@ -54,6 +66,10 @@ public class TemplateMessage implements Message {
 		return getAsJsonObject().toString();
 	}
 
+	/**
+	 * Sets the quick reply of the template message
+	 * @reply 	The quick reply object to be stored as the quick reply
+	 */
 	@Override
 	public void setQuickReply(QuickReply reply) {
 		this.reply = reply;
