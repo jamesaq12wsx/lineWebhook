@@ -77,7 +77,7 @@ public class RuleEngineDialogue extends RootDialogue {
 		System.out.println("EXPECTING INPUT: " + expectingInput);
 		System.out.println("NEXT NODE ID: " + nextNodeId);
 		System.out.println("CURRENT TOKEN : + currentToken");
-		if (verified) {
+		// if (verified) {
 			// Handle the event based on its type
 			if (event.type() == WebHookEventType.MESSAGE) {
 				MessageEvent messageEvent = (MessageEvent) event;
@@ -100,9 +100,11 @@ public class RuleEngineDialogue extends RootDialogue {
 				PostbackEvent postbackEvent = (PostbackEvent) event;
 				handlePostbackEvent(postbackEvent, userId);
 			}
+			/*
 		} else {
 			handleVerification(userId);
 		}
+		*/
 	}
 	
 	// Helper method to interact with the user based on the input nodes
@@ -276,7 +278,8 @@ public class RuleEngineDialogue extends RootDialogue {
 		if (!response.has("nodes") || !response.get("nodes").isJsonArray()) return;
 		// Construct the initial menu from the nodes data
 		JsonArray nodes = response.getAsJsonArray("nodes");
-		ChatbotNodeHandler.constructMenuFromNodes(nodes, userId, sender);
+		TemplateMessage menu = ChatbotNodeHandler.constructMenuFromNodes(nodes, userId);
+		Util.sendSinglePush(sender, userId, menu);
 	}
 	
 	public void handleResponseContent(JsonObject response, String userId, String responseMessage) {
