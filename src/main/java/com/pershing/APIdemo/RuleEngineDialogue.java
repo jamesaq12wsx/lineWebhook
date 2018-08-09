@@ -271,7 +271,7 @@ public class RuleEngineDialogue extends RootDialogue {
         if (token != null && !token.equals("")) headers.put("Authorization", "Bearer " + token);
         
         JsonObject response = HttpUtils.sendPost(CHATBOT_API_URL, headers, obj);
-        System.out.println("> DEBUG: " + response.toString());
+        if (response != null) System.out.println("> DEBUG: " + response.toString());
         return response;
 	}
 	
@@ -346,6 +346,8 @@ public class RuleEngineDialogue extends RootDialogue {
 					} catch (Exception ex) {}
 				}
 				Util.sendSinglePush(sender, userId, new TemplateMessage(responseMessage, buttons));	
+			} else if (response.get("content").isJsonPrimitive()){
+				Util.sendSingleTextPush(sender, userId, responseMessage);
 			}
 		}
 	}
