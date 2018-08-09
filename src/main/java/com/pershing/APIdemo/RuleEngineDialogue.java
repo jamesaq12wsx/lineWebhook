@@ -330,21 +330,23 @@ public class RuleEngineDialogue extends RootDialogue {
 			}
 			Util.sendSinglePush(sender, userId, new TemplateMessage(responseMessage, buttons));
 		} else {
-			ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(responseMessage).build();
-			JsonArray content = response.getAsJsonArray("content");
-			for (JsonElement e : content) {
-				JsonObject obj = e.getAsJsonObject();
-				try {
-					buttons.addAction(new MessageAction(
-								obj.get("title").getAsString(),
-								obj.get("value").getAsString()
-							));
-					// FOR NOW JUST SET THE FORWARD EVERY TIME
-					// TODO: DEFINITELY WANT TO CHANGE THIS IMPLEMENTATION
-					nextNodeId = obj.get("forward").getAsString();
-				} catch (Exception ex) {}
+			if (response.has("content") && response.get("content").isJsonArray()) {
+				ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(responseMessage).build();
+				JsonArray content = response.getAsJsonArray("content");
+				for (JsonElement e : content) {
+					JsonObject obj = e.getAsJsonObject();
+					try {
+						buttons.addAction(new MessageAction(
+									obj.get("title").getAsString(),
+									obj.get("value").getAsString()
+								));
+						// FOR NOW JUST SET THE FORWARD EVERY TIME
+						// TODO: DEFINITELY WANT TO CHANGE THIS IMPLEMENTATION
+						nextNodeId = obj.get("forward").getAsString();
+					} catch (Exception ex) {}
+				}
+				Util.sendSinglePush(sender, userId, new TemplateMessage(responseMessage, buttons));	
 			}
-			Util.sendSinglePush(sender, userId, new TemplateMessage(responseMessage, buttons));
 		}
 	}
 	
