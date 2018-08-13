@@ -356,6 +356,9 @@ public class RuleEngineDialogue extends RootDialogue {
 				verified = true;
 				sendInitialMessage(userId);
 				return;
+			} else {
+				// TODO: this is inefficient, fix it!
+				handleMessage("9", "", "", userId);
 			}
 		}
 		/*
