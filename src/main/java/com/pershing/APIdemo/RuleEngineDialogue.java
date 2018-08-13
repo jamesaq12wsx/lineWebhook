@@ -77,9 +77,8 @@ public class RuleEngineDialogue extends RootDialogue {
 		System.out.println("EXPECTING INPUT: " + expectingInput);
 		System.out.println("NEXT NODE ID: " + nextNodeId);
 		System.out.println("CURRENT TOKEN : + currentToken");
-		// if (verified) {
+		if (verified) {
 			// Handle the event based on its type
-		try {
 			if (event.type() == WebHookEventType.MESSAGE) {
 				MessageEvent messageEvent = (MessageEvent) event;
 				if (messageEvent.message().type() == MessageType.TEXT) {
@@ -101,14 +100,9 @@ public class RuleEngineDialogue extends RootDialogue {
 				PostbackEvent postbackEvent = (PostbackEvent) event;
 				handlePostbackEvent(postbackEvent, userId);
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-			/*
 		} else {
 			handleVerification(userId);
 		}
-		*/
 	}
 	
 	// Helper method to interact with the user based on the input nodes
@@ -353,10 +347,16 @@ public class RuleEngineDialogue extends RootDialogue {
 	}
 	
 	private void handleVerification(String userId) {
-		try {
-			handleMessage("9", "", "", userId);
-		} catch (Exception e) {
-			e.printStackTrace();
+		// call node 9 to handle account binding
+		JsonObject response = ruleEngineRequest("9", "", "", userId);
+		if (response.has("contentType")) {
+			if (response.get("contentType").isJsonPrimitive() &&
+					response.get("contentType").getAsString().equals("I")) 
+			{
+				verified = true;
+				sendInitialMessage(userId);
+				return;
+			}
 		}
 		/*
 		ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder("帳戶尚未綁定").build();
