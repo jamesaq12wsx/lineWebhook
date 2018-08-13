@@ -365,7 +365,9 @@ public class RuleEngineDialogue extends RootDialogue {
 	}
 	
 	private void handleVerification(String userId) {
-		// call node 9 to handle account binding
+		// Unlink the rich menu until the user is verified
+		sender.UnlinkRichMenu(userId);
+		// Call node 9 to handle account binding
 		JsonObject response = ruleEngineRequest("9", "", "", userId);
 		if (response.has("contentType")) {
 			if (response.get("contentType").isJsonPrimitive() &&
@@ -373,6 +375,7 @@ public class RuleEngineDialogue extends RootDialogue {
 			{
 				verified = true;
 				sendInitialMessage(userId);
+				sender.linkRichMenu(RICH_MENU_ID, userId);
 				return;
 			} else {
 				// TODO: this is inefficient, fix it!
