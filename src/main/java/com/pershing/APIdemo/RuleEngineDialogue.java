@@ -201,9 +201,9 @@ public class RuleEngineDialogue extends RootDialogue {
 			handleMessage(forward, paramData, currentToken, userId);
 		}
 	}
-	
-	// Helper method to handle a message to the chatbot API
-	private void handleMessage(String nodeId, String message, String token, String userId) {
+
+	// Helpder method to handle a message to the chatbot API
+	private void handleMessage(String nodeId, String message, String token, String userId, boolean handleNodes) {
 		// If the first character is a zero width space, DON'T PARSE THE MESSAGE
 		if (message.length() > 0 && message.substring(0, 1).equals("\u200B")) {
 			return;
@@ -245,6 +245,12 @@ public class RuleEngineDialogue extends RootDialogue {
 		} else {
 			sendInitialMessage(userId);
 		}
+	}
+	
+	// Helper method to handle a message to the chatbot API
+	private void handleMessage(String nodeId, String message, String token, String userId) {
+		// Handle the message nodes by default
+		handleMessage(nodeId, message, token, userId, true);
 	}
 	
 	// Helper method to get the next node depending on the sent message from backend API
@@ -358,7 +364,7 @@ public class RuleEngineDialogue extends RootDialogue {
 				return;
 			} else {
 				// TODO: this is inefficient, fix it!
-				handleMessage("9", "", "", userId);
+				handleMessage("9", "", "", userId, false);
 			}
 		}
 		/*
