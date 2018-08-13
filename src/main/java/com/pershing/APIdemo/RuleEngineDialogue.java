@@ -205,7 +205,14 @@ public class RuleEngineDialogue extends RootDialogue {
 		}
 	}
 
-	// Helpder method to handle a message to the chatbot API
+	/**
+	 * Helper method to handle a message to the chatbot API
+	 * @param nodeId		The nodeId to make the rule engine request with
+	 * @param message		The message to make the rule engine request with
+	 * @param token			The token to make the rule engine request with
+	 * @param userId		The userId to make the rule engine request with
+	 * @param handleNodes	Flag to indicate whether to parse the nodes array or not
+	 */
 	private void handleMessage(String nodeId, String message, String token, String userId, boolean handleNodes) {
 		// If the first character is a zero width space, DON'T PARSE THE MESSAGE
 		if (message.length() > 0 && message.substring(0, 1).equals("\u200B")) {
@@ -242,11 +249,13 @@ public class RuleEngineDialogue extends RootDialogue {
 				}
 			}
 		}
-		JsonArray nodes = response.getAsJsonArray("nodes");
-		if (nodes.size() > 0) {
-			handleNodes(nodes, userId);	
-		} else {
-			sendInitialMessage(userId);
+		if (handleNodes) {
+			JsonArray nodes = response.getAsJsonArray("nodes");
+			if (nodes.size() > 0) {
+				handleNodes(nodes, userId);	
+			} else {
+				sendInitialMessage(userId);
+			}	
 		}
 	}
 	
