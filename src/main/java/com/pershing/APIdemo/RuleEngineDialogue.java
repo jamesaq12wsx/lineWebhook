@@ -77,6 +77,7 @@ public class RuleEngineDialogue extends RootDialogue {
 		System.out.println("EXPECTING INPUT: " + expectingInput);
 		System.out.println("NEXT NODE ID: " + nextNodeId);
 		System.out.println("CURRENT TOKEN : + currentToken");
+		System.out.println("VERIFIED: " + Boolean.toString(verified));
 		if (verified) {
 			// Handle the event based on its type
 			if (event.type() == WebHookEventType.MESSAGE) {
@@ -101,7 +102,9 @@ public class RuleEngineDialogue extends RootDialogue {
 				handlePostbackEvent(postbackEvent, userId);
 			}
 		} else {
-			handleVerification(userId);
+			if (event.type() != WebHookEventType.UNFOLLOW) {
+				handleVerification(userId);	
+			}
 		}
 	}
 	
