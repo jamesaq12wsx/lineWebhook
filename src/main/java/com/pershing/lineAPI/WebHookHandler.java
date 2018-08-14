@@ -2,6 +2,8 @@ package com.pershing.lineAPI;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+
 import com.pershing.dialogue.Dialogue;
 import com.pershing.dialogue.DialogueStack;
 import com.pershing.dialogue.RootDialogue;
@@ -68,6 +70,14 @@ public class WebHookHandler extends BaseWebHookHandler {
 			stacks.put(userId, new DialogueStack(rootDialogue.create()));
 		}
 		stacks.get(userId).handleEvent(event, userId);
+	}
+	
+	/**
+	 * Getter method for the list of users in the webhook handler
+	 * @return		The list of users in the webhook handler
+	 */
+	public final Set<String> getUsers() {
+		return stacks.keySet();
 	}
 	
 }

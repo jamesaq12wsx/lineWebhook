@@ -25,7 +25,10 @@ public class Demo {
 		HttpServer server = HttpServer.create(new InetSocketAddress(Integer.valueOf(port)), 0);
 		System.out.println("Server started at port: " + port);
 		// Use a root handler to handle every incoming HTTP request
-		server.createContext("/", new RootHandler());
+		RootHandler handler = new RootHandler();
+		server.createContext("/", handler);
+		UserHandler users = new UserHandler(handler.getWebHookHandler());
+		server.createContext("/user", users);
 
 		// run the HTTP server
 		server.setExecutor(null);

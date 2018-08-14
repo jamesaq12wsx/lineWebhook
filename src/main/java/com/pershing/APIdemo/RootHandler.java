@@ -24,7 +24,7 @@ public class RootHandler implements HttpHandler {
 	private static final String CHANNEL_ACCESS_TOKEN = "B+R5Dl03JENfxXW+ALdsS6yHlFvBlB1xIrMh1ReV7qwgxnKflMyV+ludAmyhCq3oLt6XIzXQlv/vSUXSUBFNRbc+HP2TYfLZv5oMCQHGq+xsrZpDmRd+nj+KeJWrVtkYbD8r/uxDPXRUS21iE15iQgdB04t89/1O/w1cDnyilFU=";
 	
 	// The webhookHandler that the line bot runs on
-	WebHookHandler webHookHandler;
+	private WebHookHandler webHookHandler;
 	
 	/**
 	 * Default constructor which instantiates a new webhook handler for the line bot
@@ -103,6 +103,13 @@ public class RootHandler implements HttpHandler {
 		
 		return exchange.getRequestHeaders().get("X-Line-Signature").toString();
 		
+	}
+
+	/**
+	 * Getter method for the webhookHandler of the RootHandler
+	 */
+	public WebHookHandler getWebHookHandler() {
+		return webHookHandler;
 	}
 	
 }
