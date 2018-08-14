@@ -299,14 +299,17 @@ public class RuleEngineDialogue extends RootDialogue {
 	}
 	
 	public boolean handleResponseContent(JsonObject response, String userId, String responseMessage) {
-		String contentType = "";
+		List<String> contentType = new ArrayList<String>();
 		if (response.has("contentType") && response.get("contentType").isJsonPrimitive()) {
-			contentType = response.get("contentType").getAsString();
+			contentType = Arrays.asList(response.get("contentType").getAsString().split(","));
 		}
-		if (contentType.equals("LO")) {
+		List<Message> messages = new ArrayList<Message>();
+		boolean handleNodes = true;
+		if (contentType.contains("LO")) {
+			// send location messages independently of the other messages
 			Util.sendSingleTextPush(sender, userId, responseMessage);
 			// Go through the locations and add them one by one
-			List<Message> messages = new ArrayList<Message>();
+			List<Message> locationMessages = new ArrayList<Message>();
 			JsonArray content = response.getAsJsonArray("content");
 			for (JsonElement e : content) {
 				JsonObject locationObject = e.getAsJsonObject();
@@ -316,12 +319,12 @@ public class RuleEngineDialogue extends RootDialogue {
 							locationObject.get("lat").getAsFloat(),
 							locationObject.get("lng").getAsFloat()
 						);
-				messages.add(message);
+				locationMessages.add(message);
 			}
-			sender.sendPush(userId, messages, "");
-			return false;
+			sender.sendPush(userId, locationMessages, "");
+			handleNodes = false;
 		}
-		if (contentType.equals("L")) {
+		if (contentType.contains("L")) {
 			ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(responseMessage).build();
 			if (response.get("content").isJsonArray()) {
 				JsonArray content = response.getAsJsonArray("content");
@@ -342,10 +345,10 @@ public class RuleEngineDialogue extends RootDialogue {
 							content.get("url").getAsString()
 						));
 			}
-			Util.sendSinglePush(sender, userId, new TemplateMessage(responseMessage, buttons));
-			return false;
-		} 
-		if (contentType.equals("B")) {
+			messages.add(new TemplateMessage(responseMessage, buttons));
+			handleNodes = false;
+		}
+		if (contentType.contains("B")) {
 			if (response.has("content") && response.get("content").isJsonArray()) {
 				ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(responseMessage).build();
 				JsonArray content = response.getAsJsonArray("content");
@@ -361,16 +364,17 @@ public class RuleEngineDialogue extends RootDialogue {
 								));
 					} catch (Exception ex) {}
 				}
-				Util.sendSinglePush(sender, userId, new TemplateMessage(responseMessage, buttons));	
+				messages.add(new TemplateMessage(responseMessage, buttons));
 			} else {
-				Util.sendSingleTextPush(sender, userId, responseMessage);
+				messages.add(new TextMessage(responseMessage));
 			}
-			return false;
+			handleNodes = false;
 		}
-		if (contentType.equals("I")) {
-			Util.sendSingleTextPush(sender, userId, responseMessage);
+		if (contentType.contains("I")) {
+			messages.add(new TextMessage(responseMessage));
 		}
-		return true;
+		sender.sendPush(userId, messages, "");
+		return handleNodes;
 	}
 	
 	private void handleVerification(String userId) {
