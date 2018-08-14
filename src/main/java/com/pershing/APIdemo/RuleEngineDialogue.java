@@ -238,9 +238,7 @@ public class RuleEngineDialogue extends RootDialogue {
 			expectingInput = true;
 			// Only print out buttons if there is a message to use as the title
 			if (response.has("content")) {
-				handleResponseContent(response, userId, responseMessage);
-				// Don't handle the nodes if content is handled
-				handleNodes = false;
+				handleNodes = handleResponseContent(response, userId, responseMessage);
 			}
 			// Set the next node if it exists
 			JsonArray nodes = response.getAsJsonArray("nodes");
@@ -300,7 +298,7 @@ public class RuleEngineDialogue extends RootDialogue {
 		Util.sendSinglePush(sender, userId, menu);
 	}
 	
-	public void handleResponseContent(JsonObject response, String userId, String responseMessage) {
+	public boolean handleResponseContent(JsonObject response, String userId, String responseMessage) {
 		String contentType = "";
 		if (response.has("contentType") && response.get("contentType").isJsonPrimitive()) {
 			contentType = response.get("contentType").getAsString();
@@ -321,6 +319,7 @@ public class RuleEngineDialogue extends RootDialogue {
 				messages.add(message);
 			}
 			sender.sendPush(userId, messages, "");
+			return false;
 		}
 		if (contentType.equals("L")) {
 			ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(responseMessage).build();
@@ -344,6 +343,7 @@ public class RuleEngineDialogue extends RootDialogue {
 						));
 			}
 			Util.sendSinglePush(sender, userId, new TemplateMessage(responseMessage, buttons));
+			return false;
 		} 
 		if (contentType.equals("B")) {
 			if (response.has("content") && response.get("content").isJsonArray()) {
@@ -364,10 +364,12 @@ public class RuleEngineDialogue extends RootDialogue {
 			} else {
 				Util.sendSingleTextPush(sender, userId, responseMessage);
 			}
+			return false;
 		}
 		if (contentType.equals("I")) {
 			Util.sendSingleTextPush(sender, userId, responseMessage);
 		}
+		return true;
 	}
 	
 	private void handleVerification(String userId) {
