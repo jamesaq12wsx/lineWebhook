@@ -350,13 +350,12 @@ public class RuleEngineDialogue extends RootDialogue {
 				for (JsonElement e : content) {
 					JsonObject obj = e.getAsJsonObject();
 					try {
-						buttons.addAction(new MessageAction(
+						buttons.addAction(new PostbackAction(
 									obj.get("title").getAsString(),
-									obj.get("value").getAsString()
+									"forward=" + obj.get("forward").getAsString() +
+									"&data=" + obj.get("customValue").getAsString(),
+									"\u200B" + obj.get("title")
 								));
-						// FOR NOW JUST SET THE FORWARD EVERY TIME
-						// TODO: DEFINITELY WANT TO CHANGE THIS IMPLEMENTATION
-						nextNodeId = obj.get("forward").getAsString();
 					} catch (Exception ex) {}
 				}
 				Util.sendSinglePush(sender, userId, new TemplateMessage(responseMessage, buttons));	

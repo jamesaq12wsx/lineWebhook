@@ -61,7 +61,6 @@ public class ChatbotNodeHandler {
 					"&data=" + buttonObject.get("customValue").getAsString(),
 					"\u200B" + buttonObject.get("title")));
 		}
-		System.out.println(content.toString());
 		TemplateMessage message = new TemplateMessage(node.get("nodetitle").getAsString(), buttons);
 		return message;
 	}
