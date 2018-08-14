@@ -305,6 +305,7 @@ public class RuleEngineDialogue extends RootDialogue {
 		}
 		List<Message> messages = new ArrayList<Message>();
 		boolean handleNodes = true;
+		/*
 		if (contentType.contains("LO")) {
 			// send location messages independently of the other messages
 			Util.sendSingleTextPush(sender, userId, responseMessage);
@@ -324,6 +325,7 @@ public class RuleEngineDialogue extends RootDialogue {
 			sender.sendPush(userId, locationMessages, "");
 			handleNodes = false;
 		}
+		*/
 		if (contentType.contains("L")) {
 			ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(responseMessage).build();
 			if (response.get("content").isJsonArray()) {
@@ -377,6 +379,15 @@ public class RuleEngineDialogue extends RootDialogue {
 			if (!contentType.contains("B")) {
 				messages.add(new TextMessage(responseMessage));
 				handleNodes = false;	
+			}
+		}
+		// ADD LO FOR QUICK REPLY LAST
+		if (contentType.contains("LO")) {
+			// SEND A LOCATION QUICKREPLY LMAO
+			if (messages.size() > 0) {
+				QuickReply reply = new QuickReply();
+				reply.addItem(new LocationAction("發送位置"));
+				messages.get(0).setQuickReply(reply);
 			}
 		}
 		sender.sendPush(userId, messages, "");
