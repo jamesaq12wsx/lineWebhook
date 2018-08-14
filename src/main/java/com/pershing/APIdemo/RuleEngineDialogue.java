@@ -239,6 +239,8 @@ public class RuleEngineDialogue extends RootDialogue {
 			// Only print out buttons if there is a message to use as the title
 			if (response.has("content")) {
 				handleResponseContent(response, userId, responseMessage);
+				// Don't handle the nodes if content is handled
+				handleNodes = false;
 			}
 			// Set the next node if it exists
 			JsonArray nodes = response.getAsJsonArray("nodes");
@@ -362,6 +364,9 @@ public class RuleEngineDialogue extends RootDialogue {
 			} else {
 				Util.sendSingleTextPush(sender, userId, responseMessage);
 			}
+		}
+		if (contentType.equals("I")) {
+			Util.sendSingleTextPush(sender, userId, responseMessage);
 		}
 	}
 	
