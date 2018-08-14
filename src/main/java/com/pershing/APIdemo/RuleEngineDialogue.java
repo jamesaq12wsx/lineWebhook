@@ -373,6 +373,10 @@ public class RuleEngineDialogue extends RootDialogue {
 		if (contentType.contains("I")) {
 			messages.add(new TextMessage(responseMessage));
 		}
+		if (contentType.contains("Q")) {
+			messages.add(new TextMessage(responseMessage));
+			handleNodes = false;
+		}
 		sender.sendPush(userId, messages, "");
 		return handleNodes;
 	}
