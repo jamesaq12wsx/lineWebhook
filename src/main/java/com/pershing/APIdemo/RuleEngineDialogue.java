@@ -355,7 +355,7 @@ public class RuleEngineDialogue extends RootDialogue {
 						buttons.addAction(new PostbackAction(
 									obj.get("title").getAsString(),
 									"forward=" + obj.get("forward").getAsString() +
-									"&data=" + obj.get("customValue").getAsString(),
+									(obj.has("customValue") ?  "&data=" + obj.get("customValue").getAsString() : ""),
 									"\u200B" + obj.get("title")
 								));
 					} catch (Exception ex) {}
