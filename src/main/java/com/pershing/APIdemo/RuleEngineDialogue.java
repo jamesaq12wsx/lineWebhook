@@ -305,27 +305,27 @@ public class RuleEngineDialogue extends RootDialogue {
 		}
 		List<Message> messages = new ArrayList<Message>();
 		boolean handleNodes = true;
-		/*
-		if (contentType.contains("LO")) {
+		if (contentType.contains("LOL")) {
 			// send location messages independently of the other messages
 			Util.sendSingleTextPush(sender, userId, responseMessage);
-			// Go through the locations and add them one by one
-			List<Message> locationMessages = new ArrayList<Message>();
-			JsonArray content = response.getAsJsonArray("content");
-			for (JsonElement e : content) {
-				JsonObject locationObject = e.getAsJsonObject();
-				LocationMessage message = new LocationMessage(
-							locationObject.get("title").getAsString(),
-							locationObject.get("address").getAsString(),
-							locationObject.get("lat").getAsFloat(),
-							locationObject.get("lng").getAsFloat()
-						);
-				locationMessages.add(message);
+			if (response.has("content") && response.get("content").isJsonArray()) {
+				// Go through the locations and add them one by one
+				List<Message> locationMessages = new ArrayList<Message>();
+				JsonArray content = response.getAsJsonArray("content");
+				for (JsonElement e : content) {
+					JsonObject locationObject = e.getAsJsonObject();
+					LocationMessage message = new LocationMessage(
+								locationObject.get("title").getAsString(),
+								locationObject.get("address").getAsString(),
+								locationObject.get("lat").getAsFloat(),
+								locationObject.get("lng").getAsFloat()
+							);
+					locationMessages.add(message);
+				}
+				sender.sendPush(userId, locationMessages, "");	
 			}
-			sender.sendPush(userId, locationMessages, "");
 			handleNodes = false;
 		}
-		*/
 		if (contentType.contains("L")) {
 			ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(responseMessage).build();
 			if (response.get("content").isJsonArray()) {
