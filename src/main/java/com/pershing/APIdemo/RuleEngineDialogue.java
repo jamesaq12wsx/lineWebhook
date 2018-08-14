@@ -319,7 +319,8 @@ public class RuleEngineDialogue extends RootDialogue {
 				messages.add(message);
 			}
 			sender.sendPush(userId, messages, "");
-		} else if (contentType.equals("L")) {
+		}
+		if (contentType.equals("L")) {
 			ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(responseMessage).build();
 			if (response.get("content").isJsonArray()) {
 				JsonArray content = response.getAsJsonArray("content");
@@ -341,7 +342,8 @@ public class RuleEngineDialogue extends RootDialogue {
 						));
 			}
 			Util.sendSinglePush(sender, userId, new TemplateMessage(responseMessage, buttons));
-		} else {
+		} 
+		if (contentType.equals("B")) {
 			if (response.has("content") && response.get("content").isJsonArray()) {
 				ButtonsTemplate buttons = new ButtonsTemplate.ButtonsTemplateBuilder(responseMessage).build();
 				JsonArray content = response.getAsJsonArray("content");
