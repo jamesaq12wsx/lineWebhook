@@ -236,10 +236,6 @@ public class RuleEngineDialogue extends RootDialogue {
 		if (response.has("message") && !response.get("message").isJsonNull()) {
 			String responseMessage = response.get("message").getAsString();
 			expectingInput = true;
-			// Only print out buttons if there is a message to use as the title
-			if (response.has("content")) {
-				handleNodes = handleResponseContent(response, userId, responseMessage);
-			}
 			// Set the next node if it exists
 			JsonArray nodes = response.getAsJsonArray("nodes");
 			if (nodes != null && nodes.isJsonArray() && nodes.size() > 0) {
@@ -247,6 +243,10 @@ public class RuleEngineDialogue extends RootDialogue {
 				if (node.has("forward") && !node.get("forward").isJsonNull()) {
 					nextNodeId = node.get("forward").getAsString();	
 				}
+			}
+			// Only print out buttons if there is a message to use as the title
+			if (response.has("content")) {
+				handleNodes = handleResponseContent(response, userId, responseMessage);
 			}
 		}
 		if (handleNodes) {
