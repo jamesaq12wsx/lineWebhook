@@ -59,7 +59,7 @@ public class ChatbotNodeHandler {
 					buttonObject.get("title").getAsString(), 
 					"forward=" + buttonObject.get("forward").getAsString() +
 					"&data=" + buttonObject.get("customValue").getAsString(),
-					"\u200B" + buttonObject.get("title")));
+					"\u200B" + buttonObject.get("title").getAsString()));
 		}
 		TemplateMessage message = new TemplateMessage(node.get("nodetitle").getAsString(), buttons);
 		return message;
