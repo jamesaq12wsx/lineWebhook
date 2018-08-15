@@ -305,6 +305,20 @@ public class RuleEngineDialogue extends RootDialogue {
 		}
 		List<Message> messages = new ArrayList<Message>();
 		boolean handleNodes = true;
+		if (contentType.contains("D") || contentType.contains("DD")) {
+			// For default contentType, ust forward on to the next node in the node array
+			if (response.has("nodes")&& response.get("nodes").isJsonArray()) {
+				JsonArray arr = response.getAsJsonArray("nodes");
+				if (arr.size() > 0) {
+					JsonObject node = arr.get(0).getAsJsonObject();
+					if (node.has("forward") && node.get("forward").isJsonPrimitive()) {
+						handleMessage(node.get("forward").getAsString(), "", currentToken, userId);
+						// Don't print another message since we are purely forwarding
+						return false;
+					}
+				}
+			}
+		}
 		if (contentType.contains("LOL")) {
 			// send location messages independently of the other messages
 			Util.sendSingleTextPush(sender, userId, responseMessage);
