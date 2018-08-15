@@ -391,6 +391,11 @@ public class RuleEngineDialogue extends RootDialogue {
 			}
 		}
 		sender.sendPush(userId, messages, "");
+		// LASTLY, IF THERE IS AN 'H' CONTENT TYPE, SEND THE MENU AGAIN
+		if (contentType.contains("H")) {
+			sendInitialMessage(userId);
+			handleNodes = false;
+		}
 		return handleNodes;
 	}
 	
