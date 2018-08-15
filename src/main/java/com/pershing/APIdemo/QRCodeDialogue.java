@@ -95,7 +95,7 @@ public class QRCodeDialogue extends Dialogue {
 		url += '&';
 		url += "amount=" + Integer.toString(amount);
 		List<Message> messages = new ArrayList<Message>();
-		messages.add(new TextMessage("PAY: " + Integer.toString(amount) + " TO " + target));
+		messages.add(new TextMessage("轉帳 $" + Integer.toString(amount) + " 到 " + target));
 		messages.add(new ImageMessage(url, url));
 		sender.sendPush(userId, messages, "");
 	}

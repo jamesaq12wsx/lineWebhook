@@ -64,7 +64,7 @@ public class DemoUtils {
 		
 		// Construct a button to open a link to PWA
 		ButtonsTemplate link = new ButtonsTemplate.ButtonsTemplateBuilder("其他匯率").build();
-		link.addAction(new URIAction("其他匯率", "https://pwa-web-page.herokuapp.com/"));
+		link.addAction(new URIAction("其他匯率", "https://pwa-web-page2.herokuapp.com/goto/index.html"));
 		TemplateMessage buttonsMessage = new TemplateMessage("其他匯率", link);
 		
 		// Construct the list of messages to send
