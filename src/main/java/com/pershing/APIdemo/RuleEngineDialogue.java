@@ -362,7 +362,7 @@ public class RuleEngineDialogue extends RootDialogue {
 									"forward=" + obj.get("forward").getAsString() +
 									(obj.has("customValue") ?  "&data=" + obj.get("customValue").getAsString() : 
 										(obj.has("value") ? "&data=" + obj.get("value").getAsString() : "")),
-									"\u200B" + obj.get("title")
+									"\u200B" + obj.get("title").getAsString()
 								));
 					} catch (Exception ex) {}
 				}
