@@ -372,15 +372,14 @@ public class RuleEngineDialogue extends RootDialogue {
 			}
 			handleNodes = false;
 		}
+		if (contentType.contains("I")) {
+			messages.add(new TextMessage(responseMessage));
+		}
 		if (contentType.contains("Q") || contentType.contains("QS")) {
 			if (!contentType.contains("B")) {
 				messages.add(new TextMessage(responseMessage));
 				handleNodes = false;	
 			}
-		}
-		if (contentType.contains("I")) {
-			messages.add(new TextMessage(responseMessage));
-			handleNodes = true;
 		}
 		// ADD LO FOR QUICK REPLY LAST
 		if (contentType.contains("LO")) {
