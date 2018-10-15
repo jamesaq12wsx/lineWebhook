@@ -2,3 +2,5 @@ assets/
 .settings/
 target/
 notes.md
+.md
+lauch.json

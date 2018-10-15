@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="f73a9d2b-8a8e-486a-b74f-4699b9f9557c" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.classpath" beforeDir="false" afterPath="$PROJECT_DIR$/.classpath" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.project" beforeDir="false" afterPath="$PROJECT_DIR$/.project" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/dialogue_stacks.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/dialogue_stacks.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/getting_started.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/getting_started.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/using_the_api.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/using_the_api.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/APIdemo/BillingDialogue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/APIdemo/BillingDialogue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/APIdemo/ChatbotNodeHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/APIdemo/ChatbotNodeHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/APIdemo/Demo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/APIdemo/Demo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/APIdemo/DemoUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/APIdemo/DemoUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/APIdemo/HttpUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/APIdemo/HttpUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/APIdemo/QRCodeDialogue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/APIdemo/QRCodeDialogue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/APIdemo/QRCodeGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/APIdemo/QRCodeGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/APIdemo/RatesDialogue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/APIdemo/RatesDialogue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/APIdemo/RootDialogueDemo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/APIdemo/RootDialogueDemo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/APIdemo/RootHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/APIdemo/RootHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/APIdemo/RuleEngineDialogue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/APIdemo/RuleEngineDialogue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/APIdemo/SMS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/APIdemo/SMS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/APIdemo/SetupDialogue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/APIdemo/SetupDialogue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/APIdemo/UserHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/APIdemo/UserHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/APIdemo/VerifyPhoneDialogue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/APIdemo/VerifyPhoneDialogue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/action/Action.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/action/Action.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/action/ActionType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/action/ActionType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/action/DatetimePickerAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/action/DatetimePickerAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/action/LocationAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/action/LocationAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/action/MessageAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/action/MessageAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/action/PostbackAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/action/PostbackAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/action/URIAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/action/URIAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/dialogue/Dialogue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/dialogue/Dialogue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/dialogue/DialogueStack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/dialogue/DialogueStack.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/dialogue/EchoRootDialogue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/dialogue/EchoRootDialogue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/dialogue/RootDialogue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/dialogue/RootDialogue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/event/AccountLinkEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/event/AccountLinkEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/event/BeaconEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/event/BeaconEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/event/BeaconEventType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/event/BeaconEventType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/event/FollowEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/event/FollowEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/event/JoinEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/event/JoinEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/event/LeaveEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/event/LeaveEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/event/MessageEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/event/MessageEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/event/PostbackEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/event/PostbackEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/event/UnfollowEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/event/UnfollowEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/event/WebHookEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/event/WebHookEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/event/WebHookEventType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/event/WebHookEventType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/event/WebHookSource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/event/WebHookSource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/event/WebHookSourceType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/event/WebHookSourceType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/lineAPI/BaseWebHookHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/lineAPI/BaseWebHookHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/lineAPI/WebHookHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/lineAPI/WebHookHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/message/FlexMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/message/FlexMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/message/ImageMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/message/ImageMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/message/LocationMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/message/LocationMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/message/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/message/Message.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/message/MessageType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/message/MessageType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/message/StickerMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/message/StickerMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/message/TemplateMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/message/TemplateMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/message/TextMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/message/TextMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/mockAPI/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/mockAPI/Account.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/mockAPI/MockAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/mockAPI/MockAPI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/mockAPI/Payee.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/mockAPI/Payee.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/mockAPI/UserData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/mockAPI/UserData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/quickReply/QuickReply.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/quickReply/QuickReply.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/quickReply/QuickReplyItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/quickReply/QuickReplyItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/sender/HTTPMessageSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/sender/HTTPMessageSender.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/sender/MessageSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/sender/MessageSender.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/sender/MessageSenderFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/sender/MessageSenderFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/sender/Response.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/sender/Response.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/template/ButtonsTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/template/ButtonsTemplate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/template/CarouselTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/template/CarouselTemplate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/template/Column.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/template/Column.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/template/ConfirmTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/template/ConfirmTemplate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/template/Template.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/template/Template.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/template/TemplateType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/template/TemplateType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pershing/util/Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pershing/util/Util.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/pershing/lineAPI/AppTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/pershing/lineAPI/AppTest.java" afterDir="false" />
+    </list>
+    <ignored path="$PROJECT_DIR$/target/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file leaf-file-name="WebHookHandler.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/pershing/lineAPI/WebHookHandler.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="357">
+              <caret line="33" column="8" selection-start-line="33" selection-start-column="8" selection-end-line="33" selection-end-column="8" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BaseWebHookHandler.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/pershing/lineAPI/BaseWebHookHandler.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="512">
+              <caret line="56" column="22" lean-forward="true" selection-start-line="56" selection-start-column="22" selection-end-line="56" selection-end-column="22" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GradleLocalSettings">
+    <option name="projectSyncType">
+      <map>
+        <entry key="$PROJECT_DIR$/../../gs-rest-service" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../../gs-rest-service/complete" value="PREVIEW" />
+      </map>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="NodePackageJsonFileManager">
+    <packageJsonPaths />
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="y" value="23" />
+    <option name="width" value="1680" />
+    <option name="height" value="981" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="lineAPI" type="b2602c69:ProjectViewProjectNode" />
+              <item name="lineAPI" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="lineAPI" type="b2602c69:ProjectViewProjectNode" />
+              <item name="lineAPI" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="lineAPI" type="b2602c69:ProjectViewProjectNode" />
+              <item name="lineAPI" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="lineAPI" type="b2602c69:ProjectViewProjectNode" />
+              <item name="lineAPI" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="lineAPI" type="b2602c69:ProjectViewProjectNode" />
+              <item name="lineAPI" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="pershing" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="lineAPI" type="b2602c69:ProjectViewProjectNode" />
+              <item name="lineAPI" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="pershing" type="462c0819:PsiDirectoryNode" />
+              <item name="lineAPI" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="PackagesPane" />
+      <pane id="AndroidView" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="settings.editor.selected.configurable" value="preferences.updates" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="Application" factoryName="Application">
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <patterns />
+    </configuration>
+    <configuration default="true" type="TestNG" factoryName="TestNG">
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SUITE_NAME" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+      <option name="OUTPUT_DIRECTORY" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" />
+      <properties />
+      <listeners />
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f73a9d2b-8a8e-486a-b74f-4699b9f9557c" name="Default" comment="" />
+      <created>1539615189678</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1539615189678</updated>
+      <workItem from="1539615193201" duration="48000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="48000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="23" width="1680" height="981" extended-state="0" />
+    <editor active="true" />
+    <layout>
+      <window_info anchor="right" id="Palette" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="right" id="Palette&#9;" />
+      <window_info id="Image Layers" />
+      <window_info anchor="right" id="Capture Analysis" />
+      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info anchor="right" id="Maven Projects" />
+      <window_info anchor="bottom" id="Database Changes" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Version Control" />
+      <window_info anchor="bottom" id="Terminal" />
+      <window_info id="Capture Tool" />
+      <window_info id="Designer" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
+      <window_info anchor="right" id="Database" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info id="UI Designer" />
+      <window_info anchor="right" id="Theme Preview" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info id="Favorites" side_tool="true" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/pershing/lineAPI/BaseWebHookHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="512">
+          <caret line="56" column="22" lean-forward="true" selection-start-line="56" selection-start-column="22" selection-end-line="56" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/pershing/lineAPI/WebHookHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="33" column="8" selection-start-line="33" selection-start-column="8" selection-end-line="33" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>10</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>
