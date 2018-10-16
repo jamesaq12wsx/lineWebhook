@@ -19,9 +19,9 @@ import com.sun.net.httpserver.HttpHandler;
 public class RootHandler implements HttpHandler {
 	
 	// The channel secret of the LINE bot
-	private static final String CHANNEL_SECRET = "94abbc36058b1987965fceeeab06ae50";
+	private static final String CHANNEL_SECRET = "39a7a8b5594e8fe81bac12e31890752e";
 	// The channel access token of the LINE bot
-	private static final String CHANNEL_ACCESS_TOKEN = "0c9FzOTxXe9xMP34RdSJeB7+NZ25KmviLYAiYMMGycL4bvKz2YQkzykB+ysy+J8+xzkUPoPIAo/Dl+HwzxJlFTnFIn6sQ9kQ5t5H7vTxS9UITo08bORsZ8JZVlab/iJq6VbZ1Pl5Mw0OP29xuWaEJwdB04t89/1O/w1cDnyilFU=";
+	private static final String CHANNEL_ACCESS_TOKEN = "B+R5Dl03JENfxXW+ALdsS6yHlFvBlB1xIrMh1ReV7qwgxnKflMyV+ludAmyhCq3oLt6XIzXQlv/vSUXSUBFNRbc+HP2TYfLZv5oMCQHGq+xsrZpDmRd+nj+KeJWrVtkYbD8r/uxDPXRUS21iE15iQgdB04t89/1O/w1cDnyilFU=";
 	
 	// The webhookHandler that the line bot runs on
 	private WebHookHandler webHookHandler;
@@ -66,7 +66,7 @@ public class RootHandler implements HttpHandler {
 			exchange.sendResponseHeaders(200, response.length());
 			OutputStream os = exchange.getResponseBody();
 			os.write(response.getBytes());
-			os.close();
+			os.close();	
 		} else {
 			System.out.println(">>> [ROOT HANDLER] HTTP request failed");
 			String response = "HTTP request failed";
