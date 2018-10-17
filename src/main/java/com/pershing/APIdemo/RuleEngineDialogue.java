@@ -44,8 +44,8 @@ public class RuleEngineDialogue extends RootDialogue {
 	private static final String RICH_MENU_ID = "richmenu-949e4ac74b5b932f062ef11d20316c32";
 	
 	// The endpoints of the chatbot API
-	private static final String CHATBOT_API_URL = "https://chatbotapipsc.azurewebsites.net/api/chatbot/";
-	private static final String CHATBOT_MENU_URL = "https://chatbotapipsc.azurewebsites.net/api/chatbot/menu/top";
+	private static final String CHATBOT_API_URL = "https://pershing-chatbot-api.azurewebsites.net/api/chatbot/";
+	private static final String CHATBOT_MENU_URL = "https://pershing-chatbot-api.azurewebsites.net/api/chatbot/menu/top";
 	
 	private static final String LIFF_APP_URL = "line://app/1599437019-DalpOzwK";
 	

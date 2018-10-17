@@ -19,9 +19,9 @@ import com.sun.net.httpserver.HttpHandler;
 public class RootHandler implements HttpHandler {
 	
 	// The channel secret of the LINE bot
-	private static final String CHANNEL_SECRET = "6515c73618cc3d7a2dc2ba218680447b";
+	private static final String CHANNEL_SECRET = "ad4c0413ff6e5fea0b68f8a99b3aeaaa";
 	// The channel access token of the LINE bot
-	private static final String CHANNEL_ACCESS_TOKEN = "S9sAF/Gq5AKn8TBZAsn7xWqC4djwWu14/crf6GoVnQypgPYTc7jUFi5HzxeE03zmxzkUPoPIAo/Dl+HwzxJlFTnFIn6sQ9kQ5t5H7vTxS9WcME+PCb4bMSCOKSogMWqfdXnfNTmdubO9h57buPMqWwdB04t89/1O/w1cDnyilFU=";
+	private static final String CHANNEL_ACCESS_TOKEN = "GQY0ZAOLwvi8aq7F4/CDMdhakkdgB4tnVvcfJCFWyQYV+3VDVxYr09ivAz8hRzIIMUFIbRl0+6I5S5bgwZsBOcujqnc1hVD3XsqOYrpBNJYDH9l6LbId/6/iL39hcQwj4jthD9OCZbh+PB+sYmLVpwdB04t89/1O/w1cDnyilFU=";
 	
 	// The webhookHandler that the line bot runs on
 	private WebHookHandler webHookHandler;
