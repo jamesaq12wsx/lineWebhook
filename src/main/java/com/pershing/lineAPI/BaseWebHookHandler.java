@@ -98,6 +98,7 @@ public class BaseWebHookHandler {
 		try {
 			Mac mac = Mac.getInstance("HmacSHA256");
 			mac.init(key);
+			log(">>> [WebHookHandler] REQUEST BODY: " + body);
 			byte[] source = body.getBytes("UTF-8");
 			byte[] encoded = Base64.getEncoder().encode(mac.doFinal(source));
 			signature = "[" + new String(encoded) + "]";
